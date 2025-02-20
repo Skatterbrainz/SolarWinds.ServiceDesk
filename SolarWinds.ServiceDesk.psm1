@@ -1,6 +1,6 @@
 <#
 .NOTES
-	Version 1.0.0 - 2025-02-18
+	Version 1.0.0 - 2025-02-19
 
 	Reference: https://apidoc.samanage.com/
 	For better ODATA query syntax documentation, see the Loggly API reference:
@@ -684,6 +684,8 @@ function New-SDTask {
 		The number of days to offset the due date. Default is 14 days.
 	.EXAMPLE
 		New-SDTask -IncidentNumber "12345" -Name "Task Name" -Assignee "user123@contoso.com"
+	.NOTES
+		Refer to https://apidoc.samanage.com/#tag/Task/operation/createTask
 	#>
 	[CmdletBinding()]
 	param(
@@ -706,18 +708,24 @@ function New-SDTask {
 			throw "User $Assignee not found."
 		}
 		$dueDate = (Get-Date).AddDays($DueDateOffsetDays).ToString("MMM dd, yyyy")
-		$task = @{
-			name        = $Name.Trim()
-			assignee    = @{ email = $Assignee }
-			due_at      = $dueDate
-			is_complete = $False
-		}
-		$json = $task | ConvertTo-Json
+		$body = @{
+			"task" = @{
+				"name" = $Name.Trim()
+				"assignee" = @{
+					"email" = $Assignee.Trim()
+				}
+				"due_at" = $dueDate
+				"is_complete" = $IsComplete
+			}
+		} | ConvertTo-Json
+		Write-Verbose "Creating task: $json"
 		#curl -H "X-Samanage-Authorization: Bearer $token" -H "Accept: application/vnd.samanage.v2.1+json" -H "Content-Type: application/json" -X POST $url -d $json
-		$response = Invoke-RestMethod -Method POST -Uri $url -ContentType "application/json" -Headers $Session.headers -Body $json -ErrorAction Stop
+		$response = Invoke-RestMethod -Method POST -Uri $url -ContentType "application/json" -Headers $Session.headers -Body $body #-ErrorAction Stop
 		$response
 	} catch {
-		Write-Error $_.Exception.Message
+		if ($_.Exception.Message -notmatch '406') {
+			Write-Error $_.Exception.Message
+		}
 	}
 }
 
@@ -739,6 +747,44 @@ function Remove-SDTask {
 	$response = Invoke-RestMethod -Method DELETE -Uri $TaskURL -Headers $Session.headers
 	$response
 }
+
+function Update-SDTask {
+	<#
+	.DESCRIPTION
+		Updates the specified task record with the provided assignee and/or status.
+	.PARAMETER TaskURL
+		The URL of the task.
+	.PARAMETER Assignee
+		The email address of the assignee.
+	.PARAMETER Completed
+		Mark the task as completed.
+	.EXAMPLE
+		Update-SDTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json" -Completed
+	#>
+	[CmdletBinding()]
+	param (
+		[parameter(Mandatory)][string][ValidateNotNullOrWhiteSpace()]$TaskURL,
+		[parameter()][string][Alias('Email')]$Assignee,
+		[parameter()][switch]$Completed
+	)
+	$Session = New-SDSession
+	$task    = Invoke-RestMethod -Method GET -Uri $TaskURL -Headers $Session.headers
+	if ($task) {
+		$body    = @{task = @{}}
+		if (![string]::IsNullOrEmpty($Assignee)) {
+			$body.task.assignee = @{email = $Assignee}
+		}
+		if ($Completed.IsPresent) {
+			$body.task.is_complete = $true
+		}
+		$json = $body | ConvertTo-Json
+		$response = Invoke-RestMethod -Method PUT -Uri $TaskURL -ContentType "application/json" -Headers $Session.headers -Body $json
+		$response
+	} else {
+		Write-Error "Task not found with URL: $TaskURL"
+	}
+}
+
 #endregion
 
 #region Users, Roles, Groups
