@@ -1,6 +1,6 @@
 <#
 .NOTES
-	Version 1.0.0 - 2025-02-19
+	Version 1.0.0 - 2025-02-22
 
 	Reference: https://apidoc.samanage.com/
 	For better ODATA query syntax documentation, see the Loggly API reference:
@@ -136,6 +136,18 @@ function Get-SDIncident {
 		The name of the incident for provisioning requests. Default is 'New Users are entered into the IT Authorization Form'.
 	.PARAMETER IncidentNameTermination
 		The name of the incident for termination requests. Default is 'Employee Terminations'.
+	.PARAMETER Export
+		Export the incident description to a file in HTML or JSON format. Default is Nothing.
+	.PARAMETER ExportPath
+		The path to export the incident description file. Default is "~".
+	.PARAMETER Show
+		Show the exported file.
+	.EXAMPLE
+		Get-SDIncident -Number 12345
+		Returns the incident record for incident number 12345.
+	.EXAMPLE
+		Get-SDIncident -Id 123456789 -Name "Incident Name"
+		Returns the incident record for incident ID 12345 with the specified name.
 	#>
 	[CmdletBinding()]
 	param (
@@ -327,6 +339,9 @@ function Get-SDRequestProvSingle {
 		This is intended for incidents with a single user provision request.
 	.PARAMETER Incident
 		The incident record.
+	.EXAMPLE
+		$incident = Get-SDIncident -Number 12345
+		Get-SDRequestProvSingle -Incident $incident
 	#>
 	[CmdletBinding()]
 	param(
@@ -456,6 +471,18 @@ function Get-SDRequestProvBatch {
 
 # Get user termination request table data from incident record (existing, email list)
 function Get-SDRequestTermSingle {
+	<#
+	.SYNOPSIS
+		Retrieves the user termination request table data from the incident record 'description' field.
+	.DESCRIPTION
+		The function retrieves the user termination request table data from the incident record 'description' field.
+		This is intended for incidents with a single user termination request.
+	.PARAMETER Incident
+		The incident record.
+	.EXAMPLE
+		$incident = Get-SDIncident -Number 12345
+		Get-SDRequestTermSingle -Incident $incident
+	#>
 	[CmdletBinding()]
 	param(
 		[parameter(Mandatory)][object]$Incident
@@ -484,6 +511,11 @@ function Get-SDRequestTermSingle {
 }
 
 function Get-SDRequestTermMultiple {
+	<#
+	.NOTES
+		This is not currently used. It is intended for reading request details
+		for multiple termination requests in a single table.
+	#>
 	[CmdletBinding()]
 	param(
 		[parameter(Mandatory)][object]$Incident
@@ -782,6 +814,125 @@ function Update-SDTask {
 		$response
 	} else {
 		Write-Error "Task not found with URL: $TaskURL"
+	}
+}
+
+#endregion
+
+#region Comments
+function Get-SDComments {
+	<#
+	.SYNOPSIS
+		Returns the comments for the specified incident.
+	.DESCRIPTION
+		Returns the comments for the specified incident.
+	.PARAMETER IncidentNumber
+		The incident number.
+	.EXAMPLE
+		Get-SDComments -IncidentNumber 12345
+	#>
+	[CmdletBinding()]
+	param (
+		[parameter(Mandatory)][string]$IncidentNumber
+	)
+	try {
+		$Session     = New-SDSession
+		$incident    = Get-SDIncident -Number $IncidentNumber -NoRequestData
+		if ($incident) {
+			$baseurl  = (Get-SDAPI -Name "Helpdesk Incidents List") -replace ".json", ""
+			$url      = "$($baseurl)/$($incident.id)/comments.json"
+			Write-Verbose "Url: $url"
+			$params = @{
+				Uri         = $url
+				Method      = 'GET'
+				ContentType = "application/json"
+				Headers     = $Session.headers
+				ErrorAction = 'Stop'
+			}
+			$response    = Invoke-RestMethod @params
+			$result      = $response
+		} else {
+			throw "Incident not found: $IncidentNumber"
+		}
+	} catch {
+		$result = [pscustomobject]@{
+			Status    = 'Error'
+			Activity  = $($_.CategoryInfo.Activity -join (";"))
+			Message   = $($_.Exception.Message -join (";"))
+			Trace     = $($_.ScriptStackTrace -join (";"))
+			Incident  = $IncidentNumber
+		}
+	} finally {
+		$result
+	}
+}
+
+function Add-SDComment {
+	<#
+	.SYNOPSIS
+		Adds a comment to the specified incident.
+	.DESCRIPTION
+		Adds a comment to the specified incident.
+	.PARAMETER IncidentNumber
+		The incident number.
+	.PARAMETER Comment
+		The comment to add.
+	.PARAMETER Assignee
+		The email address of the assignee.
+	.PARAMETER Private
+		Make the comment private.
+	.EXAMPLE
+		Add-SDComment -IncidentNumber 12345 -Comment "This is a test comment." -Assignee "svc_ULMAPI@contoso.com"
+	#>
+	[CmdletBinding()]
+	param (
+		[parameter(Mandatory)][string]$IncidentNumber,
+		[parameter(Mandatory)][string]$Comment,
+		[parameter(Mandatory)][string]$Assignee,
+		[parameter()][switch]$Private
+	)
+	try {
+		$Session  = New-SDSession
+		$incident = Get-SDIncident -Number $IncidentNumber -NoRequestData
+		if ($incident) {
+			$baseurl = Get-SDAPI -Name "Helpdesk Incidents List"
+			$url = "$($baseurl.replace('.json',''))/$($incident.id)/comments"
+			Write-Verbose "Url: $url"
+			$body = @{
+				"comment" = @{
+					"body"       = $Comment.Trim()
+					"is_private" = $($Private.IsPresent)
+					"user" = @{"email" = $Assignee}
+				}
+			} | ConvertTo-Json
+			$params = @{
+				Uri         = $url
+				Method      = 'POST'
+				ContentType = "application/json"
+				Headers     = $Session.headers
+				Body        = $body
+				ErrorAction = 'Stop'
+			}
+			$response = Invoke-RestMethod @params
+			$result = $response
+		} else {
+			Write-Warning "Incident $IncidentNumber not found."
+		}
+	} catch {
+		$msg = $_.Exception.Message
+		if ($msg -notmatch '406') {
+			$result = [pscustomobject]@{
+				Status    = 'Error'
+				Activity  = $($_.CategoryInfo.Activity -join (";"))
+				Message   = $($_.Exception.Message -join (";"))
+				Trace     = $($_.ScriptStackTrace -join (";"))
+				Incident  = $IncidentNumber
+			}
+		} else {
+			$result = $True
+		}
+	} finally {
+		$result
 	}
 }
 
