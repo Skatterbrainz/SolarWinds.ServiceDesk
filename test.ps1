@@ -1,6 +1,6 @@
-Import-Module '/home/ds0934/Documents/GitHub/SolarWinds.ServiceDesk/SolarWinds.ServiceDesk.psm1' -Force
+Import-Module 'SolarWinds.ServiceDesk' -Force
 
-$svcAccount = "svc_ULMAPI@AdvocatesInc.org"
+$svcAccount = "Automation@contoso.com"
 
 $token = Get-Content ~/sdtoken.txt
 New-SDSession -ApiToken $token
