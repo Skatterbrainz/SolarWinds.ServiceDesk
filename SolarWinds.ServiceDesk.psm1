@@ -33,14 +33,18 @@ function New-SDSession {
 	try {
 		if ($SDSession -and !$Refresh.IsPresent) {
 			$SDSession
-		} else {
+		} else {			
 			if (![string]::IsNullOrWhiteSpace($ApiToken)) {
-				$global:Token = $ApiToken
+				$global:SwSdToken = $ApiToken
 			} else {
-				throw "ApiToken was not provided"
+				if ($env:SWSDToken) {
+					$global:SwSdToken = $env:SWSDToken
+				} else {
+					throw "API Token not provided or defined in the environment.(env: SWSDToken)"
+				}
 			}
 			$headers = @{
-				"X-Samanage-Authorization" = "Bearer $($global:Token)"
+				"X-Samanage-Authorization" = "Bearer $($global:SwSdToken)"
 				"Accept" = "application/vnd.samanage.$($ApiVersion)+$($ApiFormat)"
 				"Content-Type" = "application/json"
 			}
@@ -54,27 +58,6 @@ function New-SDSession {
 	} catch {
 		Write-Error $_.Exception.Message
 	}
-}
-
-function Import-SDToken {
-	param(
-		[parameter()][string]$Path = "~/sdtoken.txt"
-	)
-	if (Test-Path -Path $Path) {
-		$global:token = $(Get-Content -Path $Path -Raw -Encoding utf8).Trim()
-		Write-Host "Token imported from $Path"
-	} else {
-		Write-Host "Token file not found: $Path"
-		$token = Read-Host "Enter your SolarWinds Service Desk API token"
-		if (![string]::IsNullOrEmpty($token)) {
-			Set-Content -Path $Path -Value $token.Trim()
-			$global:token = $token.Trim()
-		} else {
-			Write-Warning "No token, no service desk"
-			break
-		}
-	}
-	$token
 }
 
 function Get-SDAPI {
@@ -119,29 +102,13 @@ function Get-SDAPI {
 function Get-SDIncident {
 	<#
 	.DESCRIPTION
-		Returns a Service Desk incident record with RequestData for the specified incident number or ID and name.
+		Returns a Service Desk incident for the specified incident Number or ID + name.
 	.PARAMETER Number
 		The incident number.
 	.PARAMETER Id
 		The incident ID.
 	.PARAMETER Name
 		The incident name. Required if Id is provided.
-	.PARAMETER IncludeDescription
-		Include the incident description in the output.
-	.PARAMETER NoRequestData
-		Exclude the request data from the output.
-	.PARAMETER RequestDataType
-		The type of request data to retrieve: Single or Multiple. Default is Single.
-	.PARAMETER IncidentNameProvision
-		The name of the incident for provisioning requests. Default is 'New Users are entered into the IT Authorization Form'.
-	.PARAMETER IncidentNameTermination
-		The name of the incident for termination requests. Default is 'Employee Terminations'.
-	.PARAMETER Export
-		Export the incident description to a file in HTML or JSON format. Default is Nothing.
-	.PARAMETER ExportPath
-		The path to export the incident description file. Default is "~".
-	.PARAMETER Show
-		Show the exported file.
 	.EXAMPLE
 		Get-SDIncident -Number 12345
 		Returns the incident record for incident number 12345.
@@ -153,15 +120,7 @@ function Get-SDIncident {
 	param (
 		[parameter(ParameterSetName='Number')][string]$Number,
 		[parameter(ParameterSetName='ID')][int32]$Id,
-		[parameter(ParameterSetName='ID')][string]$Name,
-		[parameter()][switch]$IncludeDescription,
-		[parameter()][switch]$NoRequestData,
-		[parameter()][string][ValidateSet('Single','Multiple')]$RequestDataType = 'Single',
-		[parameter()][string]$IncidentNameProvision = 'New Users are entered into the IT Authorization Form',
-		[parameter()][string]$IncidentNameTermination = 'Employee Termination Notification',
-		[parameter()][string][ValidateSet('Nothing','HTML','JSON')]$Export = 'Nothing',
-		[parameter()][string]$ExportPath = "~",
-		[parameter()][switch]$Show
+		[parameter(ParameterSetName='ID')][string]$Name
 	)
 	try {
 		$Session  = New-SDSession
@@ -176,71 +135,17 @@ function Get-SDIncident {
 			throw "Either the Number or ID + Name must be provided."
 		}
 		Write-Verbose "url = $url"
-		$incident = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get
-		Write-Verbose "Name: $($incident.name)"
-		if ($incident.name -eq $IncidentNameProvision) {
-			$requestType = 'Provision'
-		} elseif ($incident.name -eq $IncidentNameTermination) {
-			$requestType = 'Termination'
-		} else {
-			throw "Unsupported Request Type: $($incident.name)"
-		}
-		if (!$NoRequestData.IsPresent) {
-			if ($requestType -eq 'Provision') {
-				if ($RequestDataType -eq 'Single') {
-					Write-Verbose "getting request form data: prov-single"
-					$requestData = Get-SDRequestProvSingle -Incident $incident
-				} elseif ($RequestDataType -eq 'Multiple') {
-					Write-Verbose "getting request form data: prov-multiple"
-					$requestData = Get-SDRequestProvBatch -Incident $incident
-				}
-			} elseif ($requestType -eq 'Termination') {
-				if ($RequestDataType -eq 'Single') {
-					Write-Verbose "getting request form data: term-single"
-					$requestData = Get-SDRequestTermSingle -Incident $incident
-				} elseif ($RequestDataType -eq 'Multiple') {
-					Write-Verbose "getting request form data: term-multiple"
-					$requestData = Get-SDRequestTermMultiple -Incident $incident
-				}
-			}
-			if (!$IncludeDescription.IsPresent) {
-				# return everything except description properties
-				$incident | Select-Object -Property *, @{ n = 'RequestData'; e = { $requestData }}, @{ n = 'RequestType'; e = { $requestType }} -ExcludeProperty description,description_no_html
-			} else {
-				$incident | Select-Object -Property *, @{ n = 'RequestData'; e = { $requestData }}, @{ n = 'RequestType'; e = { $requestType }}
-			}
-			if ($Export -eq 'HTML') {
-				$filepath = Join-Path $ExportPath "incident-$($incident.number)_description.html"
-				$incident.description | Out-File -FilePath $filepath -Encoding utf8 -Force
-				Write-Host "Incident description exported to: $filepath"
-				if ($Show.IsPresent) { Invoke-Item $filepath }
-			} elseif ($Export -eq 'JSON') {
-				$filepath = Join-Path $ExportPath "incident-$($incident.number).json"
-				$incident | ConvertTo-Json | Out-File -FilePath $filepath -Encoding utf8 -Force
-				Write-Host "Incident description exported to: $filepath"
-				if ($Show.IsPresent) { Invoke-Item $filepath }
-			}
-		} else {
-			if (!$IncludeDescription.IsPresent) {
-				# return everything except the description properties
-				$incident | Select-Object -Property *, @{ n = 'RequestType'; e = { $requestType }} -ExcludeProperty description,description_no_html
-			} else {
-				$incident | Select-Object -Property *, @{ n = 'RequestType'; e = { $requestType }}
-			}
-			if ($Export -eq 'HTML') {
-				$filepath = Join-Path $ExportPath "incident-$($incident.number)_description.html"
-				$incident.description | Out-File -FilePath $filepath -Encoding utf8 -Force
-				Write-Host "Incident description exported to: $filepath"
-				if ($Show.IsPresent) { Invoke-Item $filepath }
-			} elseif ($Export -eq 'JSON') {
-				$filepath = Join-Path $ExportPath "incident-$($incident.number).json"
-				$incident | ConvertTo-Json | Out-File -FilePath $filepath -Encoding utf8 -Force
-				Write-Host "Incident description exported to: $filepath"
-				if ($Show.IsPresent) { Invoke-Item $filepath }
-			}
-		}
+		$result = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get
 	} catch {
-		Write-Error $_.Exception.Message
+		$result = [pscustomobject]@{
+			Status    = 'Error'
+			Activity  = $($_.CategoryInfo.Activity -join (";"))
+			Message   = $($_.Exception.Message -join (";"))
+			Trace     = $($_.ScriptStackTrace -join (";"))
+			Incident  = $IncidentNumber
+		}
+	} finally {
+		$result
 	}
 }
 
@@ -267,27 +172,16 @@ function Get-SDIncidents {
 		[parameter()][string]
 		[ValidateSet('Awaiting Input','Assigned','Closed','On Hold','Pending Assignment','Scheduled')]$Status = 'Pending Assignment',
 		[parameter()][int]$PageLimit = 100,
-		[parameter()][int]$PageCount = 0,
-		[parameter()][string]$IncidentNameProvision = 'New Users are entered into the IT Authorization Form',
-		[parameter()][string]$IncidentNameTermination = 'Employee Terminations'
+		[parameter()][int]$PageCount = 0
 	)
 	try {
 		$Session = New-SDSession	
 		$baseurl = Get-SDAPI -Name "Search"
 		if ([string]::IsNullOrEmpty($baseurl)) { throw "API Url not found." }
-		switch ($RequestType) {
-			'Provision' {
-				$IncName = $IncidentNameProvision
-			}
-			'Termination' {
-				$IncName = $IncidentNameTermination # 'Employee Termination Notification'
-			}
-		}
 		$searchCriteria = "state:`"$($Status)`" AND name:`"$($IncName)`""
 		$encodedSearch  = [System.Web.HttpUtility]::UrlEncode($searchCriteria)
 		$url = "$($baseurl)?per_page=$PageLimit&q=$($encodedSearch)"
 		Write-Verbose "url: $url"
-		#$incidents = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ResponseHeadersVariable responseHeaders -Erroraction Stop
 		$incidents = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ErrorAction Stop
 		if ($responseHeaders) {
 			Write-Verbose "getting response headers"
@@ -303,9 +197,17 @@ function Get-SDIncidents {
 				$incidents += Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get
 			}
 		}
-		Write-Output $incidents
+		$result = $incidents
 	} catch {
-		Write-Error $_.Exception.Message
+		$result = [pscustomobject]@{
+			Status    = 'Error'
+			Activity  = $($_.CategoryInfo.Activity -join (";"))
+			Message   = $($_.Exception.Message -join (";"))
+			Trace     = $($_.ScriptStackTrace -join (";"))
+			Incident  = $IncidentNumber
+		}
+	} finally {
+		$result
 	}
 }
 
@@ -332,212 +234,8 @@ function Get-SDIncidentLink {
 
 #region Incident Request Data
 # Get user provision request table data from incident record
-function Get-SDRequestProvSingle {
-	<#
-	.DESCRIPTION
-		Retrieves the user provision request table data from the incident record 'description' field.
-		This is intended for incidents with a single user provision request.
-	.PARAMETER Incident
-		The incident record.
-	.EXAMPLE
-		$incident = Get-SDIncident -Number 12345
-		Get-SDRequestProvSingle -Incident $incident
-	#>
-	[CmdletBinding()]
-	param(
-		[parameter(Mandatory)][object]$Incident
-	)
-	$desc = $Incident.description.Trim()
-	if (![string]::IsNullOrWhiteSpace($desc)) {
-		$div  = $($desc | ConvertFrom-Html).SelectNodes('//*[@class="grid"]').InnerHtml | ConvertFrom-Html
-		$rows = $div.SelectNodes("//tr")
-		$rows = $rows[1..$rows.Count]
-        $result = @{}
-		$rows | ForEach-Object {
-			$children = $_.ChildNodes
-			$name     = $children[1].InnerText.Trim()
-			$value    = $children[5].InnerText.Trim()
-            if (![string]::IsNullOrWhiteSpace($name)) {
-                $label = Rename-Column -ColumnName $name
-			    if ([string]::IsNullOrWhiteSpace($value)) {
-				    $x = $($children[5].InnerHtml | Where-Object {$_ -match 'toggled on'})
-				    if ($x) {
-					    $value = $True
-				    }
-			    }
-                $result[$label] = $value
-		        if ($label -eq 'CostCenter') {
-			        $costcenter = $value
-			        $result['CCNum'] = Compress-CostCenter $value
-		        }
-            }
-		}
-    	$result['IncidentNumber'] = $Incident.number
-	    $result['Location']       = Get-CostCenterLocation -CostCenter $costcenter
-	    $result['Description']    = New-UserDescription -JobTitle $result['JobTitle'] -Location $result['Location']
-        [pscustomobject]$result
-	}
-}
-
-function Get-SDRequestProvSingle2 {
-	[CmdletBinding()]
-	param(
-		[parameter(Mandatory)][object]$Incident
-	)
-	#######################################
-	##### THIS FUNCTION IS DEPRECATED #####
-	#######################################
-	$incNum      = $Incident.number
-	$tableOffset = 13 # 13th table is the request table
-	$rowOffset   = 19 # 19th to 56th rows are the request fields
-	$rowCount    = 37 # 37 fields in the request table dataset
-	$result      = @{}
-	$desc        = $Incident.description | ConvertFrom-Html
-	$table       = $desc.SelectNodes("//table")[$tableOffset]
-	$rows        = $table.SelectNodes("//tr")[$rowOffset..$($rowOffset + $rowCount)]
-	Write-Verbose "Iterating through $($rows.Count) columns for incident $incNum."
-	foreach ($row in $rows) {
-		# retrieve the column name and value
-		$cellData = ($row.InnerHtml | ConvertFrom-Html).ChildNodes[0,2].InnerText
-		$column   = $cellData[0] # column name
-		$value    = $cellData[1] # column value
-		$label    = Rename-Column -ColumnName $column # rename column name
-		$result[$label] = $value
-		if ($label -eq 'CostCenter') {
-			$costcenter = $value
-			$result['CCNum'] = Compress-CostCenter $value
-		}
-	}
-	Write-Verbose "appending incident number and Location to result."
-	$result['IncidentNumber'] = $incNum
-	$result['Location']       = Get-CostCenterLocation -CostCenter $costcenter
-	$result['Description']    = New-UserDescription -JobTitle $result['JobTitle'] -Location $result['Location']
-	[pscustomobject]$result
-}
-
-function Get-SDRequestProvBatch {
-	<#
-	.DESCRIPTION
-		Retrieves the user provision request table data from the incident record 'description' field.
-		This is intended for incidents with multiple user provision requests in a single table.
-	.PARAMETER Incident
-		The incident record.
-	.EXAMPLE
-		Get-SDRequestProvBatch -Incident $incident
-	#>
-	[CmdletBinding()]
-	param(
-		[parameter(Mandatory)][object]$Incident
-	)
-	$incNum	      = $Incident.number
-	$tableOffset  = 12  # 13th table is the request table
-	$columnOffset = 19  # 19th column begins the column headings
-	$maxRows      = 100 # assume table has less than 100 rows
-	$maxColumns   = 40  # assume table has less than 40 columns
-	$desc         = $Incident.description
-	$htmlDoc      = ConvertFrom-Html -Content $desc
-	$table        = $htmlDoc.SelectNodes("//table")[$tableOffset]
-	$columns      = $table.FirstChild.ChildNodes.InnerText # first row is column headings
-	$tbody        = $table.LastChild # table body
-	$rows         = $tbody.SelectNodes("//tr")[$columnOffset..$maxRows] # retrieve table rows and cells
-	$result       = @()
-	Write-Verbose "$($rows.Count) requests returned for incident $incNum."
-	foreach ($row in $rows) {
-		$outrow = @{}
-		$added  = $false
-		# retrieve the column names and values
-		$values = ($row.InnerHtml | ConvertFrom-Html).SelectNodes("//td")[0..$maxColumns] | Select-Object -ExpandProperty InnerText
-		# iterate through the columns and values for current row
-		for ($i = 0; $i -lt $values.Count; $i++) {
-			# retrieve the column name
-			$column = $columns[$i]
-			if (![string]::IsNullOrEmpty($column)) {
-				# rename the column name
-				$label  = Rename-Column -ColumnName $column
-				$outrow[$label] = $values[$i]
-				if ($label -eq 'CostCenter') {
-					$outrow['CCNum'] = Compress-CostCenter $values[$i]
-				}
-				$added = $true
-			}
-		}
-		if ($added) {
-			$outrow['IncidentNumber'] = $incNum
-		}
-		$result += $outrow
-	}
-	[pscustomobject]$result
-}
 
 # Get user termination request table data from incident record (existing, email list)
-function Get-SDRequestTermSingle {
-	<#
-	.SYNOPSIS
-		Retrieves the user termination request table data from the incident record 'description' field.
-	.DESCRIPTION
-		The function retrieves the user termination request table data from the incident record 'description' field.
-		This is intended for incidents with a single user termination request.
-	.PARAMETER Incident
-		The incident record.
-	.EXAMPLE
-		$incident = Get-SDIncident -Number 12345
-		Get-SDRequestTermSingle -Incident $incident
-	#>
-	[CmdletBinding()]
-	param(
-		[parameter(Mandatory)][object]$Incident
-	)
-	$desc = $Incident.description | ConvertFrom-Html
-	$row  = $desc.SelectNodes("//div")[0].SelectNodes("//table")[2].SelectNodes("//tr").SelectNodes("//td")[6].InnerHtml.Trim() -split '<br>'
-	$result = @{}
-	$row | ForEach-Object {
-		$pair  = $_ -split ':'
-		$key   = $pair[0].Trim()
-		# ignore blank or irrelevant columns
-		if ($key -in ('ID','Effective Date','Name')) {
-			$value = $pair[1].Trim()
-			if ($key -eq 'ID') {
-				$label = 'EmployeeID'
-   			} elseif ($key -eq 'Effective Date') {
-				$label = 'TermDate'
-			} else {
-				$label = $key
-			}
-			$result["$label"] = $value
-		}
-	}
-	$result['IncidentNumber'] = $Incident.number
-	[pscustomobject]$result
-}
-
-function Get-SDRequestTermMultiple {
-	<#
-	.NOTES
-		This is not currently used. It is intended for reading request details
-		for multiple termination requests in a single table.
-	#>
-	[CmdletBinding()]
-	param(
-		[parameter(Mandatory)][object]$Incident
-	)
-	$desc    = $Incident.description
-	$htmlDoc = ConvertFrom-Html -Content $desc
-	$table   = $htmlDoc.SelectNodes("//table")[0]
-	$tbody   = $table.LastChild
-	$tbody   = $table.LastChild # table body
-	$rows    = $tbody.SelectNodes("//tr")[2..100] | Where-Object {$_.InnerLength -gt 200} # retrieve table rows without headings
-	$result  = @()
-	foreach ($row in $rows) {
-		$cellText = $($row.InnerHtml | ConvertFrom-Html).SelectNodes("//td")[0..2].InnerText.Trim()
-		$result += [pscustomobject]@{
-			DisplayName = $cellText[0].Trim()
-			EmployeeID  = $cellText[1].Trim()
-			EndDate     = $cellText[2].Trim()
-		}
-	}
-	$result
-}
-
 function Export-SDIncidentRequest {
 	<#
 	.DESCRIPTION
@@ -1149,130 +847,6 @@ function Get-SDCatalogCategories {
 		Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ErrorAction Stop | Sort-Object name
 	} catch {
 		Write-Error $_.Exception.Message
-	}
-}
-#endregion
-
-#region Custom Functions
-function Rename-Column {
-	[CmdletBinding()]
-	param (
-		[parameter()][string]$ColumnName
-	)
-	Write-Verbose "Column Name: $ColumnName"
-	$headings = @{
-		'Latest Comment'                        = 'LatestComment'
-		'Network Start Date'                    = 'StartDate'
-		'Covid Test Date'                       = 'CovidTestDate'
-		'Email Setup'                           = 'EmailSetup'
-		'Pronouns'                              = 'Pronouns'
-		'New CBHC Staff'                        = 'CBHCStaff'
-		'Network End Date (Estimate if needed)' = 'EndDate'
-		'First Name'                            = 'FirstName'
-		'Last Name'                             = 'LastName'
-		'Rehire'                                = 'Rehire'
-		'Current/Recent Intern'                 = 'RecentIntern'
-		'Employee ID'                           = 'EmployeeID'
-		'Cost Center'                           = 'CostCenter'
-		'Job Title'                             = 'JobTitle'
-		'Equipment Needed'                      = 'EquipmentNeeded'
-		'Supervisor'                            = 'Supervisor'
-		'Degree'                                = 'Degree'
-		'NPI Number'                            = 'NPINumber'
-		'Supervisor approval'                   = 'SupervisorApproval'
-		'License'                               = 'License'
-		'License Number'                        = 'LicenseNumber'
-		'License Type'                          = 'LicenseType'
-		'License Expiration Date'               = 'LicenseExpirationDate'
-		'Relief Staff'                          = 'ReliefStaff'
-		'Intern'                                = 'IsIntern'
-		'Manager'                               = 'Manager'
-		'HD Completed'                          = 'HDCompleted'
-		'Application Setup Completed'           = 'AppCompleted'
-		'Temp'                                  = 'IsTemp'
-		'Consultant'                            = 'IsConsultant'
-		'Consultant Email Needed'               = 'EmailNeeded'
-		'Business Unit'                         = 'BusinessUnit'
-		'A&amp;F'                               = 'AandF'
-		'Day Supports &amp; Other'              = 'DaySupports'
-		'DS/BI'                                 = 'DSBI'
-		'BH'                                    = 'BH'
-		'BH Res'                                = 'BHRes'
-		'Comments'                              = 'Comments'
-	}
-	if ($headings.ContainsKey($ColumnName)) {
-		Write-Output $headings[$ColumnName]
-	} else {
-		Write-Output $ColumnName
-	}
-}
-
-function Compress-CostCenter {
-	<#
-	.DESCRIPTION
-		Removes the dashes from the cost center number prefix portion a Cost Center string input.
-	.EXAMPLE
-		Compress-CostCenter -CostCenter "1-234-56-7 - 100 Main Street"
-		Returns: "1234567"
-	#>
-	param (
-		[parameter()][string]$CostCenter
-	)
-	if (![string]::IsNullOrWhiteSpace($CostCenter)) {
-		$CostCenter.Substring(0,10) -replace '-',''
-	} else {
-		""
-	}
-}
-
-function Get-CostCenterLocation {
-	<#
-	.DESCRIPTION
-		Returns the location portion of the cost center after the number prefix portion.
-	.EXAMPLE
-		Get-CostCenterLocation -CostCenter "1-234-56-7 - 100 Main Street"
-		Returns: "100 Main Street"
-	#>
-	[CmdletBinding()]
-	param(
-		[parameter()][string]$CostCenter
-	)
-	if (![string]::IsNullOrWhiteSpace($CostCenter)) {
-		Write-Verbose "CostCenter input: $CostCenter"
-		if ($CostCenter.Length -gt 12) {
-			$CostCenter.Substring(12).Trim()
-		} else {
-			""
-		}
-	} else {
-		""
-	}
-}
-
-function New-UserDescription {
-	<#
-	.DESCRIPTION
-		Generates a user description string based on the job title and location.
-	.PARAMETER JobTitle
-		The user's job title.
-	.PARAMETER Location
-		The user's location.
-	.EXAMPLE
-		New-UserDescription -JobTitle "IT Specialist" -Location "100 Main Street"
-		Returns: "IT Specialist at 100 Main Street"
-	#>
-	param (
-		[parameter()][string]$JobTitle,
-		[parameter()][string]$Location
-	)
-	if (![string]::IsNullOrWhiteSpace($JobTitle) -and ![string]::IsNullOrWhiteSpace($Location)) {
-		"$($JobTitle.Trim()) at $($Location.Trim())"
-	} elseif (![string]::IsNullOrWhiteSpace($JobTitle)) {
-		$JobTitle.Trim()
-	} elseif (![string]::IsNullOrWhiteSpace($Location)) {
-		$Location.Trim()
-	} else {
-		""
 	}
 }
 #endregion
