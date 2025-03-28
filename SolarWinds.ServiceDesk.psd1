@@ -23,7 +23,7 @@
     # TypesToProcess = @()
     # FormatsToProcess = @()
     # NestedModules = @()
-    FunctionsToExport = @('Get-*', 'New-*', 'Set-*', 'Update-*', 'Export-*', 'Remove-*')
+    FunctionsToExport = @('Connect-*', 'Get-*', 'New-*', 'Set-*', 'Update-*', 'Export-*', 'Remove-*')
     CmdletsToExport   = @()
     VariablesToExport = '*'
     AliasesToExport   = @()
