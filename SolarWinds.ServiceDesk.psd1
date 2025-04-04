@@ -17,7 +17,7 @@
     # DotNetFrameworkVersion = ''
     # ClrVersion = ''
     # ProcessorArchitecture = ''
-    RequiredModules   = @('PowerHTML')
+    # RequiredModules   = @()
     # RequiredAssemblies = @()
     # ScriptsToProcess = @()
     # TypesToProcess = @()
@@ -30,9 +30,9 @@
     # DscResourcesToExport = @()
     # ModuleList = @()
     # FileList = @()
-    PrivateData       = @{
+    PrivateData = @{
         PSData = @{
-            Tags = @('SolarWinds', 'ServiceDesk', 'HelpDesk', 'Incidents', 'Service', 'Tickets', 'skatterbrainz')
+            Tags = @('ServiceDesk', 'SolarWinds', 'HelpDesk', 'Incidents', 'Service', 'Tickets', 'skatterbrainz')
             # LicenseUri = ''
             # ProjectUri = ''
             # IconUri = ''
