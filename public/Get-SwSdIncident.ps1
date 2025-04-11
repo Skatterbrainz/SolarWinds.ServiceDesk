@@ -25,6 +25,15 @@ function Get-SwSDIncident {
 	.EXAMPLE
 		Get-SwSDIncident -Id 123456789 -Name "Incident Name"
 		Returns the incident record for incident ID 12345 with the specified name.
+	.EXAMPLE
+		Get-SwSDIncident -Status "Pending Assignment" -Name "Incident Name"
+		Returns a list of incidents with status "Pending Assignment" and name "Incident Name".
+	.EXAMPLE
+		Get-SwSDIncident -Status "Pending Assignment" -PageLimit 50 -PageCount 2
+		Returns a list of incidents with status "Pending Assignment", with a maximum of 50 records per page, and returns 2 pages.
+	.NOTES
+	.LINK
+		
 	#>
 	[CmdletBinding()]
 	param (
