@@ -1,16 +1,25 @@
-function Get-SwSDAPI {
+function Get-SwSdAPI {
 	<#
+	.SYNOPSIS
+		Retrieves the SolarWinds Service Desk API URL for the specified API $Name, or returns the list of available APIs.
 	.DESCRIPTION
 		Retrieves the SolarWinds Service Desk API URL for the specified API $Name, or returns the list of available APIs.
 		Caches list to global variable $SDAPIList, to minimize API calls.
 	.PARAMETER Name
 		The name of the API to retrieve. If not specified, returns the list of available APIs.
 	.EXAMPLE
-		Get-SwSDAPI -Name "Incidents List"
+		Get-SwSdAPI -Name "Incidents List"
 		Returns the URL for the Incidents List API
 	.EXAMPLE
-		Get-SwSDAPI
+		Get-SwSdAPI
 		Returns all API URLs
+	.EXAMPLE
+		Get-SwSdAPI -Name "Search"
+		Returns the URL for the Search API
+	.NOTES
+		Reference: https://apidoc.samanage.com/#section/General-Concepts/API-Entry-Point
+	.LINK
+		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdAPI.md
 	#>
 	[CmdletBinding()]
 	param (

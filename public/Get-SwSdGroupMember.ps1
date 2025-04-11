@@ -1,4 +1,4 @@
-function Get-SwSDGroupMember {
+function Get-SwSdGroupMember {
 	<#
 	.SYNOPSIS
 		Returns the members of the specified group.
@@ -9,18 +9,23 @@ function Get-SwSDGroupMember {
 	.PARAMETER MemberName
 		The member name or email address. If not specified, returns all members.
 	.EXAMPLE
-		Get-SwSDGroupMember -Name "Admins"
+		Get-SwSdGroupMember -Name "Admins"
 		Returns the members of the Admins group.
 	.EXAMPLE
 		Get-SwSdGroupMember -Name "Admins" -MemberName "jsmith@contoso.com"
 		Returns the member record for the specified email address in the Admins group.
+	.NOTES
+		Reference: https://apidoc.samanage.com/#tag/Group
+	.LINK
+		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdGroupMember.md
+	
 	#>
 	[CmdletBinding()]
 	param(
-		[parameter(Mandatory)][string]$Name,
-		[parameter()][string]$MemberName
+		[parameter(Mandatory = $True)][string]$Name,
+		[parameter(Mandatory = $False)][string]$MemberName
 	)
-	$group = Get-SwWDGroup -Name $Name
+	$group = Get-SwWdGroup -Name $Name
 	if (![string]::IsNullOrEmpty($MemberName)) {
 		$MemberName = $MemberName.ToLower()
 		$group.memberships | Where-Object {

@@ -1,9 +1,9 @@
-function Add-SwSDComment {
+function Add-SwSdComment {
 	<#
 	.SYNOPSIS
 		Adds a comment to the specified incident.
 	.DESCRIPTION
-		Adds a comment to the specified incident.
+		Adds a comment to the specified incident. The comment can be made private and assigned to a user.
 	.PARAMETER IncidentNumber
 		The incident number.
 	.PARAMETER Comment
@@ -13,14 +13,24 @@ function Add-SwSDComment {
 	.PARAMETER Private
 		Make the comment private.
 	.EXAMPLE
-		Add-SwSDComment -IncidentNumber 12345 -Comment "This is a test comment." -Assignee "svc_ULMAPI@contoso.com"
+		Add-SwSdComment -IncidentNumber 12345 -Comment "This is a comment." -Assignee "jsmith@contoso.com"
+		Adds a comment to the specified incident number with the provided comment and assignee.
+	.EXAMPLE
+		Add-SwSdComment -IncidentNumber 12345 -Comment "This is a new comment" -Assignee "jsmith@contoso.com" -Private
+		Adds a private comment to the specified incident number with the provided comment and assignee.
+	.NOTES
+		The Assignee must be a valid SWSD user account.
+		Reference: https://apidoc.samanage.com/#tag/Incident
+		Reference: https://apidoc.samanage.com/#tag/Comment
+	.LINK
+		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Add-SwSdComment.md
 	#>
 	[CmdletBinding()]
 	param (
-		[parameter(Mandatory)][string]$IncidentNumber,
-		[parameter(Mandatory)][string]$Comment,
-		[parameter(Mandatory)][string]$Assignee,
-		[parameter()][switch]$Private
+		[parameter(Mandatory = $True)][string]$IncidentNumber,
+		[parameter(Mandatory = $True)][string]$Comment,
+		[parameter(Mandatory = $True)][string]$Assignee,
+		[parameter(Mandatory = $False)][switch]$Private
 	)
 	try {
 		$Session  = Connect-SwSD

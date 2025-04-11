@@ -1,7 +1,10 @@
 function New-SwSdTask {
 	<#
-	.DESCRIPTION
+	.SYNOPSIS
 		Creates a new task for the specified incident number.
+	.DESCRIPTION
+		Creates a new task for the specified incident number. 
+		The task is assigned to the specified user and has a due date offset by the specified number of days.
 	.PARAMETER IncidentNumber
 		The incident number.
 	.PARAMETER Name
@@ -16,24 +19,26 @@ function New-SwSdTask {
 		New-SwSdTask -IncidentNumber "12345" -Name "Task Name" -Assignee "user123@contoso.com"
 	.NOTES
 		Refer to https://apidoc.samanage.com/#tag/Task/operation/createTask
+	.LINK
+		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/New-SwSdTask.md
 	#>
 	[CmdletBinding()]
 	param(
-		[parameter(Mandatory)][string][ValidateNotNullOrWhiteSpace()]$IncidentNumber,
-		[parameter(Mandatory)][string][ValidateNotNullOrWhiteSpace()]$Name,
-		[parameter(Mandatory)][string][ValidateNotNullOrWhiteSpace()]$Assignee,
-		[parameter()][boolean]$IsComplete = $False,
-		[parameter()][int]$DueDateOffsetDays = 14
+		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$IncidentNumber,
+		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$Name,
+		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$Assignee,
+		[parameter(Mandatory = $False)][boolean]$IsComplete = $False,
+		[parameter(Mandatory = $False)][int]$DueDateOffsetDays = 14
 	)
 	try {
 		$Session  = Connect-SwSD
-		$incident = Get-SwSDIncident -Number $IncidentNumber
+		$incident = Get-SwSdIncident -Number $IncidentNumber
 		if (!$incident) { throw "Incident $IncidentNumber not found." }
-		$baseurl = Get-SwSDAPI -Name "Helpdesk Incidents List"
+		$baseurl = Get-SwSdAPI -Name "Helpdesk Incidents List"
 		$url  = "$($baseurl.replace('.json',''))/$($incident.id)/tasks"
 		Write-Verbose "Tasks URL: $url"
 		Write-Verbose "Verifying User $Assignee"
-		$user = Get-SwSDUser -Email $Assignee
+		$user = Get-SwSdUser -Email $Assignee
 		if (!$user) {
 			throw "User $Assignee not found."
 		}

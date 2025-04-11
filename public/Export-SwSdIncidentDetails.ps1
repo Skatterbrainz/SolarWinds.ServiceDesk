@@ -1,4 +1,4 @@
-function Export-SwSDIncidentDetails {
+function Export-SwSdIncidentDetails {
 	<#
 	.SYNOPSIS
 		Exports the incident details information to a file.
@@ -13,7 +13,18 @@ function Export-SwSDIncidentDetails {
 	.PARAMETER Show
 		Display the exported HTML request data in the default web browser.
 	.EXAMPLE
-		Export-SwSDIncidentDetails -Number 12345 -SaveToFile
+		Export-SwSdIncidentDetails -Number 12345 -SaveToFile
+		Exports the incident details for incident number 12345 to a file.
+	.EXAMPLE
+		Export-SwSdIncidentDetails -Number 12345 -SaveToFile -OutputPath "C:\Temp"
+		Exports the incident details for incident number 12345 to a file in the specified path.
+	.EXAMPLE
+		Export-SwSdIncidentDetails -Number 12345 -Show
+		Exports the incident details for incident number 12345 and displays it in the default web browser.
+	.NOTES
+		Reference: https://apidoc.samanage.com/#tag/Incident
+	.LINK
+		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Export-SwSdIncidentDetails.md
 	#>
 	[CmdletBinding()]
 	param(

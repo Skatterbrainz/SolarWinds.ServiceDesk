@@ -23,19 +23,22 @@ function New-SwSdIncident {
 		New-SwSdIncident -Name "Test Incident" -Description "This is a test incident." -Priority "High" -Status "In Progress"
 		Creates a new incident with the name "Test Incident", the description "This is a test incident.", priority "High", and status "In Progress".
 	.NOTES
+		Reference: https://apidoc.samanage.com/#tag/Incident
+	.LINK
+		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/New-SwSdIncident.md
 	#>
 	[CmdletBinding()]
 	param (
-		[parameter(Mandatory=$true)][string]$Name,
-		[parameter(Mandatory=$true)][string]$Description,
-		[parameter()][string]$Priority = "Normal",
-		[parameter()][string]$Status = "Pending Assignment",
-		[parameter()][string]$Category = "General",
-		[parameter()][string]$SubCategory = "General"
+		[parameter(Mandatory = $True)][string]$Name,
+		[parameter(Mandatory = $True)][string]$Description,
+		[parameter(Mandatory = $False)][string]$Priority = "Normal",
+		[parameter(Mandatory = $False)][string]$Status = "Pending Assignment",
+		[parameter(Mandatory = $False)][string]$Category = "General",
+		[parameter(Mandatory = $False)][string]$SubCategory = "General"
 	)
 	try {
 		$Session  = Connect-SwSD
-		$baseurl = Get-SwSDAPI -Name "Helpdesk Incidents List"
+		$baseurl = Get-SwSdAPI -Name "Helpdesk Incidents List"
 		$url = "$($baseurl.Replace('.json',''))"
 		Write-Verbose "url = $url"
 		

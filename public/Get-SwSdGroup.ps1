@@ -1,4 +1,4 @@
-function Get-SwSDGroup {
+function Get-SwSdGroup {
 	<#
 	.SYNOPSIS
 		Returns the group record for the specified group name.
@@ -7,19 +7,23 @@ function Get-SwSDGroup {
 	.PARAMETER Name
 		The group name. If not specified, returns all groups.
 	.EXAMPLE
-		Get-SwSDGroup -Name "Admins"
+		Get-SwSdGroup -Name "Admins"
 		Returns information for the Admins group.
 	.EXAMPLE
-		Get-SwSDGroup
+		Get-SwSdGroup
 		Returns all groups.
+	.NOTES
+		Reference: https://apidoc.samanage.com/#tag/Group
+	.LINK
+		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdGroup.md
 	#>
 	[CmdletBinding()]
 	param(
-		[parameter()][string]$Name
+		[parameter(Mandatory = $False)][string]$Name
 	)
 	try {
 		$Session = Connect-SwSD
-		$url     = Get-SwSDAPI -Name "Groups List"
+		$url     = Get-SwSdAPI -Name "Groups List"
 		$url     = "$($url)?per_page=100"
 		$groups  = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ResponseHeadersVariable responseHeaders -ErrorAction Stop
 		if (![string]::IsNullOrEmpty($Name)) {

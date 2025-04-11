@@ -1,4 +1,4 @@
-function Get-SwSDCatalogItem {
+function Get-SwSdCatalogItem {
 	<#
 	.SYNOPSIS
 		Returns the catalog item records for the specified ID or all catalog items.
@@ -13,23 +13,30 @@ function Get-SwSDCatalogItem {
 	.PARAMETER PageLimit
 		The maximum number of records to return per page. Default is 100.
 	.EXAMPLE
-		Get-SwSDCatalogItem -Id 12345
+		Get-SwSdCatalogItem -Id 12345
 		Returns the catalog item record for the specified ID.
 	.EXAMPLE
-		Get-SwSDCatalogItem -Name "New User"
+		Get-SwSdCatalogItem -Name "New User"
 		Returns the catalog item record for the specified name.
+	.EXAMPLE
+		Get-SwSdCatalogItem -Tag "New User"
+		Returns the catalog item record for the specified tag.
+	.EXAMPLE
+		Get-SwSdCatalogItem -PageLimit 50
+		Returns a list of catalog items with a maximum of 50 records per page.
+	.LINK
+		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdCatalogItem.md
 	#>
 	[CmdletBinding()]
 	param(
-		[parameter()][string]$Id,
-		[parameter()][string]$Name,
-		[parameter()][string]$Tag,
-		[parameter()][int]$PageLimit = 100
+		[parameter(Mandatory = $False)][string]$Id,
+		[parameter(Mandatory = $False)][string]$Name,
+		[parameter(Mandatory = $False)][string]$Tag,
+		[parameter(Mandatory = $False)][int]$PageLimit = 100
 	)
 	try {
 		$Session = Connect-SwSD
-		$baseurl = Get-SwSDAPI -Name "Catalog Items List"
-		#Write-Verbose "Url: $url"
+		$baseurl = Get-SwSdAPI -Name "Catalog Items List"
 		if (![string]::IsNullOrEmpty($Id)) {
 			$url = "$($baseurl.Replace('.json',''))/$Id.json"
 			Write-Verbose "Url: $url"

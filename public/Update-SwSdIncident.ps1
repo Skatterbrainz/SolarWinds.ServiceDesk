@@ -1,7 +1,11 @@
-function Update-SwSDIncident {
+function Update-SwSdIncident {
 	<#
+	.SYNOPSIS
+		Updates the specified incident record with the provided assignee and/or status.
 	.DESCRIPTION
 		Updates the specified incident record with the provided assignee and/or status.
+		You can specify either the assignee or status, or both.
+		Assignee must be a valid SWSD user account.
 	.PARAMETER Number
 		The incident number.
 	.PARAMETER Assignee
@@ -10,13 +14,22 @@ function Update-SwSDIncident {
 		The status of the incident: Awaiting Input, Assigned, Closed, On Hold, Pending Assignment, Scheduled.
 		The default status is 'Assigned'.
 	.EXAMPLE
-		Update-SwSDIncident -Number 12345 -Assignee "jsmith@contoso.org" -Status "Pending Assignment"
+		Update-SwSdIncident -Number 12345 -Assignee "jsmith@contoso.org" -Status "Pending Assignment"
+		Updates the incident 12345 with the specified assignee 'jsmith@contoso.org' and status 'Pending Assignment'.
+	.EXAMPLE
+		Update-SwSdIncident -Number 12345 -Status "Closed"
+		Updates the incident 12345 with the specified status 'Closed'
+	.NOTES
+		The Assignee must be a valid SWSD user account.
+		Reference: https://apidoc.samanage.com/#tag/Incident
+	.LINK
+		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Update-SwSdIncident.md
 	#>
 	[CmdletBinding()]
 	param (
-		[parameter(Mandatory)][string][ValidateNotNullOrWhiteSpace()]$Number,
-		[parameter()][string][Alias('Email')]$Assignee,
-		[parameter()][string][ValidateSet('Awaiting Input','Assigned','Closed','On Hold','Pending Assignment','Scheduled')][Alias('State')]$Status = 'Pending Assignment'
+		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$Number,
+		[parameter(Mandatory = $False)][string][Alias('Email')]$Assignee,
+		[parameter(Mandatory = $False)][string][Alias('State')]$Status
 	)
 	try {
 		if ([string]::IsNullOrEmpty($Assignee) -and [string]::IsNullOrEmpty($Status)) {
@@ -24,7 +37,7 @@ function Update-SwSDIncident {
 		}
 		$Session = Connect-SwSD
 		Write-Verbose "Requesting Incident $Number"
-		$incident = Get-SwSDIncident -Number $Number -NoRequestData
+		$incident = Get-SwSdIncident -Number $Number -NoRequestData
 		if (!$incident) {
 			throw "Incident $Number not found."
 		}
@@ -37,7 +50,7 @@ function Update-SwSDIncident {
 		}
 		if (![string]::IsNullOrEmpty($Assignee)) {
 			Write-Verbose "Verifying User $Assignee"
-			$user = Get-SwSDUser -Email $Assignee
+			$user = Get-SwSdUser -Email $Assignee
 			if (!$user) {
 				throw "User $Assignee not found."
 			}

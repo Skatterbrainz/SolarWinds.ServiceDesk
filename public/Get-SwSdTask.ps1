@@ -1,5 +1,7 @@
 function Get-SwSdTask {
 	<#
+	.SYNOPSIS
+		Returns the Service Desk task records for the specified Task URL or Incident Number.
 	.DESCRIPTION
 		Returns the Service Desk task records for the specified Task URL or Incident Number.
 	.PARAMETER TaskURL
@@ -12,11 +14,16 @@ function Get-SwSdTask {
 	.EXAMPLE
 		Get-SwSdTask -IncidentNumber "12345"
 		Returns the task records for the Incident record having the number 12345.
+	.NOTES
+		If both TaskURL and IncidentNumber are provided, TaskURL takes precedence.
+		Returns an error if neither TaskURL nor IncidentNumber is provided.
+	.LINK
+		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdTask.md
 	#>
 	[CmdletBinding()]
 	param (
-		[parameter()][string]$TaskURL,
-		[parameter()][string]$IncidentNumber
+		[parameter(Mandatory = $False)][string]$TaskURL,
+		[parameter(Mandatory = $False)][string]$IncidentNumber
 	)
 	try {
 		if ([string]::IsNullOrEmpty($TaskURL) -and [string]::IsNullOrEmpty($IncidentNumber)) {
@@ -26,7 +33,7 @@ function Get-SwSdTask {
 		if (![string]::IsNullOrWhiteSpace($TaskURL)) {
 			$response = Invoke-RestMethod -Method GET -Uri $TaskURL.Trim() -Headers $Session.headers
 		} elseif (![string]::IsNullOrWhiteSpace($IncidentNumber)) {
-			$incident = Get-SwSDIncident -Number $IncidentNumber -NoRequestData
+			$incident = Get-SwSdIncident -Number $IncidentNumber -NoRequestData
 			if ($null -ne $incident) {
 				$response = @()
 				$tasks = $incident.tasks

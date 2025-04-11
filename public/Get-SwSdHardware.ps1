@@ -1,4 +1,4 @@
-function Get-SwSDHardware {
+function Get-SwSdHardware {
 	<#
 	.SYNOPSIS
 		Returns the hardware records for the specified ID or all hardware.
@@ -13,22 +13,32 @@ function Get-SwSDHardware {
 	.PARAMETER NoProgress
 		Suppress the progress indicator.
 	.EXAMPLE
-		Get-SwSDHardware -Id 12345
+		Get-SwSdHardware -Id 12345
 		Returns the hardware record for the specified ID.
 	.EXAMPLE
-		Get-SwSDHardware -PageCount 5
+		Get-SwSdHardware -PageCount 5
 		Returns the first 5 pages of hardware records.
+	.EXAMPLE
+		Get-SwSdHardware -PageLimit 50
+		Returns a list of hardware records with a maximum of 50 records per page.
+	.EXAMPLE
+		Get-SwSdHardware -NoProgress
+		Returns a list of hardware records without showing the progress indicator.
+	.NOTES
+		Reference: https://apidoc.samanage.com/#tag/Hardware
+	.LINK
+		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdHardware.md
 	#>
 	[CmdletBinding()]
 	param (
-		[parameter()][string]$Id,
-		[parameter()][int]$PageCount = 0,
-		[parameter()][int]$PageLimit = 100,
-		[parameter()][switch]$NoProgress
+		[parameter(Mandatory = $False)][string]$Id,
+		[parameter(Mandatory = $False)][int]$PageCount = 0,
+		[parameter(Mandatory = $False)][int]$PageLimit = 100,
+		[parameter(Mandatory = $False)][switch]$NoProgress
 	)
 	try {
 		$Session = Connect-SwSD
-		$baseurl = Get-SwSDAPI -Name "Computers List"
+		$baseurl = Get-SwSdAPI -Name "Computers List"
 		if (![string]::IsNullOrEmpty($Id)) {
 			$url = "$($baseurl)/$Id.json"
 			$result = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ErrorAction Stop

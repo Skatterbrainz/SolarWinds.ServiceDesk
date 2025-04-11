@@ -1,7 +1,11 @@
-function Update-SwSDTask {
+function Update-SwSdTask {
 	<#
+	.SYNOPSIS
+		Updates the specified task record with the provided assignee and/or status.
 	.DESCRIPTION
 		Updates the specified task record with the provided assignee and/or status.
+		You can specify either the assignee or status, or both.
+		Assignee must be a valid SWSD user account.
 	.PARAMETER TaskURL
 		The URL of the task.
 	.PARAMETER Assignee
@@ -9,13 +13,22 @@ function Update-SwSDTask {
 	.PARAMETER Completed
 		Mark the task as completed.
 	.EXAMPLE
-		Update-SwSDTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json" -Completed
+		Update-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json" -Completed
+		Updates the task record for the specified Task URL and marks it as completed.
+	.EXAMPLE
+		Update-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json" -Assignee "jsmith@contoso.com"
+		Updates the task record for the specified Task URL and assigns it to the specified user.
+	.NOTES
+		The Assignee must be a valid SWSD user account.
+		Reference: https://apidoc.samanage.com/#tag/Task
+	.LINK
+		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Update-SwSdTask.md
 	#>
 	[CmdletBinding()]
 	param (
-		[parameter(Mandatory)][string][ValidateNotNullOrWhiteSpace()]$TaskURL,
-		[parameter()][string][Alias('Email')]$Assignee,
-		[parameter()][switch]$Completed
+		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$TaskURL,
+		[parameter(Mandatory = $False)][string][Alias('Email')]$Assignee,
+		[parameter(Mandatory = $False)][switch]$Completed
 	)
 	$Session = Connect-SwSD
 	$task    = Invoke-RestMethod -Method GET -Uri $TaskURL -Headers $Session.headers

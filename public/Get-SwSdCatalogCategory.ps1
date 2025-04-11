@@ -1,4 +1,4 @@
-function Get-SwSDCatalogCategory {
+function Get-SwSdCatalogCategory {
 	<#
 	.SYNOPSIS
 		Returns a catalog category or returns all categories.
@@ -9,19 +9,23 @@ function Get-SwSDCatalogCategory {
 	.PARAMETER Name
 		The catalog category name.
 	.EXAMPLE
-		Get-SwSDCatalogCategories
+		Get-SwSdCatalogCategories
 		Returns the catalog categories.
 	.EXAMPLE
-		Get-SwSDCatalogCategory -Id 12345
+		Get-SwSdCatalogCategory -Id 12345
 		Returns the catalog category for the specified ID.
 	.EXAMPLE
-		Get-SwSDCatalogCategory -Name "Mobile Devices"
+		Get-SwSdCatalogCategory -Name "Mobile Devices"
 		Returns the catalog category for the specified name.
+	.NOTES
+		Reference: https://apidoc.samanage.com/#tag/Category
+	.LINK
+		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdCatalogCategory.md
 	#>
 	[CmdletBinding()]
 	param(
-		[parameter()][int]$Id,
-		[parameter()][string]$Name
+		[parameter(Mandatory = $False)][int]$Id,
+		[parameter(Mandatory = $False)][string]$Name
 	)
 	try {
 		$Session = Connect-SwSD

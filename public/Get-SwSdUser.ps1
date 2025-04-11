@@ -1,7 +1,10 @@
-function Get-SwSDUser {
+function Get-SwSdUser {
 	<#
-	.DESCRIPTION
+	.SYNOPSIS
 		Returns the user record for the specified email address.
+	.DESCRIPTION
+		Returns the user record for the specified email address. If no email address is specified, it returns all users.
+		Supports pagination with a specified page limit and page count.
 	.PARAMETER Email
 		The user's email address.
 	.PARAMETER PageLimit
@@ -11,18 +14,32 @@ function Get-SwSDUser {
 	.PARAMETER NoProgress
 		Suppress the progress indicator.
 	.EXAMPLE
-		Get-SwSDUser -Email "jsmith@contoso.com"
+		Get-SwSdUser -Email "jsmith@contoso.com"
+		Returns the user record for the specified email address.
+	.EXAMPLE
+		Get-SwSdUser -PageCount 5
+		Returns the first 5 pages of user records.
+	.EXAMPLE
+		Get-SwSdUser -PageLimit 50
+		Returns a list of user records with a maximum of 50 records per page.
+	.EXAMPLE
+		Get-SwSdUser -NoProgress
+		Returns a list of user records without showing the progress indicator.
+	.NOTES
+		Reference: https://apidoc.samanage.com/#tag/User
+	.LINK
+		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdUser.md
 	#>
 	[CmdletBinding()]
 	param(
-		[parameter()][Alias('Name')][string]$Email,
-		[parameter()][int]$PageLimit = 100,
-		[parameter()][int]$PageCount = 10,
-		[parameter()][switch]$NoProgress
+		[parameter(Mandatory = $False)][Alias('Name')][string]$Email,
+		[parameter(Mandatory = $False)][int]$PageLimit = 100,
+		[parameter(Mandatory = $False)][int]$PageCount = 10,
+		[parameter(Mandatory = $False)][switch]$NoProgress
 	)
 	try {
-		$Session = Connect-SwSD
-		$baseurl = Get-SwSDAPI -Name "Users List"
+		$Session = Connect-SwSd
+		$baseurl = Get-SwSdAPI -Name "Users List"
 		if (![string]::IsNullOrEmpty($Email)) {
 			$url    = "$($baseurl)?email=$Email"
 			$result = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ErrorAction Stop

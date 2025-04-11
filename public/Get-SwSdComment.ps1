@@ -1,4 +1,4 @@
-function Get-SwSDComment {
+function Get-SwSdComment {
 	<#
 	.SYNOPSIS
 		Returns the comments for the specified incident.
@@ -7,17 +7,20 @@ function Get-SwSDComment {
 	.PARAMETER IncidentNumber
 		The incident number.
 	.EXAMPLE
-		Get-SwSDComment -IncidentNumber 12345
+		Get-SwSdComment -IncidentNumber 12345
+		Returns the comments for the specified incident number.
+	.LINK
+		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdComment.md
 	#>
 	[CmdletBinding()]
 	param (
-		[parameter(Mandatory)][string]$IncidentNumber
+		[parameter(Mandatory = $True)][string]$IncidentNumber
 	)
 	try {
 		$Session     = Connect-SwSD
-		$incident    = Get-SwSDIncident -Number $IncidentNumber -NoRequestData
+		$incident    = Get-SwSdIncident -Number $IncidentNumber -NoRequestData
 		if ($incident) {
-			$baseurl  = (Get-SwSDAPI -Name "Helpdesk Incidents List") -replace ".json", ""
+			$baseurl  = (Get-SwSdAPI -Name "Helpdesk Incidents List") -replace ".json", ""
 			$url      = "$($baseurl)/$($incident.id)/comments.json"
 			Write-Verbose "Url: $url"
 			$params = @{
