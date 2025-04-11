@@ -1,44 +1,62 @@
 ---
 external help file: SolarWinds.ServiceDesk-help.xml
 Module Name: SolarWinds.ServiceDesk
-online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/New-SwSdTask.md
+online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdCatalogItem.md
 schema: 2.0.0
 ---
 
-# New-SwSdTask
+# Get-SwSdCatalogItem
 
 ## SYNOPSIS
-Creates a new task for the specified incident number.
+Returns the catalog item records for the specified ID or all catalog items.
 
 ## SYNTAX
 
 ```
-New-SwSdTask [-IncidentNumber] <String> [-Name] <String> [-Assignee] <String> [[-IsComplete] <Boolean>]
- [[-DueDateOffsetDays] <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-SwSdCatalogItem [[-Id] <String>] [[-Name] <String>] [[-Tag] <String>] [[-PageLimit] <Int32>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Creates a new task for the specified incident number. 
-The task is assigned to the specified user and has a due date offset by the specified number of days.
+Returns the catalog item records for the specified ID or all catalog items.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-New-SwSdTask -IncidentNumber "12345" -Name "Task Name" -Assignee "user123@contoso.com"
+Get-SwSdCatalogItem -Id 12345
+Returns the catalog item record for the specified ID.
+```
+
+### EXAMPLE 2
+```
+Get-SwSdCatalogItem -Name "New User"
+Returns the catalog item record for the specified name.
+```
+
+### EXAMPLE 3
+```
+Get-SwSdCatalogItem -Tag "New User"
+Returns the catalog item record for the specified tag.
+```
+
+### EXAMPLE 4
+```
+Get-SwSdCatalogItem -PageLimit 50
+Returns a list of catalog items with a maximum of 50 records per page.
 ```
 
 ## PARAMETERS
 
-### -IncidentNumber
-The incident number.
+### -Id
+The catalog item ID.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 1
 Default value: None
 Accept pipeline input: False
@@ -46,54 +64,38 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-The task name.
+The catalog item name.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Assignee
-The task assignee email address.
+### -Tag
+The catalog item tag.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IsComplete
-The task completion status.
-Default is False.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 4
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DueDateOffsetDays
-The number of days to offset the due date.
-Default is 14 days.
+### -PageLimit
+The maximum number of records to return per page.
+Default is 100.
 
 ```yaml
 Type: Int32
@@ -101,8 +103,8 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 5
-Default value: 14
+Position: 4
+Default value: 100
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -130,9 +132,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-Refer to https://apidoc.samanage.com/#tag/Task/operation/createTask
 
 ## RELATED LINKS
 
-[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/New-SwSdTask.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/New-SwSdTask.md)
+[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdCatalogItem.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdCatalogItem.md)
 

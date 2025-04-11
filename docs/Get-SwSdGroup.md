@@ -1,43 +1,50 @@
 ---
 external help file: SolarWinds.ServiceDesk-help.xml
 Module Name: SolarWinds.ServiceDesk
-online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Remove-SwSdTask.md
+online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdGroup.md
 schema: 2.0.0
 ---
 
-# Remove-SwSdTask
+# Get-SwSdGroup
 
 ## SYNOPSIS
-Deletes the task for the specified Task URL.
+Returns the group record for the specified group name.
 
 ## SYNTAX
 
 ```
-Remove-SwSdTask [-TaskURL] <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-SwSdGroup [[-Name] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Deletes the task for the specified Task URL.
+Returns the group record for the specified group name or all groups.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Remove-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json"
-Deletes the specified incident task record.
+Get-SwSdGroup -Name "Admins"
+Returns information for the Admins group.
+```
+
+### EXAMPLE 2
+```
+Get-SwSdGroup
+Returns all groups.
 ```
 
 ## PARAMETERS
 
-### -TaskURL
-The URL of the task.
+### -Name
+The group name.
+If not specified, returns all groups.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 1
 Default value: None
 Accept pipeline input: False
@@ -67,9 +74,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-Reference: https://apidoc.samanage.com/#tag/Task
+Reference: https://apidoc.samanage.com/#tag/Group
 
 ## RELATED LINKS
 
-[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Remove-SwSdTask.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Remove-SwSdTask.md)
+[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdGroup.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdGroup.md)
 

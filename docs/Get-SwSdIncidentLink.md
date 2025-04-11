@@ -1,67 +1,59 @@
 ---
 external help file: SolarWinds.ServiceDesk-help.xml
 Module Name: SolarWinds.ServiceDesk
-online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdTask.md
+online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdIncidentLink.md
 schema: 2.0.0
 ---
 
-# Get-SwSdTask
+# Get-SwSdIncidentLink
 
 ## SYNOPSIS
-Returns the Service Desk task records for the specified Task URL or Incident Number.
+Generates a unique URL for the specified incident ID and name.
 
 ## SYNTAX
 
 ```
-Get-SwSdTask [[-TaskURL] <String>] [[-IncidentNumber] <String>] [-ProgressAction <ActionPreference>]
+Get-SwSdIncidentLink [-Number] <String> [-Name] <String> [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Returns the Service Desk task records for the specified Task URL or Incident Number.
+Generates a unique URL for the specified incident ID and name.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json"
-Returns the task record for the specified Task URL.
-```
-
-### EXAMPLE 2
-```
-Get-SwSdTask -IncidentNumber "12345"
-Returns the task records for the Incident record having the number 12345.
+Get-SwSdIncidentLink -Number 149737766 -Name "NH 2/18/25 Abenaa Ampem MBL WKR PKG #1 3000000"
+Returns: 149737766-nh-2-18-25-abenaa-ampem-mbl-wkr-pkg-1-3000000.json
 ```
 
 ## PARAMETERS
 
-### -TaskURL
-The URL of the task.
-If provided, returns the specific task record.
+### -Number
+The incident number.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IncidentNumber
-The incident number.
-If provided without TaskURL, returns all task records for the specified incident.
+### -Name
+The incident name.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: 2
 Default value: None
 Accept pipeline input: False
@@ -91,10 +83,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-If both TaskURL and IncidentNumber are provided, TaskURL takes precedence.
-Returns an error if neither TaskURL nor IncidentNumber is provided.
+This is also the tail end of the \[href\] property of an incident.
 
 ## RELATED LINKS
 
-[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdTask.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdTask.md)
+[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdIncidentLink.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdIncidentLink.md)
 

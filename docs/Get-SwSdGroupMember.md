@@ -1,60 +1,59 @@
 ---
 external help file: SolarWinds.ServiceDesk-help.xml
 Module Name: SolarWinds.ServiceDesk
-online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdTask.md
+online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdGroupMember.md
 schema: 2.0.0
 ---
 
-# Get-SwSdTask
+# Get-SwSdGroupMember
 
 ## SYNOPSIS
-Returns the Service Desk task records for the specified Task URL or Incident Number.
+Returns the members of the specified group.
 
 ## SYNTAX
 
 ```
-Get-SwSdTask [[-TaskURL] <String>] [[-IncidentNumber] <String>] [-ProgressAction <ActionPreference>]
+Get-SwSdGroupMember [-Name] <String> [[-MemberName] <String>] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Returns the Service Desk task records for the specified Task URL or Incident Number.
+Returns the members of the specified group.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json"
-Returns the task record for the specified Task URL.
+Get-SwSdGroupMember -Name "Admins"
+Returns the members of the Admins group.
 ```
 
 ### EXAMPLE 2
 ```
-Get-SwSdTask -IncidentNumber "12345"
-Returns the task records for the Incident record having the number 12345.
+Get-SwSdGroupMember -Name "Admins" -MemberName "jsmith@contoso.com"
+Returns the member record for the specified email address in the Admins group.
 ```
 
 ## PARAMETERS
 
-### -TaskURL
-The URL of the task.
-If provided, returns the specific task record.
+### -Name
+The group name.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IncidentNumber
-The incident number.
-If provided without TaskURL, returns all task records for the specified incident.
+### -MemberName
+The member name or email address.
+If not specified, returns all members.
 
 ```yaml
 Type: String
@@ -91,10 +90,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-If both TaskURL and IncidentNumber are provided, TaskURL takes precedence.
-Returns an error if neither TaskURL nor IncidentNumber is provided.
+Reference: https://apidoc.samanage.com/#tag/Group
 
 ## RELATED LINKS
 
-[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdTask.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdTask.md)
+[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdGroupMember.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdGroupMember.md)
 

@@ -1,36 +1,36 @@
 ---
 external help file: SolarWinds.ServiceDesk-help.xml
 Module Name: SolarWinds.ServiceDesk
-online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Remove-SwSdTask.md
+online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdComment.md
 schema: 2.0.0
 ---
 
-# Remove-SwSdTask
+# Get-SwSdComment
 
 ## SYNOPSIS
-Deletes the task for the specified Task URL.
+Returns the comments for the specified incident.
 
 ## SYNTAX
 
 ```
-Remove-SwSdTask [-TaskURL] <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-SwSdComment [-IncidentNumber] <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Deletes the task for the specified Task URL.
+Returns the comments for the specified incident.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Remove-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json"
-Deletes the specified incident task record.
+Get-SwSdComment -IncidentNumber 12345
+Returns the comments for the specified incident number.
 ```
 
 ## PARAMETERS
 
-### -TaskURL
-The URL of the task.
+### -IncidentNumber
+The incident number.
 
 ```yaml
 Type: String
@@ -67,9 +67,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-Reference: https://apidoc.samanage.com/#tag/Task
 
 ## RELATED LINKS
 
-[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Remove-SwSdTask.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Remove-SwSdTask.md)
+[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdComment.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdComment.md)
 

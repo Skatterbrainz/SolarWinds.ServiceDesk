@@ -1,13 +1,14 @@
 ---
 external help file: SolarWinds.ServiceDesk-help.xml
 Module Name: SolarWinds.ServiceDesk
-online version:
+online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Connect-SwSD.md
 schema: 2.0.0
 ---
 
 # Connect-SwSD
 
 ## SYNOPSIS
+Creates a new SolarWinds Service Desk session.
 
 ## SYNTAX
 
@@ -18,20 +19,40 @@ Connect-SwSD [[-ApiToken] <String>] [[-ApiUrl] <String>] [[-ApiVersion] <String>
 
 ## DESCRIPTION
 Creates a new SolarWinds Service Desk session.
+If a session already exists, it will return the existing session unless the \`-Refresh\` switch is used.
+You can provide the API token, URL, version, and format as parameters.
+If the API token is not provided, it will look for the \`$env:SWSDToken\` environment variable.
+You can also set the API URL, version, and format as parameters.
+The default values are:
+	- ApiUrl: "https://api.samanage.com"
+	- ApiVersion: "v2.1"
+	- ApiFormat: "json"
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Connect-SwSD -ApiToken "your_api_token"
+Creates a new SolarWinds Service Desk session with the specified API token.
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+Connect-SwSD -ApiUrl "https://api.samanage.com" -ApiVersion "v2.1" -ApiFormat "json"
+Creates a new SolarWinds Service Desk session with the specified API URL, version, and format.
+```
+
+### EXAMPLE 3
+```
+Connect-SwSD -Refresh
+Refreshes the existing SolarWinds Service Desk session.
+```
 
 ## PARAMETERS
 
 ### -ApiToken
 The authentication API token.
+This is required if not set in the environment variable \`$env:SWSDToken\`.
 
 ```yaml
 Type: String
@@ -131,5 +152,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
+Reference: https://apidoc.samanage.com/#section/General-Concepts/Service-URL
 
 ## RELATED LINKS
+
+[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Connect-SwSD.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Connect-SwSD.md)
+

@@ -1,60 +1,64 @@
 ---
 external help file: SolarWinds.ServiceDesk-help.xml
 Module Name: SolarWinds.ServiceDesk
-online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdTask.md
+online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdCatalogCategory.md
 schema: 2.0.0
 ---
 
-# Get-SwSdTask
+# Get-SwSdCatalogCategory
 
 ## SYNOPSIS
-Returns the Service Desk task records for the specified Task URL or Incident Number.
+Returns a catalog category or returns all categories.
 
 ## SYNTAX
 
 ```
-Get-SwSdTask [[-TaskURL] <String>] [[-IncidentNumber] <String>] [-ProgressAction <ActionPreference>]
+Get-SwSdCatalogCategory [[-Id] <Int32>] [[-Name] <String>] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Returns the Service Desk task records for the specified Task URL or Incident Number.
+Returns a catalog category or returns all categories.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json"
-Returns the task record for the specified Task URL.
+Get-SwSdCatalogCategories
+Returns the catalog categories.
 ```
 
 ### EXAMPLE 2
 ```
-Get-SwSdTask -IncidentNumber "12345"
-Returns the task records for the Incident record having the number 12345.
+Get-SwSdCatalogCategory -Id 12345
+Returns the catalog category for the specified ID.
+```
+
+### EXAMPLE 3
+```
+Get-SwSdCatalogCategory -Name "Mobile Devices"
+Returns the catalog category for the specified name.
 ```
 
 ## PARAMETERS
 
-### -TaskURL
-The URL of the task.
-If provided, returns the specific task record.
+### -Id
+The catalog category ID.
 
 ```yaml
-Type: String
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: 1
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IncidentNumber
-The incident number.
-If provided without TaskURL, returns all task records for the specified incident.
+### -Name
+The catalog category name.
 
 ```yaml
 Type: String
@@ -91,10 +95,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-If both TaskURL and IncidentNumber are provided, TaskURL takes precedence.
-Returns an error if neither TaskURL nor IncidentNumber is provided.
+Reference: https://apidoc.samanage.com/#tag/Category
 
 ## RELATED LINKS
 
-[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdTask.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdTask.md)
+[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdCatalogCategory.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdCatalogCategory.md)
 
