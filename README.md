@@ -1,6 +1,6 @@
 # SolarWinds.ServiceDesk
 
-This module provides an abstraction layer for the SolarWinds Service Desk (SwSD) REST API, focused mainly on incidents (tickets).
+This module provides an abstraction layer for the SolarWinds Service Desk (SwSD) REST API, focused mainly on incidents (tickets). This module was built for my own needs, but further development will be based upon that and general public interest (volume of downloads) or feedback (see below).
 
 Please submit feature enhancements or bug fixes by creating an [Issue](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/issues).
 
