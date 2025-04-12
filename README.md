@@ -4,6 +4,12 @@ This module provides an abstraction layer for the SolarWinds Service Desk (SwSD)
 
 Please submit feature enhancements or bug fixes by creating an [Issue](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/issues).
 
+# Requirements
+
+* PowerShell 5.1 or newer
+* Windows, Linux, MacOS
+* An active Service Desk subscription and API token
+
 # Connecting to Service Desk
 
 ## Connect with an explicit Token string.
