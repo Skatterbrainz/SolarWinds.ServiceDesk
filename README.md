@@ -50,6 +50,29 @@ Update an incident to set the status to Closed.
 Update-SwSdIncident -Number 12345 -Status "Closed"
 ```
 
+Get Tasks related to an incident.
+
+```powershell
+Get-SwSdTask -IncidentNumber 12345
+```
+
+Add a new Task to an incident.
+
+```powershell
+New-SwSdTask -IncidentNumber 12345 -Name "Assign Laptop" -Assignee "bjones@contoso.com" -DueDateOffsetDays 7
+```
+
+Update a Task on an incident to set status to Completed.
+
+```powershell
+$task = Get-SwSdTask -IncidentNumber 12345 | Where-Object name -eq 'Assign Laptop'
+Update-SwSdTask -TaskURL $task.href -Assignee "ctaylor@contoso.com" -Completed
+```
+
+# Want more? 
+
+Head over to the [Issues](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/issues) page to send feedback. Thank you!
+
 # Revision History
 
 - 1.0.1 - 4/16/2025
