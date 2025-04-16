@@ -19,3 +19,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+ADDENDUM
+
+This module is not produced by SolarWinds and is not supported by them. It is a 
+community module that provides a PowerShell interface to the SolarWinds Service Desk API.
+
+SolarWinds legal terms of use, copyright and trademark information, and privacy
+terms are available online at: https://www.solarwinds.com/legal/legal-documents
