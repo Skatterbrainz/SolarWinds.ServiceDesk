@@ -28,7 +28,7 @@ function New-SwSdTask {
 		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$Name,
 		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$Assignee,
 		[parameter(Mandatory = $False)][boolean]$IsComplete = $False,
-		[parameter(Mandatory = $False)][int]$DueDateOffsetDays = 14
+		[parameter(Mandatory = $False)][int]$DueDateOffsetDays = 7
 	)
 	try {
 		$Session  = Connect-SwSD

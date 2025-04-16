@@ -33,7 +33,7 @@ function Get-SwSdTask {
 		if (![string]::IsNullOrWhiteSpace($TaskURL)) {
 			$response = Invoke-RestMethod -Method GET -Uri $TaskURL.Trim() -Headers $Session.headers
 		} elseif (![string]::IsNullOrWhiteSpace($IncidentNumber)) {
-			$incident = Get-SwSdIncident -Number $IncidentNumber -NoRequestData
+			$incident = Get-SwSdIncident -Number $IncidentNumber
 			if ($null -ne $incident) {
 				$response = @()
 				$tasks = $incident.tasks
@@ -41,7 +41,7 @@ function Get-SwSdTask {
 				foreach ($task in $tasks) {
 					$TaskURL = $task.href
 					Write-Verbose "Task URL: $taskUrl"
-					$response += Invoke-RestMethod -Method GET -Uri $TaskURL -Headers $Session.headers
+					$response += Invoke-RestMethod -Method GET -Uri $TaskURL -Headers $Session.headers | Select-Object -ExpandProperty task
 				}
 			} else {
 				throw "Incident $IncidentNumber not found."

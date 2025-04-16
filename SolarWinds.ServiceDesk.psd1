@@ -4,7 +4,7 @@
 
 @{
     RootModule        = 'SolarWinds.ServiceDesk.psm1'
-    ModuleVersion     = '1.0.0'
+    ModuleVersion     = '1.0.1'
     # CompatiblePSEditions = @()
     GUID              = '15d2bfff-ebc1-4309-9aa1-51410f7ff8d3'
     Author            = 'David Stein'
@@ -32,11 +32,11 @@
     # FileList = @()
     PrivateData = @{
         PSData = @{
-            Tags = @('ServiceDesk', 'SolarWinds', 'SWSD', 'samanage', 'HelpDesk', 'Incidents', 'Service', 'Tickets', 'skatterbrainz')
+            Tags = @('ServiceDesk', 'SolarWinds', 'SWSD', 'samanage', 'HelpDesk', 'Incidents', 'Service', 'Tickets', 'Tasks', 'skatterbrainz')
             LicenseUri = 'https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/LICENSE'
             ProjectUri = 'https://github.com/Skatterbrainz/SolarWinds.ServiceDesk'
             # IconUri = ''
-            # ReleaseNotes = ''
+            ReleaseNotes = 'This module is not produced by SolarWinds and is not supported by them. It is a community module that provides a PowerShell interface to the SolarWinds Service Desk API.'
             # Prerelease = ''
             # RequireLicenseAcceptance = $false
             # ExternalModuleDependencies = @()

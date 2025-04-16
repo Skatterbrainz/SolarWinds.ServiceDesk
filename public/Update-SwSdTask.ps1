@@ -10,6 +10,8 @@ function Update-SwSdTask {
 		The URL of the task.
 	.PARAMETER Assignee
 		The email address of the assignee.
+	.PARAMETER DueDate
+		The due date for the task.
 	.PARAMETER Completed
 		Mark the task as completed.
 	.EXAMPLE
@@ -18,6 +20,9 @@ function Update-SwSdTask {
 	.EXAMPLE
 		Update-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json" -Assignee "jsmith@contoso.com"
 		Updates the task record for the specified Task URL and assigns it to the specified user.
+	.EXAMPLE
+		Update-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json" -DueDate (Get-Date).AddDays(7)
+		Updates the task record for the specified Task URL and sets the due date to 7 days from now.
 	.NOTES
 		The Assignee must be a valid SWSD user account.
 		Reference: https://apidoc.samanage.com/#tag/Task
@@ -28,6 +33,7 @@ function Update-SwSdTask {
 	param (
 		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$TaskURL,
 		[parameter(Mandatory = $False)][string][Alias('Email')]$Assignee,
+		[parameter(Mandatory = $False)][datetime]$DueDate,
 		[parameter(Mandatory = $False)][switch]$Completed
 	)
 	$Session = Connect-SwSD
@@ -39,6 +45,9 @@ function Update-SwSdTask {
 		}
 		if ($Completed.IsPresent) {
 			$body.task.is_complete = $true
+		}
+		if (![string]::IsNullOrEmpty($DueDate)) {
+			$body.task.due_at = $DueDate.ToString("MMM dd, yyyy")
 		}
 		$json = $body | ConvertTo-Json
 		$response = Invoke-RestMethod -Method PUT -Uri $TaskURL -ContentType "application/json" -Headers $Session.headers -Body $json

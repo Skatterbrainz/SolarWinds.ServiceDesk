@@ -10,21 +10,21 @@ Please submit feature enhancements or bug fixes by creating an [Issue](https://g
 * Windows, Linux, MacOS
 * An active Service Desk subscription and API token
 
-# Connecting to Service Desk
+# Examples
 
-## Connect with an explicit Token string.
+## Connect to Service Desk: Using an explicit Token string.
 
 ```powershell
 Connect-SwSd -ApiToken "<YOUR TOKEN>"
 ```
 
-## Connect with an existing $env:SWSDToken variable.
+## Connect to Service Desk: Using an existing $env:SWSDToken variable.
 
 ```powershell
 Connect-SwSd
 ```
 
-# Getting Incidents
+## Getting Incidents
 
 Return a list of incidents by status and name.
 
@@ -49,3 +49,13 @@ Update an incident to set the status to Closed.
 ```powershell
 Update-SwSdIncident -Number 12345 -Status "Closed"
 ```
+
+# Revision History
+
+- 1.0.1 - 4/16/2025
+  - Get-SwSdTask - Fixed bug in parameter reference and corrected the response JSON data
+  - New-SwSdTask - Changed DueDateOffsetDays default from 14 to 7 days
+  - Update-SwSdTask - Added support for DueDate property
+  - Tasks API: Still wondering why the Reminder property isn't exposed through the REST API
+- 1.0.0 - 4/12/2025
+  - It was born. Cigars were smoked. Insurance was billed.

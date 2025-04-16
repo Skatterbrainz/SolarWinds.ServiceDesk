@@ -102,7 +102,7 @@ Aliases:
 
 Required: False
 Position: 5
-Default value: 14
+Default value: 7
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

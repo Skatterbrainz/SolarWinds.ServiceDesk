@@ -1,51 +1,44 @@
 ---
 external help file: SolarWinds.ServiceDesk-help.xml
 Module Name: SolarWinds.ServiceDesk
-online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Update-SwSdTask.md
+online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Add-SwSdComment.md
 schema: 2.0.0
 ---
 
-# Update-SwSdTask
+# Add-SwSdComment
 
 ## SYNOPSIS
-Updates the specified task record with the provided assignee and/or status.
+Adds a comment to the specified incident.
 
 ## SYNTAX
 
 ```
-Update-SwSdTask [-TaskURL] <String> [[-Assignee] <String>] [[-DueDate] <DateTime>] [-Completed]
+Add-SwSdComment [-IncidentNumber] <String> [-Comment] <String> [-Assignee] <String> [-Private]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Updates the specified task record with the provided assignee and/or status.
-You can specify either the assignee or status, or both.
-Assignee must be a valid SWSD user account.
+Adds a comment to the specified incident.
+The comment can be made private and assigned to a user.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Update-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json" -Completed
-Updates the task record for the specified Task URL and marks it as completed.
+Add-SwSdComment -IncidentNumber 12345 -Comment "This is a comment." -Assignee "jsmith@contoso.com"
+Adds a comment to the specified incident number with the provided comment and assignee.
 ```
 
 ### EXAMPLE 2
 ```
-Update-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json" -Assignee "jsmith@contoso.com"
-Updates the task record for the specified Task URL and assigns it to the specified user.
-```
-
-### EXAMPLE 3
-```
-Update-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json" -DueDate (Get-Date).AddDays(7)
-Updates the task record for the specified Task URL and sets the due date to 7 days from now.
+Add-SwSdComment -IncidentNumber 12345 -Comment "This is a new comment" -Assignee "jsmith@contoso.com" -Private
+Adds a private comment to the specified incident number with the provided comment and assignee.
 ```
 
 ## PARAMETERS
 
-### -TaskURL
-The URL of the task.
+### -IncidentNumber
+The incident number.
 
 ```yaml
 Type: String
@@ -59,38 +52,38 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Assignee
-The email address of the assignee.
+### -Comment
+The comment to add.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: Email
+Aliases:
 
-Required: False
+Required: True
 Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DueDate
-The due date for the task.
+### -Assignee
+The email address of the assignee.
 
 ```yaml
-Type: DateTime
+Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Completed
-Mark the task as completed.
+### -Private
+Make the comment private.
 
 ```yaml
 Type: SwitchParameter
@@ -128,9 +121,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 The Assignee must be a valid SWSD user account.
-Reference: https://apidoc.samanage.com/#tag/Task
+Reference: https://apidoc.samanage.com/#tag/Incident
+Reference: https://apidoc.samanage.com/#tag/Comment
 
 ## RELATED LINKS
 
-[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Update-SwSdTask.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Update-SwSdTask.md)
+[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Add-SwSdComment.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Add-SwSdComment.md)
 
