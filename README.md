@@ -75,6 +75,9 @@ Head over to the [Issues](https://github.com/Skatterbrainz/SolarWinds.ServiceDes
 
 # Revision History
 
+- 1.0.2 - 4/23/2025
+  - New-SDTask - Revised DueDateOffsetDays to DueDate and made the default null (nil)
+  - Update-SDTask - Updated help documentation
 - 1.0.1 - 4/16/2025
   - Get-SwSdTask - Fixed bug in parameter reference and corrected the response JSON data
   - New-SwSdTask - Changed DueDateOffsetDays default from 14 to 7 days
