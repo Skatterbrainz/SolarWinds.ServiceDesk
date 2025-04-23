@@ -31,7 +31,7 @@ function Get-SwSdTask {
 		}
 		$Session = Connect-SwSD
 		if (![string]::IsNullOrWhiteSpace($TaskURL)) {
-			$response = Invoke-RestMethod -Method GET -Uri $TaskURL.Trim() -Headers $Session.headers
+			$response = Invoke-RestMethod -Method GET -Uri $TaskURL.Trim() -Headers $Session.headers | Select-Object -ExpandProperty task
 		} elseif (![string]::IsNullOrWhiteSpace($IncidentNumber)) {
 			$incident = Get-SwSdIncident -Number $IncidentNumber
 			if ($null -ne $incident) {
