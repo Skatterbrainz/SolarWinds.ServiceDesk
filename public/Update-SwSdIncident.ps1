@@ -15,9 +15,11 @@ function Update-SwSdIncident {
 		The default status is 'Assigned'.
 	.EXAMPLE
 		Update-SwSdIncident -Number 12345 -Assignee "jsmith@contoso.org" -Status "Pending Assignment"
+		
 		Updates the incident 12345 with the specified assignee 'jsmith@contoso.org' and status 'Pending Assignment'.
 	.EXAMPLE
 		Update-SwSdIncident -Number 12345 -Status "Closed"
+
 		Updates the incident 12345 with the specified status 'Closed'
 	.NOTES
 		The Assignee must be a valid SWSD user account.
