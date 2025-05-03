@@ -27,20 +27,23 @@ Assignee must be a valid SWSD user account.
 ### EXAMPLE 1
 ```
 Update-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json" -Completed
-Updates the task record for the specified Task URL and marks it as completed.
 ```
+
+Updates the task record for the specified Task URL and marks it as completed.
 
 ### EXAMPLE 2
 ```
 Update-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json" -Assignee "jsmith@contoso.com"
-Updates the task record for the specified Task URL and assigns it to the specified user.
 ```
+
+Updates the task record for the specified Task URL and assigns it to the specified user.
 
 ### EXAMPLE 3
 ```
 Update-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json" -DueDate (Get-Date).AddDays(7)
-Updates the task record for the specified Task URL and sets the due date to 7 days from now.
 ```
+
+Updates the task record for the specified Task URL and sets the due date to 7 days from now.
 
 ## PARAMETERS
 
@@ -128,6 +131,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 The Assignee must be a valid SWSD user account.
+
 Reference: https://apidoc.samanage.com/#tag/Task
 
 ## RELATED LINKS

@@ -8,6 +8,7 @@ function Remove-SwSdTask {
 		The URL of the task.
 	.EXAMPLE
 		Remove-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json"
+
 		Deletes the specified incident task record.
 	.NOTES
 		Reference: https://apidoc.samanage.com/#tag/Task
@@ -18,7 +19,6 @@ function Remove-SwSdTask {
 	param(
 		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$TaskURL
 	)
-	$Session  = Connect-SwSD
-	$response = Invoke-RestMethod -Method DELETE -Uri $TaskURL -Headers $Session.headers
+	$response = getApiResponseByURL -URL $TaskURL -Method "Delete"
 	$response
 }

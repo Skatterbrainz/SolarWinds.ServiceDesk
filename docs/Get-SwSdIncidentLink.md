@@ -25,8 +25,9 @@ Generates a unique URL for the specified incident ID and name.
 ### EXAMPLE 1
 ```
 Get-SwSdIncidentLink -Number 149737766 -Name "NH 2/18/25 Abenaa Ampem MBL WKR PKG #1 3000000"
-Returns: 149737766-nh-2-18-25-abenaa-ampem-mbl-wkr-pkg-1-3000000.json
 ```
+
+Returns: 149737766-nh-2-18-25-abenaa-ampem-mbl-wkr-pkg-1-3000000.json
 
 ## PARAMETERS
 

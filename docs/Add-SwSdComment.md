@@ -26,14 +26,16 @@ The comment can be made private and assigned to a user.
 ### EXAMPLE 1
 ```
 Add-SwSdComment -IncidentNumber 12345 -Comment "This is a comment." -Assignee "jsmith@contoso.com"
-Adds a comment to the specified incident number with the provided comment and assignee.
 ```
+
+Adds a comment to the specified incident number with the provided comment and assignee.
 
 ### EXAMPLE 2
 ```
 Add-SwSdComment -IncidentNumber 12345 -Comment "This is a new comment" -Assignee "jsmith@contoso.com" -Private
-Adds a private comment to the specified incident number with the provided comment and assignee.
 ```
+
+Adds a private comment to the specified incident number with the provided comment and assignee.
 
 ## PARAMETERS
 

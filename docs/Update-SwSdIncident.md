@@ -27,14 +27,16 @@ Assignee must be a valid SWSD user account.
 ### EXAMPLE 1
 ```
 Update-SwSdIncident -Number 12345 -Assignee "jsmith@contoso.org" -Status "Pending Assignment"
-Updates the incident 12345 with the specified assignee 'jsmith@contoso.org' and status 'Pending Assignment'.
 ```
+
+Updates the incident 12345 with the specified assignee 'jsmith@contoso.org' and status 'Pending Assignment'.
 
 ### EXAMPLE 2
 ```
 Update-SwSdIncident -Number 12345 -Status "Closed"
-Updates the incident 12345 with the specified status 'Closed'
 ```
+
+Updates the incident 12345 with the specified status 'Closed'
 
 ## PARAMETERS
 

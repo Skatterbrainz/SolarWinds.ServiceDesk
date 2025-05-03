@@ -14,12 +14,15 @@ function Export-SwSdIncidentDetails {
 		Display the exported HTML request data in the default web browser.
 	.EXAMPLE
 		Export-SwSdIncidentDetails -Number 12345 -SaveToFile
+		
 		Exports the incident details for incident number 12345 to a file.
 	.EXAMPLE
 		Export-SwSdIncidentDetails -Number 12345 -SaveToFile -OutputPath "C:\Temp"
+
 		Exports the incident details for incident number 12345 to a file in the specified path.
 	.EXAMPLE
 		Export-SwSdIncidentDetails -Number 12345 -Show
+
 		Exports the incident details for incident number 12345 and displays it in the default web browser.
 	.NOTES
 		Reference: https://apidoc.samanage.com/#tag/Incident

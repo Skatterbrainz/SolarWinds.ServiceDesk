@@ -1,61 +1,68 @@
 ---
 external help file: SolarWinds.ServiceDesk-help.xml
 Module Name: SolarWinds.ServiceDesk
-online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdGroupMember.md
+online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdVendor.md
 schema: 2.0.0
 ---
 
-# Get-SwSdGroupMember
+# Get-SwSdVendor
 
 ## SYNOPSIS
-Returns the members of the specified group.
+Returns the Service Desk vendor records for the specified ID or all vendors.
 
 ## SYNTAX
 
 ```
-Get-SwSdGroupMember [-Name] <String> [[-MemberName] <String>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+Get-SwSdVendor [[-Name] <String>] [[-Id] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Returns the members of the specified group.
+Returns the Service Desk vendor records for the specified ID or all vendors.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-SwSdGroupMember -Name "Admins"
+Get-SwSdVendor -Name "Vendor1"
 ```
 
-Returns the members of the Admins group.
+Returns the vendor record for the specified name.
 
 ### EXAMPLE 2
 ```
-Get-SwSdGroupMember -Name "Admins" -MemberName "jsmith@contoso.com"
+Get-SwSdVendor -Id "12345"
 ```
 
-Returns the member record for the specified email address in the Admins group.
+Returns the vendor record for the specified ID.
+
+### EXAMPLE 3
+```
+Get-SwSdVendor
+```
+
+Returns all vendor records.
 
 ## PARAMETERS
 
 ### -Name
-The group name.
+The vendor name to search for.
+If provided, returns the specific vendor record.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -MemberName
-The member name or email address.
-If not specified, returns all members.
+### -Id
+The vendor ID.
+If provided, returns the specific vendor record.
 
 ```yaml
 Type: String
@@ -92,9 +99,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-Reference: https://apidoc.samanage.com/#tag/Group
 
 ## RELATED LINKS
 
-[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdGroupMember.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdGroupMember.md)
+[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdVendor.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdVendor.md)
 

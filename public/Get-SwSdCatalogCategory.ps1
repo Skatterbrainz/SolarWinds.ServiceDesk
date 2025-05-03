@@ -28,8 +28,7 @@ function Get-SwSdCatalogCategory {
 		[parameter(Mandatory = $False)][string]$Name
 	)
 	try {
-		$Session = Connect-SwSD
-		$url     = Get-SwSDAPI -Name "Categories List"
+		$url = getApiBaseURL -ApiName "Categories List"
 		Write-Verbose "Url: $url"
 		$response = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ErrorAction Stop | Sort-Object name
 		if ($Id -gt 0) {

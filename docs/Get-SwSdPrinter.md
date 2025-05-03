@@ -1,61 +1,68 @@
 ---
 external help file: SolarWinds.ServiceDesk-help.xml
 Module Name: SolarWinds.ServiceDesk
-online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdGroupMember.md
+online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdPrinter.md
 schema: 2.0.0
 ---
 
-# Get-SwSdGroupMember
+# Get-SwSdPrinter
 
 ## SYNOPSIS
-Returns the members of the specified group.
+Returns the Service Desk printer records for the specified ID or all printers.
 
 ## SYNTAX
 
 ```
-Get-SwSdGroupMember [-Name] <String> [[-MemberName] <String>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+Get-SwSdPrinter [[-Name] <String>] [[-Id] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Returns the members of the specified group.
+Returns the Service Desk printer records for the specified ID or all printers.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-SwSdGroupMember -Name "Admins"
+Get-SwSdPrinter -Name "Printer1"
 ```
 
-Returns the members of the Admins group.
+Returns the printer record for the specified name.
 
 ### EXAMPLE 2
 ```
-Get-SwSdGroupMember -Name "Admins" -MemberName "jsmith@contoso.com"
+Get-SwSdPrinter -Id "12345"
 ```
 
-Returns the member record for the specified email address in the Admins group.
+Returns the printer record for the specified ID.
+
+### EXAMPLE 3
+```
+Get-SwSdPrinter
+```
+
+Returns all printer records.
 
 ## PARAMETERS
 
 ### -Name
-The group name.
+The printer name.
+If provided, returns the specific printer record.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -MemberName
-The member name or email address.
-If not specified, returns all members.
+### -Id
+The printer ID.
+If provided, returns the specific printer record.
 
 ```yaml
 Type: String
@@ -92,9 +99,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-Reference: https://apidoc.samanage.com/#tag/Group
 
 ## RELATED LINKS
 
-[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdGroupMember.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdGroupMember.md)
+[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdPrinter.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdPrinter.md)
 

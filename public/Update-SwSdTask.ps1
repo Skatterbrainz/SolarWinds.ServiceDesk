@@ -16,15 +16,19 @@ function Update-SwSdTask {
 		Mark the task as completed.
 	.EXAMPLE
 		Update-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json" -Completed
+
 		Updates the task record for the specified Task URL and marks it as completed.
 	.EXAMPLE
 		Update-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json" -Assignee "jsmith@contoso.com"
+
 		Updates the task record for the specified Task URL and assigns it to the specified user.
 	.EXAMPLE
 		Update-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json" -DueDate (Get-Date).AddDays(7)
+
 		Updates the task record for the specified Task URL and sets the due date to 7 days from now.
 	.NOTES
 		The Assignee must be a valid SWSD user account.
+
 		Reference: https://apidoc.samanage.com/#tag/Task
 	.LINK
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Update-SwSdTask.md
@@ -36,8 +40,8 @@ function Update-SwSdTask {
 		[parameter(Mandatory = $False)][datetime]$DueDate,
 		[parameter(Mandatory = $False)][switch]$Completed
 	)
-	$Session = Connect-SwSD
-	$task    = Invoke-RestMethod -Method GET -Uri $TaskURL -Headers $Session.headers
+	#$task = Invoke-RestMethod -Method GET -Uri $TaskURL -Headers $Session.headers
+	$task = getApiResponseByURL -URL $TaskURL
 	if ($task) {
 		$body    = @{task = @{}}
 		if (![string]::IsNullOrEmpty($Assignee)) {
@@ -50,6 +54,7 @@ function Update-SwSdTask {
 			$body.task.due_at = $DueDate.ToString("MMM dd, yyyy")
 		}
 		$json = $body | ConvertTo-Json
+		$response = getApiResponseByURL -URL $TaskURL -Method "PUT" -Body $json
 		$response = Invoke-RestMethod -Method PUT -Uri $TaskURL -ContentType "application/json" -Headers $Session.headers -Body $json
 		$response
 	} else {

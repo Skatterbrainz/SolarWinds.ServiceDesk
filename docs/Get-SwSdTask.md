@@ -25,14 +25,16 @@ Returns the Service Desk task records for the specified Task URL or Incident Num
 ### EXAMPLE 1
 ```
 Get-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json"
-Returns the task record for the specified Task URL.
 ```
+
+Returns the task record for the specified Task URL.
 
 ### EXAMPLE 2
 ```
 Get-SwSdTask -IncidentNumber "12345"
-Returns the task records for the Incident record having the number 12345.
 ```
+
+Returns the task records for the Incident record having the number 12345.
 
 ## PARAMETERS
 
@@ -92,6 +94,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 If both TaskURL and IncidentNumber are provided, TaskURL takes precedence.
+
 Returns an error if neither TaskURL nor IncidentNumber is provided.
 
 ## RELATED LINKS

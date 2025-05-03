@@ -8,9 +8,11 @@ function Get-SwSdGroup {
 		The group name. If not specified, returns all groups.
 	.EXAMPLE
 		Get-SwSdGroup -Name "Admins"
+
 		Returns information for the Admins group.
 	.EXAMPLE
 		Get-SwSdGroup
+
 		Returns all groups.
 	.NOTES
 		Reference: https://apidoc.samanage.com/#tag/Group
@@ -22,8 +24,7 @@ function Get-SwSdGroup {
 		[parameter(Mandatory = $False)][string]$Name
 	)
 	try {
-		$Session = Connect-SwSD
-		$url     = Get-SwSdAPI -Name "Groups List"
+		$url     = getApiBaseURL -ApiName "Groups List"
 		$url     = "$($url)?per_page=100"
 		$groups  = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ResponseHeadersVariable responseHeaders -ErrorAction Stop
 		if (![string]::IsNullOrEmpty($Name)) {

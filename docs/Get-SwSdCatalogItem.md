@@ -25,26 +25,30 @@ Returns the catalog item records for the specified ID or all catalog items.
 ### EXAMPLE 1
 ```
 Get-SwSdCatalogItem -Id 12345
-Returns the catalog item record for the specified ID.
 ```
+
+Returns the catalog item record for the specified ID.
 
 ### EXAMPLE 2
 ```
 Get-SwSdCatalogItem -Name "New User"
-Returns the catalog item record for the specified name.
 ```
+
+Returns the catalog item record for the specified name.
 
 ### EXAMPLE 3
 ```
 Get-SwSdCatalogItem -Tag "New User"
-Returns the catalog item record for the specified tag.
 ```
+
+Returns the catalog item record for the specified tag.
 
 ### EXAMPLE 4
 ```
 Get-SwSdCatalogItem -PageLimit 50
-Returns a list of catalog items with a maximum of 50 records per page.
 ```
+
+Returns a list of catalog items with a maximum of 50 records per page.
 
 ## PARAMETERS
 

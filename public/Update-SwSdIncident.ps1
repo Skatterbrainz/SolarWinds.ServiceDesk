@@ -37,7 +37,6 @@ function Update-SwSdIncident {
 		if ([string]::IsNullOrEmpty($Assignee) -and [string]::IsNullOrEmpty($Status)) {
 			throw "Assignee or Status must be provided."
 		}
-		$Session = Connect-SwSD
 		Write-Verbose "Requesting Incident $Number"
 		$incident = Get-SwSdIncident -Number $Number -NoRequestData
 		if (!$incident) {

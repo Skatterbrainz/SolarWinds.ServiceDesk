@@ -33,20 +33,23 @@ The default values are:
 ### EXAMPLE 1
 ```
 Connect-SwSD -ApiToken "your_api_token"
-Creates a new SolarWinds Service Desk session with the specified API token.
 ```
+
+Creates a new SolarWinds Service Desk session with the specified API token.
 
 ### EXAMPLE 2
 ```
 Connect-SwSD -ApiUrl "https://api.samanage.com" -ApiVersion "v2.1" -ApiFormat "json"
-Creates a new SolarWinds Service Desk session with the specified API URL, version, and format.
 ```
+
+Creates a new SolarWinds Service Desk session with the specified API URL, version, and format.
 
 ### EXAMPLE 3
 ```
 Connect-SwSD -Refresh
-Refreshes the existing SolarWinds Service Desk session.
 ```
+
+Refreshes the existing SolarWinds Service Desk session.
 
 ## PARAMETERS
 

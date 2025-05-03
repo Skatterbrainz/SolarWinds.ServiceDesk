@@ -14,15 +14,19 @@ function Get-SwSdHardware {
 		Suppress the progress indicator.
 	.EXAMPLE
 		Get-SwSdHardware -Id 12345
+
 		Returns the hardware record for the specified ID.
 	.EXAMPLE
 		Get-SwSdHardware -PageCount 5
+
 		Returns the first 5 pages of hardware records.
 	.EXAMPLE
 		Get-SwSdHardware -PageLimit 50
+
 		Returns a list of hardware records with a maximum of 50 records per page.
 	.EXAMPLE
 		Get-SwSdHardware -NoProgress
+
 		Returns a list of hardware records without showing the progress indicator.
 	.NOTES
 		Reference: https://apidoc.samanage.com/#tag/Hardware
@@ -37,19 +41,19 @@ function Get-SwSdHardware {
 		[parameter(Mandatory = $False)][switch]$NoProgress
 	)
 	try {
-		$Session = Connect-SwSD
-		$baseurl = Get-SwSdAPI -Name "Computers List"
+		$baseurl = getApiBaseURL -ApiName "Computers List"
 		if (![string]::IsNullOrEmpty($Id)) {
 			$url = "$($baseurl)/$Id.json"
-			$result = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ErrorAction Stop
+			$result = getApiResponseByURL -URL $url
 			Write-Output $hardwares
 			break
 		} else {
 			$url = "$($baseurl)?per_page=$PageLimit"
-			$result = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ResponseHeadersVariable responseHeaders -ErrorAction Stop
+			$result = getApiResponseByURL -URL $url
+			#$result = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ResponseHeadersVariable responseHeaders -ErrorAction Stop
 			if ($responseHeaders) {
-				[int]$totalCount = $responseHeaders.'X-Total-Count'[0]
-				[int]$totalPages = $responseHeaders.'X-Total-Pages'[0]
+				[int]$totalCount = $response.Headers['X-Total-Count'][0]
+				[int]$totalPages = $response.Headers['X-Total-Pages'][0]
 				if ($PageCount -gt 0 -and $PageCount -lt $totalPages) {
 					$totalPages = $PageCount
 				}
@@ -57,7 +61,8 @@ function Get-SwSdHardware {
 				for ($i = 2; $i -le $totalPages; $i++) {
 					$url = "$($baseurl)?per_page=$PageLimit&page=$i"
 					try {
-						$result += Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get
+						$result += getApiResponseByURL -URL $url
+						#$result += Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get
 						if (!$NoProgress.IsPresent) {
 							Write-Progress -Activity "Retrieving hardware" -Status "Page $i of $totalPages ($totalCount total items)" -PercentComplete ($i / $totalPages * 100) -Id 0
 						}

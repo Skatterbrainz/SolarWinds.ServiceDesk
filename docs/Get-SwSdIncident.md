@@ -12,16 +12,9 @@ Returns a Service Desk incident or list of incidents.
 
 ## SYNTAX
 
-### Number
 ```
-Get-SwSdIncident [-Number <String>] [-Status <String>] [-PageLimit <Int32>] [-PageCount <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
-```
-
-### ID
-```
-Get-SwSdIncident [-Id <Int32>] [-Name <String>] [-Status <String>] [-PageLimit <Int32>] [-PageCount <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-SwSdIncident [[-Number] <String>] [[-Id] <Int32>] [[-Name] <String>] [[-Status] <String>]
+ [[-PageLimit] <Int32>] [[-PageCount] <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -64,11 +57,11 @@ The incident number.
 
 ```yaml
 Type: String
-Parameter Sets: Number
+Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -79,11 +72,11 @@ The incident ID.
 
 ```yaml
 Type: Int32
-Parameter Sets: ID
+Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 2
 Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -95,11 +88,11 @@ Required if Id is provided.
 
 ```yaml
 Type: String
-Parameter Sets: ID
+Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -114,7 +107,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 4
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -130,7 +123,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 5
 Default value: 100
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -146,7 +139,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 6
 Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False

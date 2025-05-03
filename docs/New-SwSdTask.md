@@ -14,12 +14,13 @@ Creates a new task for the specified incident number.
 
 ```
 New-SwSdTask [-IncidentNumber] <String> [-Name] <String> [-Assignee] <String> [[-IsComplete] <Boolean>]
- [[-DueDateOffsetDays] <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [[-DueDate] <DateTime>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 Creates a new task for the specified incident number. 
-The task is assigned to the specified user and has a due date offset by the specified number of days.
+The task is assigned to the specified user and can have a due date and completion status.
+Use the -IsComplete parameter to set the task as complete.
 
 ## EXAMPLES
 
@@ -27,6 +28,22 @@ The task is assigned to the specified user and has a due date offset by the spec
 ```
 New-SwSdTask -IncidentNumber "12345" -Name "Task Name" -Assignee "user123@contoso.com"
 ```
+
+Add a task for "Task Name" assigned to user "user123@contoso.com" with no due date.
+
+### EXAMPLE 2
+```
+New-SwSdTask -IncidentNumber "12345" -Name "Task Name" -Assignee "user123@contoso.com" -DueDate "2025-12-31"
+```
+
+Add a task for "Task Name" assigned to user "user123@contoso.com" with a due date of "2025-12-31".
+
+### EXAMPLE 3
+```
+New-SwSdTask -IncidentNumber "12345" -Name "Task Name" -Assignee "user123@contoso.com" -IsComplete $True
+```
+
+Add a task for "Task Name" assigned to user "user123@contoso.com" with a completion status of $True.
 
 ## PARAMETERS
 
@@ -46,7 +63,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-The task name.
+The task name or description.
 
 ```yaml
 Type: String
@@ -62,6 +79,7 @@ Accept wildcard characters: False
 
 ### -Assignee
 The task assignee email address.
+Must be a valid Service Desk user or group.
 
 ```yaml
 Type: String
@@ -77,7 +95,8 @@ Accept wildcard characters: False
 
 ### -IsComplete
 The task completion status.
-Default is False.
+True indicates a completed task.
+The default is False.
 
 ```yaml
 Type: Boolean
@@ -91,18 +110,18 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DueDateOffsetDays
-The number of days to offset the due date.
-Default is 14 days.
+### -DueDate
+The due date for the task.
+Default is no due date.
 
 ```yaml
-Type: Int32
+Type: DateTime
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: 5
-Default value: 7
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

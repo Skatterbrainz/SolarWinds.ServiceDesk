@@ -10,9 +10,11 @@ function Get-SwSdGroupMember {
 		The member name or email address. If not specified, returns all members.
 	.EXAMPLE
 		Get-SwSdGroupMember -Name "Admins"
+
 		Returns the members of the Admins group.
 	.EXAMPLE
 		Get-SwSdGroupMember -Name "Admins" -MemberName "jsmith@contoso.com"
+		
 		Returns the member record for the specified email address in the Admins group.
 	.NOTES
 		Reference: https://apidoc.samanage.com/#tag/Group

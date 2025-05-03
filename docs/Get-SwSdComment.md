@@ -24,8 +24,9 @@ Returns the comments for the specified incident.
 ### EXAMPLE 1
 ```
 Get-SwSdComment -IncidentNumber 12345
-Returns the comments for the specified incident number.
 ```
+
+Returns the comments for the specified incident number.
 
 ## PARAMETERS
 

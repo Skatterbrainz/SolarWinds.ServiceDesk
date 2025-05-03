@@ -1,45 +1,52 @@
 ---
 external help file: SolarWinds.ServiceDesk-help.xml
 Module Name: SolarWinds.ServiceDesk
-online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdRole.md
+online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdDepartment.md
 schema: 2.0.0
 ---
 
-# Get-SwSdRole
+# Get-SwSdDepartment
 
 ## SYNOPSIS
-Returns the role record for the specified role name.
+Returns the Service Desk department records for the specified ID or all departments.
 
 ## SYNTAX
 
 ```
-Get-SwSdRole [[-Name] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-SwSdDepartment [[-Name] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Returns the role record for the specified role name or all roles.
+Returns the Service Desk department records for the specified ID or all departments.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-SwSdRole -Name "Admin"
+Get-SwSdDepartment -Name "IT"
 ```
 
-Returns information for the Admin role.
+Returns the department record for the specified name.
 
 ### EXAMPLE 2
 ```
-Get-SwSdRole
+Get-SwSdDepartment -Name "12345"
 ```
 
-Returns all roles.
+Returns the department record for the specified ID.
+
+### EXAMPLE 3
+```
+Get-SwSdDepartment
+```
+
+Returns all department records.
 
 ## PARAMETERS
 
 ### -Name
-The role name.
-If not specified, returns all roles.
+The department name or ID.
+If provided, returns the specific department record.
 
 ```yaml
 Type: String
@@ -76,9 +83,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-Reference: https://apidoc.samanage.com/#tag/Role
 
 ## RELATED LINKS
 
-[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdRole.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdRole.md)
+[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdDepartment.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdDepartment.md)
 

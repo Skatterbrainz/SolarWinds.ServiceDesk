@@ -37,11 +37,8 @@ function New-SwSdIncident {
 		[parameter(Mandatory = $False)][string]$SubCategory = "General"
 	)
 	try {
-		$Session  = Connect-SwSD
-		$baseurl = Get-SwSdAPI -Name "Helpdesk Incidents List"
-		$url = "$($baseurl.Replace('.json',''))"
+		$url = getApiBaseURL -ApiName "Helpdesk Incidents List"
 		Write-Verbose "url = $url"
-		
 		$body = @{
 			name        = $Name
 			description = $Description
@@ -50,9 +47,7 @@ function New-SwSdIncident {
 			category    = $Category
 			subcategory = $SubCategory
 		} | ConvertTo-Json -Depth 10
-
 		Write-Verbose "body = $body"
-		
 		$result = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Post -Body $body
 	} catch {
 		$result = [pscustomobject]@{

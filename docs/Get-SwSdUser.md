@@ -27,26 +27,30 @@ Supports pagination with a specified page limit and page count.
 ### EXAMPLE 1
 ```
 Get-SwSdUser -Email "jsmith@contoso.com"
-Returns the user record for the specified email address.
 ```
+
+Returns the user record for the specified email address.
 
 ### EXAMPLE 2
 ```
 Get-SwSdUser -PageCount 5
-Returns the first 5 pages of user records.
 ```
+
+Returns the first 5 pages of user records.
 
 ### EXAMPLE 3
 ```
 Get-SwSdUser -PageLimit 50
-Returns a list of user records with a maximum of 50 records per page.
 ```
+
+Returns a list of user records with a maximum of 50 records per page.
 
 ### EXAMPLE 4
 ```
 Get-SwSdUser -NoProgress
-Returns a list of user records without showing the progress indicator.
 ```
+
+Returns a list of user records without showing the progress indicator.
 
 ## PARAMETERS
 

@@ -25,20 +25,23 @@ Exports the incident details (description property) information to a file.
 ### EXAMPLE 1
 ```
 Export-SwSdIncidentDetails -Number 12345 -SaveToFile
-Exports the incident details for incident number 12345 to a file.
 ```
+
+Exports the incident details for incident number 12345 to a file.
 
 ### EXAMPLE 2
 ```
 Export-SwSdIncidentDetails -Number 12345 -SaveToFile -OutputPath "C:\Temp"
-Exports the incident details for incident number 12345 to a file in the specified path.
 ```
+
+Exports the incident details for incident number 12345 to a file in the specified path.
 
 ### EXAMPLE 3
 ```
 Export-SwSdIncidentDetails -Number 12345 -Show
-Exports the incident details for incident number 12345 and displays it in the default web browser.
 ```
+
+Exports the incident details for incident number 12345 and displays it in the default web browser.
 
 ## PARAMETERS
 

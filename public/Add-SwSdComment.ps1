@@ -14,9 +14,11 @@ function Add-SwSdComment {
 		Make the comment private.
 	.EXAMPLE
 		Add-SwSdComment -IncidentNumber 12345 -Comment "This is a comment." -Assignee "jsmith@contoso.com"
+
 		Adds a comment to the specified incident number with the provided comment and assignee.
 	.EXAMPLE
 		Add-SwSdComment -IncidentNumber 12345 -Comment "This is a new comment" -Assignee "jsmith@contoso.com" -Private
+
 		Adds a private comment to the specified incident number with the provided comment and assignee.
 	.NOTES
 		The Assignee must be a valid SWSD user account.
@@ -33,11 +35,10 @@ function Add-SwSdComment {
 		[parameter(Mandatory = $False)][switch]$Private
 	)
 	try {
-		$Session  = Connect-SwSD
 		$incident = Get-SwSDIncident -Number $IncidentNumber -NoRequestData
 		if ($incident) {
-			$baseurl = Get-SwSDAPI -Name "Helpdesk Incidents List"
-			$url = "$($baseurl.replace('.json',''))/$($incident.id)/comments"
+			$url = getApiBaseURL -ApiName "Helpdesk Incidents List" -NoExtension
+			$url = "$url/$($incident.id)/comments"
 			Write-Verbose "Url: $url"
 			$body = @{
 				"comment" = @{

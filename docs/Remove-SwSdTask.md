@@ -24,8 +24,9 @@ Deletes the task for the specified Task URL.
 ### EXAMPLE 1
 ```
 Remove-SwSdTask -TaskURL "https://api.samanage.com/incidents/123456789/tasks/98765432.json"
-Deletes the specified incident task record.
 ```
+
+Deletes the specified incident task record.
 
 ## PARAMETERS
 

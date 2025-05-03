@@ -1,59 +1,53 @@
 ---
 external help file: SolarWinds.ServiceDesk-help.xml
 Module Name: SolarWinds.ServiceDesk
-online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdHardware.md
+online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdAuditLog.md
 schema: 2.0.0
 ---
 
-# Get-SwSdHardware
+# Get-SwSdAuditLog
 
 ## SYNOPSIS
-Returns the hardware records for the specified ID or all hardware.
+Returns the Service Desk audit log records for the specified ID or all audit logs.
 
 ## SYNTAX
 
 ```
-Get-SwSdHardware [[-Id] <String>] [[-PageCount] <Int32>] [[-PageLimit] <Int32>] [-NoProgress]
+Get-SwSdAuditLog [[-Id] <String>] [[-PageLimit] <Int32>] [[-Limit] <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Returns the hardware records for the specified ID or all hardware.
+Returns the Service Desk audit log records for the specified ID or all audit logs.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-SwSdHardware -Id 12345
+Get-SwSdAuditLog -Id 12345
 ```
 
-Returns the hardware record for the specified ID.
+Returns the audit log record for the specified ID.
 
 ### EXAMPLE 2
 ```
-Get-SwSdHardware -PageCount 5
+Get-SwSdAuditLog -PageLimit 50
 ```
 
-Returns the first 5 pages of hardware records.
+Returns a list of audit logs with a maximum of 50 records per page.
 
 ### EXAMPLE 3
 ```
-Get-SwSdHardware -PageLimit 50
+Get-SwSdAuditLog -Limit 200
 ```
 
-Returns a list of hardware records with a maximum of 50 records per page.
-
-### EXAMPLE 4
-```
-Get-SwSdHardware -NoProgress
-```
-
-Returns a list of hardware records without showing the progress indicator.
+Returns a list of audit logs with a maximum of 200 records.
 
 ## PARAMETERS
 
 ### -Id
-The hardware ID.
+The audit log ID.
+If provided, returns the specific audit log record.
 
 ```yaml
 Type: String
@@ -63,22 +57,6 @@ Aliases:
 Required: False
 Position: 1
 Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -PageCount
-The number of pages to return.
-Default is 0 (all pages).
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 2
-Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -93,23 +71,24 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
+Position: 2
 Default value: 100
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -NoProgress
-Suppress the progress indicator.
+### -Limit
+The maximum number of records to return.
+Default is 100.
 
 ```yaml
-Type: SwitchParameter
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
-Default value: False
+Position: 3
+Default value: 100
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -137,9 +116,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-Reference: https://apidoc.samanage.com/#tag/Hardware
 
 ## RELATED LINKS
 
-[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdHardware.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdHardware.md)
+[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdAuditLog.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdAuditLog.md)
 

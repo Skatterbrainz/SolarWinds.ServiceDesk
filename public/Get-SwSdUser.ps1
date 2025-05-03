@@ -15,15 +15,19 @@ function Get-SwSdUser {
 		Suppress the progress indicator.
 	.EXAMPLE
 		Get-SwSdUser -Email "jsmith@contoso.com"
+		
 		Returns the user record for the specified email address.
 	.EXAMPLE
 		Get-SwSdUser -PageCount 5
+
 		Returns the first 5 pages of user records.
 	.EXAMPLE
 		Get-SwSdUser -PageLimit 50
+
 		Returns a list of user records with a maximum of 50 records per page.
 	.EXAMPLE
 		Get-SwSdUser -NoProgress
+
 		Returns a list of user records without showing the progress indicator.
 	.NOTES
 		Reference: https://apidoc.samanage.com/#tag/User
@@ -38,28 +42,38 @@ function Get-SwSdUser {
 		[parameter(Mandatory = $False)][switch]$NoProgress
 	)
 	try {
-		$Session = Connect-SwSd
-		$baseurl = Get-SwSdAPI -Name "Users List"
+		$baseurl = getApiBaseURL -ApiName "Users List"
 		if (![string]::IsNullOrEmpty($Email)) {
-			$url    = "$($baseurl)?email=$Email"
-			$result = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ErrorAction Stop
+			$url = "$($baseurl)?email=$Email"
+			$result = getApiResponseByURL -URL $url
 		} else {
 			$url    = "$($baseurl)?per_page=$PageLimit"
+			Write-Verbose "Url: $url"
 			$users  = @()
-			$users  += Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ResponseHeadersVariable responseHeaders -ErrorAction Stop
-			[int]$totalCount = $responseHeaders.'X-Total-Count'[0]
-			[int]$totalPages = $responseHeaders.'X-Total-Pages'[0]
+			$response = Invoke-WebRequest -Uri $url -Headers $SDSession.headers -Method Get -ContentType "application/json" -ErrorAction Stop
+			if ($response.StatusCode -eq 200) {
+				$users += $response.Content | ConvertFrom-Json
+			} else {
+				Write-Error "Failed to retrieve user data. Status Code: $($response.StatusCode)"
+				return
+			}
+			Write-Verbose "$($users.Count) users returned."
+			[int]$totalCount = $response.Headers['X-Total-Count'][0]
+			[int]$totalPages = $response.Headers['X-Total-Pages'][0]
 			Write-Verbose "Total Pages: $totalPages / Total Records: $totalCount"
+			
 			if ($PageCount -gt 0 -and $PageCount -lt $totalPages) {
 				$totalPages = $PageCount
 			}
+			
 			for ($i = 2; $i -le $totalPages; $i++) {
 				$url = "$($baseurl)?per_page=$PageLimit&page=$i"
 				if (!$NoProgress.IsPresent) {
 					Write-Progress -Activity "Retrieving User Data" -Status "Page $i of $totalPages" -PercentComplete ($i / $totalPages * 100) -Id 0
 				}
-				$users += Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ResponseHeadersVariable responseHeaders
+				$users += getApiResponseByURL -URL $url
 			}
+			
 			if (!$NoProgress.IsPresent) {
 				Write-Progress -Activity "Retrieving User Data" -Status "Completed" -PercentComplete 100 -Id 0
 			}

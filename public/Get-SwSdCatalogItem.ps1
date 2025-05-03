@@ -14,15 +14,19 @@ function Get-SwSdCatalogItem {
 		The maximum number of records to return per page. Default is 100.
 	.EXAMPLE
 		Get-SwSdCatalogItem -Id 12345
+		
 		Returns the catalog item record for the specified ID.
 	.EXAMPLE
 		Get-SwSdCatalogItem -Name "New User"
+
 		Returns the catalog item record for the specified name.
 	.EXAMPLE
 		Get-SwSdCatalogItem -Tag "New User"
+
 		Returns the catalog item record for the specified tag.
 	.EXAMPLE
 		Get-SwSdCatalogItem -PageLimit 50
+
 		Returns a list of catalog items with a maximum of 50 records per page.
 	.LINK
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdCatalogItem.md
@@ -38,11 +42,13 @@ function Get-SwSdCatalogItem {
 		$Session = Connect-SwSD
 		$baseurl = Get-SwSdAPI -Name "Catalog Items List"
 		if (![string]::IsNullOrEmpty($Id)) {
-			$url = "$($baseurl.Replace('.json',''))/$Id.json"
+			$url = getApiBaseURL -ApiName "Catalog Items List"
+			$url = "$url/$Id.json"
 			Write-Verbose "Url: $url"
 			$result = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ErrorAction Stop
 		} elseif (![string]::IsNullOrEmpty($Name) -and ($Id -gt 0)) {
-			$url = "$($baseurl.Replace('.json',''))/$Id-$($Name.ToLower().Replace(' ','-')).json"
+			$url = getApiBaseURL -ApiName "Catalog Items List"
+			$url = "$url/$Id-$($Name.ToLower().Replace(' ','-')).json"
 			Write-Verbose "Url: $url"
 			$result = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ErrorAction Stop
 		} else {

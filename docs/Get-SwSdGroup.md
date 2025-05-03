@@ -24,14 +24,16 @@ Returns the group record for the specified group name or all groups.
 ### EXAMPLE 1
 ```
 Get-SwSdGroup -Name "Admins"
-Returns information for the Admins group.
 ```
+
+Returns information for the Admins group.
 
 ### EXAMPLE 2
 ```
 Get-SwSdGroup
-Returns all groups.
 ```
+
+Returns all groups.
 
 ## PARAMETERS
 

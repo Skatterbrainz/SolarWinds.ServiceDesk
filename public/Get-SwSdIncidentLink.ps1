@@ -10,6 +10,7 @@ function Get-SwSdIncidentLink {
 		The incident name.
 	.EXAMPLE
 		Get-SwSdIncidentLink -Number 149737766 -Name "NH 2/18/25 Abenaa Ampem MBL WKR PKG #1 3000000"
+		
 		Returns: 149737766-nh-2-18-25-abenaa-ampem-mbl-wkr-pkg-1-3000000.json
 	.NOTES
 		This is also the tail end of the [href] property of an incident.

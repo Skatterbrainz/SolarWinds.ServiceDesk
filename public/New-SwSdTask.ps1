@@ -42,11 +42,10 @@ function New-SwSdTask {
 		[parameter(Mandatory = $False)][datetime]$DueDate
 	)
 	try {
-		$Session  = Connect-SwSD
 		$incident = Get-SwSdIncident -Number $IncidentNumber
 		if (!$incident) { throw "Incident $IncidentNumber not found." }
-		$baseurl = Get-SwSdAPI -Name "Helpdesk Incidents List"
-		$url  = "$($baseurl.replace('.json',''))/$($incident.id)/tasks"
+		$url = getApiBaseURL -ApiName "Helpdesk Incidents List" -NoExtension
+		$url  = "$url/$($incident.id)/tasks"
 		Write-Verbose "Tasks URL: $url"
 		Write-Verbose "Verifying User $Assignee"
 		$user = Get-SwSdUser -Email $Assignee
@@ -56,19 +55,27 @@ function New-SwSdTask {
 		if (![string]::IsNullOrEmpty($DueDate)) {
 			$dueDate = (Get-Date $DueDate).ToString("MMM dd, yyyy")
 			Write-Verbose "Due Date: $dueDate"
-		} else {
-			$dueDate = "nil"
-		}
-		$body = @{
-			"task" = @{
-				"name" = $Name.Trim()
-				"assignee" = @{
-					"email" = $Assignee.Trim()
+			$body = @{
+				"task" = @{
+					"name" = $Name.Trim()
+					"assignee" = @{
+						"email" = $Assignee.Trim()
+					}
+					"due_at" = $dueDate
+					"is_complete" = $IsComplete
 				}
-				"due_at" = $dueDate
-				"is_complete" = $IsComplete
-			}
-		} | ConvertTo-Json
+			} | ConvertTo-Json
+		} else {
+			$body = @{
+				"task" = @{
+					"name" = $Name.Trim()
+					"assignee" = @{
+						"email" = $Assignee.Trim()
+					}
+					"is_complete" = $IsComplete
+				}
+			} | ConvertTo-Json
+		}
 		Write-Verbose "Creating task: $json"
 		#curl -H "X-Samanage-Authorization: Bearer $token" -H "Accept: application/vnd.samanage.v2.1+json" -H "Content-Type: application/json" -X POST $url -d $json
 		$response = Invoke-RestMethod -Method POST -Uri $url -ContentType "application/json" -Headers $Session.headers -Body $body #-ErrorAction Stop

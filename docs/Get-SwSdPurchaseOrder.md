@@ -1,59 +1,67 @@
 ---
 external help file: SolarWinds.ServiceDesk-help.xml
 Module Name: SolarWinds.ServiceDesk
-online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdHardware.md
+online version: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdPurchaseOrder.md
 schema: 2.0.0
 ---
 
-# Get-SwSdHardware
+# Get-SwSdPurchaseOrder
 
 ## SYNOPSIS
-Returns the hardware records for the specified ID or all hardware.
+Returns the Service Desk purchase order records for the specified criteria or all purchase orders.
 
 ## SYNTAX
 
 ```
-Get-SwSdHardware [[-Id] <String>] [[-PageCount] <Int32>] [[-PageLimit] <Int32>] [-NoProgress]
+Get-SwSdPurchaseOrder [[-Name] <String>] [[-Id] <Int32>] [[-Status] <String>] [[-HREF] <String>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Returns the hardware records for the specified ID or all hardware.
+Returns the Service Desk purchase order records for the specified criteria or all purchase orders.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-SwSdHardware -Id 12345
+Get-SwSdPurchaseOrder -Name "Purchase Order 1"
 ```
 
-Returns the hardware record for the specified ID.
+Returns the purchase order record for the specified name.
 
 ### EXAMPLE 2
 ```
-Get-SwSdHardware -PageCount 5
+Get-SwSdPurchaseOrder -Id "12345"
 ```
 
-Returns the first 5 pages of hardware records.
+Returns the purchase order record for the specified ID.
 
 ### EXAMPLE 3
 ```
-Get-SwSdHardware -PageLimit 50
+Get-SwSdPurchaseOrder -Status "Open"
 ```
 
-Returns a list of hardware records with a maximum of 50 records per page.
+Returns the purchase order records for the specified status.
 
 ### EXAMPLE 4
 ```
-Get-SwSdHardware -NoProgress
+Get-SwSdPurchaseOrder -HREF "https://api.samanage.com/purchase_orders/1234567890"
 ```
 
-Returns a list of hardware records without showing the progress indicator.
+Returns the purchase order record for the specified HREF.
+
+### EXAMPLE 5
+```
+Get-SwSdPurchaseOrder
+```
+
+Returns all purchase order records.
 
 ## PARAMETERS
 
-### -Id
-The hardware ID.
+### -Name
+The purchase order name.
+If provided, returns the specific purchase order record.
 
 ```yaml
 Type: String
@@ -67,9 +75,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -PageCount
-The number of pages to return.
-Default is 0 (all pages).
+### -Id
+The purchase order ID.
+If provided, returns the specific purchase order record.
 
 ```yaml
 Type: Int32
@@ -83,33 +91,34 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -PageLimit
-The maximum number of records to return per page.
-Default is 100.
+### -Status
+The purchase order status.
+If provided, returns the specific purchase order record.
 
 ```yaml
-Type: Int32
+Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: 3
-Default value: 100
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -NoProgress
-Suppress the progress indicator.
+### -HREF
+The purchase order HREF.
+If provided, returns the specific purchase order record.
 
 ```yaml
-Type: SwitchParameter
+Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
-Default value: False
+Position: 4
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -137,9 +146,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-Reference: https://apidoc.samanage.com/#tag/Hardware
 
 ## RELATED LINKS
 
-[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdHardware.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdHardware.md)
+[https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdPurchaseOrder.md](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdPurchaseOrder.md)
 
