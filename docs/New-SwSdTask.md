@@ -148,6 +148,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
+### System.Management.Automation.PSObject
 ## NOTES
 Refer to https://apidoc.samanage.com/#tag/Task/operation/createTask
 

@@ -116,6 +116,8 @@ Accept wildcard characters: False
 ### -PageLimit
 The maximum number of records to return per page.
 Default is 100.
+Valid values are between 1 and 500.
+If PageLimit is set to 0, it returns all records.
 
 ```yaml
 Type: Int32
@@ -132,6 +134,7 @@ Accept wildcard characters: False
 ### -PageCount
 The number of pages to return.
 Default is 0 (all pages).
+Valid values are between 0 and 100.
 
 ```yaml
 Type: Int32
@@ -167,6 +170,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
+### System.Management.Automation.PSObject
 ## NOTES
 Reference: https://apidoc.samanage.com/#tag/Incident
 

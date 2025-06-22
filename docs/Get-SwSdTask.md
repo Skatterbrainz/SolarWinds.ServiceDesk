@@ -92,6 +92,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
+### System.Management.Automation.PSObject
 ## NOTES
 If both TaskURL and IncidentNumber are provided, TaskURL takes precedence.
 

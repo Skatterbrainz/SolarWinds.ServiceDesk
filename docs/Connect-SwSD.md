@@ -154,6 +154,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
+### System.Management.Automation.PSObject
 ## NOTES
 Reference: https://apidoc.samanage.com/#section/General-Concepts/Service-URL
 

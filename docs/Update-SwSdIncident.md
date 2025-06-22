@@ -108,6 +108,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
+### System.Management.Automation.PSObject
 ## NOTES
 The Assignee must be a valid SWSD user account.
 Reference: https://apidoc.samanage.com/#tag/Incident

@@ -83,6 +83,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
+### System.String
 ## NOTES
 This is also the tail end of the \[href\] property of an incident.
 
