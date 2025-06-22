@@ -42,6 +42,8 @@ function Get-SwSdProblem {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdProblem.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
+	[Alias('Get-SwSdProblems', 'Get-SwSdProblemList')]
 	param (
 		[parameter(Mandatory = $False)][string]$Name,
 		[parameter(Mandatory = $False)][string]$Id,

@@ -22,6 +22,8 @@ function Get-SwSdSite {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdSite.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
+	[Alias('Get-SwSdSites', 'Get-SwSdSiteList')]
 	param(
 		[parameter(Mandatory = $False)][string]$Name
 	)

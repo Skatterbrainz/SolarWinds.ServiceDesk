@@ -20,6 +20,8 @@ function Get-SwSdRole {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdRole.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
+	[Alias('Get-SwSdRoles', 'Get-SwSdRoleList')]
 	param(
 		[parameter(Mandatory = $False)][string]$Name
 	)

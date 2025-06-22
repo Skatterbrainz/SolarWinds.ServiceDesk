@@ -22,6 +22,8 @@ function Get-SwSdDepartment {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdDepartment.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
+	[Alias('Get-SwSdDepartments', 'Get-SwSdDepartmentList')]
 	param (
 		[parameter(Mandatory = $False)][string]$Name
 	)

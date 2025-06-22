@@ -16,6 +16,7 @@ function Remove-SwSdTask {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Remove-SwSdTask.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
 	param(
 		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$TaskURL
 	)

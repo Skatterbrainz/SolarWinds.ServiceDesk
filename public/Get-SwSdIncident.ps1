@@ -37,13 +37,15 @@ function Get-SwSdIncident {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdIncident.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
+	[Alias('Get-SwSdIncidents', 'Get-SwSdIncidentList')]
 	param (
 		[parameter(Mandatory = $False)][string]$Number,
 		[parameter(Mandatory = $False)][int32]$Id,
 		[parameter(Mandatory = $False)][string]$Name,
 		[parameter(Mandatory = $False)][string]$Status,
-		[parameter(Mandatory = $False)][int]$PageLimit = 100,
-		[parameter(Mandatory = $False)][int]$PageCount = 0
+		[parameter(Mandatory = $False)][int][ValidateRange(1, 500)]$PageLimit = 100,
+		[parameter(Mandatory = $False)][int][ValidateRange(0,100)]$PageCount = 0
 	)
 	try {
 		if (![string]::IsNullOrWhiteSpace($Number)) {

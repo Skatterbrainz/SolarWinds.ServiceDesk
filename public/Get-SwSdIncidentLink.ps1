@@ -17,6 +17,9 @@ function Get-SwSdIncidentLink {
 	.LINK
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdIncidentLink.md
 	#>
+	[CmdletBinding()]
+	[OutputType([string])]
+	[Alias('Get-SwSdIncidentUrl', 'Get-SwSdIncidentHref')]
 	param (
 		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$Number,
 		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$Name

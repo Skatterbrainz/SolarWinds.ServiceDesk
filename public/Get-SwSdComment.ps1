@@ -14,6 +14,8 @@ function Get-SwSdComment {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdComment.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
+	[Alias('Get-SwSdComments', 'Get-SwSdIncidentComments')]
 	param (
 		[parameter(Mandatory = $True)][string]$IncidentNumber
 	)

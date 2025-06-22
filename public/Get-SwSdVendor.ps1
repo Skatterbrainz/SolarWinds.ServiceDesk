@@ -24,6 +24,8 @@ function Get-SwSdVendor {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdVendor.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
+	[Alias('Get-SwSdVendors', 'Get-SwSdVendorList')]
 	param (
 		[parameter(Mandatory = $False)][string]$Name,
 		[parameter(Mandatory = $False)][string]$Id

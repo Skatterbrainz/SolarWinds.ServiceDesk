@@ -24,6 +24,8 @@ function Get-SwSdTask {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdTask.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
+	[Alias('Get-SwSdTasks', 'Get-SwSdTaskList')]
 	param (
 		[parameter(Mandatory = $False)][string]$TaskURL,
 		[parameter(Mandatory = $False)][string]$IncidentNumber

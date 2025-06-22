@@ -34,6 +34,7 @@ function New-SwSdTask {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/New-SwSdTask.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
 	param(
 		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$IncidentNumber,
 		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$Name,

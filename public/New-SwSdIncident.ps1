@@ -28,6 +28,7 @@ function New-SwSdIncident {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/New-SwSdIncident.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
 	param (
 		[parameter(Mandatory = $True)][string]$Name,
 		[parameter(Mandatory = $True)][string]$Description,

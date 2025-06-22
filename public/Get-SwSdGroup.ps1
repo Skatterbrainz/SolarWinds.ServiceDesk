@@ -20,6 +20,8 @@ function Get-SwSdGroup {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdGroup.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
+	[Alias('Get-SwSdGroups', 'Get-SwSdGroupList')]
 	param(
 		[parameter(Mandatory = $False)][string]$Name
 	)

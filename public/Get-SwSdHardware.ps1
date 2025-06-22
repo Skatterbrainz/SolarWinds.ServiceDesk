@@ -34,6 +34,8 @@ function Get-SwSdHardware {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdHardware.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
+	[Alias('Get-SwSdHardwareList')]
 	param (
 		[parameter(Mandatory = $False)][string]$Id,
 		[parameter(Mandatory = $False)][int]$PageCount = 0,

@@ -28,6 +28,7 @@ function Update-SwSdIncident {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Update-SwSdIncident.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
 	param (
 		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$Number,
 		[parameter(Mandatory = $False)][string][Alias('Email')]$Assignee,

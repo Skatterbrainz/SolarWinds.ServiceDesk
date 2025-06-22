@@ -54,6 +54,8 @@ function Get-SwSdOtherAsset {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdOtherAsset.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
+	[Alias('Get-SwSdOtherAssets', 'Get-SwSdOtherAssetList')]
 	param (
 		[parameter(Mandatory = $False)][string]$Name,
 		[parameter(Mandatory = $False)][string]$Manufacturer,

@@ -32,6 +32,8 @@ function Get-SwSdCatalogItem {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdCatalogItem.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
+	[Alias('Get-SwSdCatalogItems', 'Get-SwSdCatalogItemList')]
 	param(
 		[parameter(Mandatory = $False)][string]$Id,
 		[parameter(Mandatory = $False)][string]$Name,

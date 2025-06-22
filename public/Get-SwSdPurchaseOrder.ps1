@@ -37,6 +37,8 @@ function Get-SwSdPurchaseOrder {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdPurchaseOrder.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
+	[Alias('Get-SwSdPurchaseOrders', 'Get-SwSdPurchaseOrderList')]
 	param (
 		[parameter(Mandatory = $False)][string]$Name,
 		[parameter(Mandatory = $False)][int]$Id,

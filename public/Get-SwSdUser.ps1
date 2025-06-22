@@ -35,6 +35,8 @@ function Get-SwSdUser {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdUser.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
+	[Alias('Get-SwSdUsers', 'Get-SwSdUserList')]
 	param(
 		[parameter(Mandatory = $False)][Alias('Name')][string]$Email,
 		[parameter(Mandatory = $False)][int]$PageLimit = 100,

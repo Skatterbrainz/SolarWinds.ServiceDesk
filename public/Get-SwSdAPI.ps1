@@ -22,8 +22,9 @@ function Get-SwSdAPI {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdAPI.md
 	#>
 	[CmdletBinding()]
+	[OutputType([string], [PSCustomObject])]
 	param (
-		[parameter()][string]$Name
+		[parameter(Mandatory = $false)][string]$Name
 	)
 	$Session = Connect-SwSD
 	if (!$SDAPIList) {

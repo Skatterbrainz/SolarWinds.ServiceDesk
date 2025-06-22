@@ -34,6 +34,8 @@ function Update-SwSdTask {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Update-SwSdTask.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
+	[Alias('Update-SwSdTaskRecord', 'Set-SwSdTask')]
 	param (
 		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$TaskURL,
 		[parameter(Mandatory = $False)][string][Alias('Email')]$Assignee,

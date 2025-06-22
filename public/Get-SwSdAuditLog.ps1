@@ -26,6 +26,8 @@ function Get-SwSdAuditLog {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdAuditLog.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
+	[Alias('Get-SwSdAuditLogs', 'Get-SwSdAuditLogList')]
 	param(
 		[parameter(Mandatory = $False)][string]$Id,
 		[parameter(Mandatory = $False)][int]$PageLimit = 100,

@@ -60,6 +60,8 @@ function Get-SwSdMobileDevice {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdMobileDevice.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
+	[Alias('Get-SwSdMobileDevices')]
 	param (
 		[parameter(Mandatory = $False)][string]$Name,
 		[parameter(Mandatory = $False)][string]$Manufacturer,

@@ -23,6 +23,7 @@ function Get-SwSdCatalogCategory {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdCatalogCategory.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
 	param(
 		[parameter(Mandatory = $False)][int]$Id,
 		[parameter(Mandatory = $False)][string]$Name

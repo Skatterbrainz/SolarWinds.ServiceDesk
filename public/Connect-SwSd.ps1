@@ -37,6 +37,8 @@ function Connect-SwSD {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Connect-SwSD.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
+	[Alias('Connect-ServiceDesk', 'New-SwSdSession')]
 	param (
 		[parameter(Mandatory = $False)][string]$ApiToken,
 		[parameter(Mandatory = $False)][string]$ApiUrl = "https://api.samanage.com",
