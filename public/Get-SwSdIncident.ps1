@@ -16,9 +16,10 @@ function Get-SwSdIncident {
 	.PARAMETER Status
 		The status of the incident, for example "Pending Assignment", "Assigned", "Closed", etc.
 	.PARAMETER PageLimit
-		The maximum number of records to return per page. Default is 100.
+		The maximum number of records to return per page. Default is 100. Valid values are between 1 and 500.
+		If PageLimit is set to 0, it returns all records.
 	.PARAMETER PageCount
-		The number of pages to return. Default is 0 (all pages).
+		The number of pages to return. Default is 0 (all pages). Valid values are between 0 and 100.
 	.EXAMPLE
 		Get-SwSdIncident -Number 12345
 		Returns the incident record for incident number 12345.
