@@ -6,9 +6,9 @@ Please submit feature enhancements or bug fixes by creating an [Issue](https://g
 
 # Requirements
 
-* PowerShell 5.1 or newer
-* Windows, Linux, MacOS
-* An active Service Desk subscription and API token
+* PowerShell version: 5.1 or newer (Tested mostly on 7.5.1)
+* Host platform: Windows, Linux, MacOS
+* Other: An active Service Desk subscription and API token
 
 # Examples
 
@@ -74,6 +74,13 @@ Update-SwSdTask -TaskURL $task.href -Assignee "ctaylor@contoso.com" -Completed
 Head over to the [Issues](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/issues) page to send feedback. Thank you!
 
 # Revision History
+
+1.0.3 - 6/22/2025
+
+| Action  | Function              | Description                                                          |
+| ------- | --------------------- | -------------------------------------------------------------------- |
+| Updated | (all functions)       | Added outputtype() and aliases                                       |
+| Updated | Get-SwSdIncident      | Added input parameter validation refinements                         |
 
 1.0.2 - 5/2/2025
 
