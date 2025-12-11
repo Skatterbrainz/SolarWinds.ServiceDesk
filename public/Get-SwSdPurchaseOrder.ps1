@@ -55,7 +55,14 @@ function Get-SwSdPurchaseOrder {
 			Write-Verbose "Search by Id: $Id"
 			$url = getApiBaseURL -ApiName "Purchase Orders List"
 			$url = "$url/$Id.json"
-			$response = Invoke-WebRequest -Uri $url -Method Get -Headers $Session.headers -ErrorAction Stop
+			$params = @{
+				Url             = $url
+				Method          = "Get"
+				Headers         = $Session.headers
+				UseBasicParsing = $true
+				ErrorAction     = "Stop"
+			}
+			$response = Invoke-WebRequest @params
 			if ($response.StatusCode -eq 200) {
 				Write-Output $($response.Content | ConvertFrom-Json)
 			} else {

@@ -75,6 +75,13 @@ Head over to the [Issues](https://github.com/Skatterbrainz/SolarWinds.ServiceDes
 
 # Revision History
 
+1.0.4 - 12/10/2025
+
+| Action  | Function               | Description                                                          |
+| ------  | ---------------------- | -------------------------------------------------------------------- |
+| Updated | Get-SwSdIncident, Get-SwSdPurchaseOrder, Get-SwSdUser, (getAPIResponse, getAPIResponseByURL) | Added -UseBasicParsing to address [CVE-2025-54100](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-54100)
+
+
 1.0.3 - 6/22/2025
 
 | Action  | Function              | Description                                                          |

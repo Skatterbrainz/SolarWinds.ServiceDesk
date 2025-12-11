@@ -70,7 +70,15 @@ function Get-SwSdIncident {
 			$url = "$($baseurl)?per_page=$PageLimit&q=$($encodedSearch)"
 			Write-Verbose "url: $url"
 			$result = @()
-			$response = Invoke-WebRequest -Uri $url -Headers $SDSession.headers -Method Get -ErrorAction Stop -ContentType "application/json"
+			$params = @{
+				Uri             = $url
+				Headers         = $SDSession.headers
+				Method          = "Get"
+				ContentType     = "application/json"
+				UseBasicParsing = $true
+				ErrorAction     = "Stop"
+			}
+			$response = Invoke-WebRequest @params
 			$result += $response.Content | ConvertFrom-Json
 			Write-Verbose "$($result.Count) incidents returned."
 			if ($response.Headers) {
@@ -84,7 +92,15 @@ function Get-SwSdIncident {
 				for ($i = 2; $i -le $totalPages; $i++) {
 					$pageurl = "$url&page=$i"
 					Write-Verbose "url: $pageurl"
-					$response = Invoke-WebRequest -Uri $pageurl -Headers $SDSession.headers -Method Get -ErrorAction Stop -ContentType "application/json"
+					$params = @{
+						Uri             = $pageurl
+						Headers         = $SDSession.headers
+						Method          = "Get"
+						ContentType     = "application/json"
+						UseBasicParsing = $true
+						ErrorAction     = "Stop"
+					}
+					$response = Invoke-WebRequest @params
 					if ($response) {
 						$result += $response.Content | ConvertFrom-Json
 						Write-Verbose "$($result.Count) incidents returned."
@@ -99,7 +115,15 @@ function Get-SwSdIncident {
 			$baseurl = getApiBaseURL -ApiName "Helpdesk Incidents List"
 			$url = "$($baseurl)?per_page=$PageLimit&state=$Status"
 			Write-Verbose "url: $url"
-			$response = Invoke-WebRequest -Uri $url -Headers $SDSession.headers -Method Get -ContentType "application/json" -ErrorAction Stop
+			$params = @{
+				Uri             = $url
+				Headers         = $SDSession.headers
+				Method          = "Get"
+				ContentType     = "application/json"
+				UseBasicParsing = $true
+				ErrorAction     = "Stop"
+			}
+			$response = Invoke-WebRequest @params
 			if ($response.StatusCode -eq 200) {
 				$result = $response.Content | ConvertFrom-Json
 				Write-Verbose "$($result.Count) incidents returned."
@@ -112,7 +136,15 @@ function Get-SwSdIncident {
 				for ($i = 2; $i -le $totalPages; $i++) {
 					$pageurl = "$url&page=$i"
 					Write-Verbose "url: $pageurl"
-					$response = Invoke-WebRequest -Uri $pageurl -Headers $SDSession.headers -Method Get -ContentType "application/json" -ErrorAction Stop
+					$params = @{
+						Uri             = $pageurl
+						Headers         = $SDSession.headers
+						Method          = "Get"
+						ContentType     = "application/json"
+						UseBasicParsing = $true
+						ErrorAction     = "Stop"
+					}
+					$response = Invoke-WebRequest @params
 					if ($response.StatusCode -eq 200) {
 						$result += $response.Content | ConvertFrom-Json
 						Write-Verbose "$($result.Count) incidents returned."

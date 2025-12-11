@@ -52,7 +52,15 @@ function Get-SwSdUser {
 			$url    = "$($baseurl)?per_page=$PageLimit"
 			Write-Verbose "Url: $url"
 			$users  = @()
-			$response = Invoke-WebRequest -Uri $url -Headers $SDSession.headers -Method Get -ContentType "application/json" -ErrorAction Stop
+			$params = @{
+				Uri             = $url
+				Headers         = $SDSession.headers
+				Method          = "Get"
+				ContentType     = "application/json"
+				UseBasicParsing = $true
+				ErrorAction     = "Stop"
+			}
+			$response = Invoke-WebRequest @params
 			if ($response.StatusCode -eq 200) {
 				$users += $response.Content | ConvertFrom-Json
 			} else {

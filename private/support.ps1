@@ -42,7 +42,15 @@ function getApiResponse {
 	)
 	$url = getApiBaseURL -ApiName $ApiName
 	Write-Verbose "API=$ApiName > URL=$url"
-	$response = Invoke-WebRequest -Uri $url -Method $Method -Headers $SDSession.headers -ContentType $ContentType -ErrorAction Stop
+	$params = @{
+		Uri             = $url.Trim()
+		Method          = $Method
+		ContentType     = $ContentType
+		Headers         = $SDSession.headers
+		UseBasicParsing = $true
+		ErrorAction	    = 'Stop'
+	}
+	$response = Invoke-WebRequest @params
 	if ($response.StatusCode -eq 200) {
 		Write-Output $($response.Content | ConvertFrom-Json)
 	} else {
@@ -60,10 +68,11 @@ function getApiResponseByURL {
 	)
 	$SDSession = Connect-SwSD
 	$params = @{
-		Uri         = $URL.Trim()
-		Method      = $Method
-		ContentType = $ContentType
-		Headers     = $SDSession.headers
+		Uri             = $URL.Trim()
+		Method          = $Method
+		ContentType     = $ContentType
+		Headers         = $SDSession.headers
+		UseBasicParsing = $true
 	}
 	if ($Method -eq 'POST' -or $Method -eq 'PUT') {
 		$params.Body = $Body
