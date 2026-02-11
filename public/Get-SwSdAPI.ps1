@@ -7,6 +7,8 @@ function Get-SwSdAPI {
 		Caches list to global variable $SDAPIList, to minimize API calls.
 	.PARAMETER Name
 		The name of the API to retrieve. If not specified, returns the list of available APIs.
+	.PARAMETER Force
+		Force refresh of the API list from the API, instead of using cached list.
 	.EXAMPLE
 		Get-SwSdAPI -Name "Incidents List"
 		Returns the URL for the Incidents List API
@@ -16,6 +18,9 @@ function Get-SwSdAPI {
 	.EXAMPLE
 		Get-SwSdAPI -Name "Search"
 		Returns the URL for the Search API
+	.EXAMPLE
+		Get-SwSdAPI -Name "Search" -Force
+		Returns the URL for the Search API, forcing refresh of the API list from the API, instead of using cached list.
 	.NOTES
 		Reference: https://apidoc.samanage.com/#section/General-Concepts/API-Entry-Point
 	.LINK
@@ -24,14 +29,16 @@ function Get-SwSdAPI {
 	[CmdletBinding()]
 	[OutputType([string], [PSCustomObject])]
 	param (
-		[parameter(Mandatory = $false)][string]$Name
+		[parameter(Mandatory = $false)][string]$Name,
+		[parameter(Mandatory = $false)][switch]$Force
 	)
-	$Session = Connect-SwSD
-	if (!$SDAPIList) {
-		Write-Verbose "API list not cached"
-		$url = "$($Session.apiurl)/api.json"
+	$SDSession = Connect-SwSD
+	if (!$SDAPIList -or $Force) {
+		Write-Verbose "API list not cached or force refresh requested, retrieving from API"
+		$url = "$($SDSession.apiurl)/api.json"
 		Write-Verbose "Url = $url"
-		$apilist = Invoke-WebRequest -Uri $url -Headers $SDSession.headers -Method Get -ErrorAction Stop -UseBasicParsing
+		$response = Invoke-WebRequest -Uri $url -Headers $SDSession.headers -Method Get -ErrorAction Stop -UseBasicParsing
+		$apilist = $response.Content | ConvertFrom-Json
 		if ($apilist.Count -gt 0) {
 			# the search api is not included in the list for some reason, so append it manually
 			$apilist += @([pscustomobject]@{name='Search'; href='https://api.samanage.com/search.json'})

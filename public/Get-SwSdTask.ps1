@@ -35,7 +35,8 @@ function Get-SwSdTask {
 			throw "Either the TaskURL or IncidentNumber must be provided."
 		}
 		if (![string]::IsNullOrWhiteSpace($TaskURL)) {
-			$response = getApiResponseByURL -ApiName "Task" -Url $TaskURL | Select-Object -ExpandProperty task
+			$response = getApiResponseByURL -Url $TaskURL | Select-Object -ExpandProperty task
+			$result = $response
 		} elseif (![string]::IsNullOrWhiteSpace($IncidentNumber)) {
 			$incident = Get-SwSdIncident -Number $IncidentNumber
 			if ($null -ne $incident) {
@@ -47,6 +48,7 @@ function Get-SwSdTask {
 					Write-Verbose "Task URL: $taskUrl"
 					$response += Invoke-WebRequest -Method GET -Uri $TaskURL -Headers $SDSession.headers -UseBasicParsing | Select-Object -ExpandProperty task
 				}
+				$result = $response
 			} else {
 				throw "Incident $IncidentNumber not found."
 			}
@@ -54,8 +56,14 @@ function Get-SwSdTask {
 			throw "Either the TaskURL or IncidentNumber must be provided."
 		}
 	} catch {
-		Write-Error $_.Exception.Message
+		$result = [pscustomobject]@{
+			Status    = 'Error'
+			Activity  = $($_.CategoryInfo.Activity -join (";"))
+			Message   = $($_.Exception.Message -join (";"))
+			Trace     = $($_.ScriptStackTrace -join (";"))
+			Incident  = $IncidentNumber
+		}
 	} finally {
-		$response
+		$result
 	}
 }

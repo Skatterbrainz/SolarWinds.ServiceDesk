@@ -6,6 +6,8 @@ function Get-SwSdGroup {
 		Returns the group record for the specified group name or all groups.
 	.PARAMETER Name
 		The group name. If not specified, returns all groups.
+	.PARAMETER Id
+		The group ID. If not specified, returns all groups.
 	.EXAMPLE
 		Get-SwSdGroup -Name "Admins"
 
@@ -14,6 +16,10 @@ function Get-SwSdGroup {
 		Get-SwSdGroup
 
 		Returns all groups.
+	.EXAMPLE
+		Get-SwSdGroup -Id 123456
+
+		Returns information for the group with ID 123456.
 	.NOTES
 		Reference: https://apidoc.samanage.com/#tag/Group
 	.LINK
@@ -23,18 +29,35 @@ function Get-SwSdGroup {
 	[OutputType([PSCustomObject])]
 	[Alias('Get-SwSdGroups', 'Get-SwSdGroupList')]
 	param(
-		[parameter(Mandatory = $False)][string]$Name
+		[parameter(Mandatory = $False)][string]$Name,
+		[parameter(Mandatory = $False)][int]$Id
 	)
 	try {
-		$url     = getApiBaseURL -ApiName "Groups List"
-		$url     = "$($url)?per_page=100"
-		$groups  = Invoke-RestMethod -Uri $url -Headers $SDSession.headers -Method Get -ResponseHeadersVariable responseHeaders -ErrorAction Stop
+		$baseurl = getApiBaseURL -ApiName "Groups List"
+		$url = "$($baseurl)?per_page=100"
+		$params = @{
+			Uri             = $url
+			Method          = 'Get'
+			Headers         = $SDSession.headers
+			ErrorAction     = 'Stop'
+			UseBasicParsing = $true
+		}
+		Write-Verbose "Getting groups with parameters: $($params | Out-String)"
+		$groups  = Invoke-WebRequest @params #| Select-Object -ExpandProperty groups
 		if (![string]::IsNullOrEmpty($Name)) {
 			$groups | Where-Object {$_.name -eq $Name}
+		} elseif ($Id) {
+			$groups | Where-Object {$_.id -eq $Id}
 		} else {
 			$groups
 		}
 	} catch {
-		Write-Error $_.Exception.Message
+		[pscustomobject]@{
+			Status    = 'Error'
+			Activity  = $($_.CategoryInfo.Activity -join (";"))
+			Message   = $($_.Exception.Message -join (";"))
+			Trace     = $($_.ScriptStackTrace -join (";"))
+			Incident  = $IncidentNumber
+		}
 	}
 }

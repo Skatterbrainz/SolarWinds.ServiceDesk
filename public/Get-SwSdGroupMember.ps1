@@ -29,7 +29,7 @@ function Get-SwSdGroupMember {
 		[parameter(Mandatory = $True)][string]$Name,
 		[parameter(Mandatory = $False)][string]$MemberName
 	)
-	$group = Get-SwWdGroup -Name $Name
+	$group = Get-SwSdGroup -Name $Name
 	if (![string]::IsNullOrEmpty($MemberName)) {
 		$MemberName = $MemberName.ToLower()
 		$group.memberships | Where-Object {

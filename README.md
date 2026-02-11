@@ -170,6 +170,14 @@ Skatterbrainz
 
 ## 📋 Version History
 
+### 1.0.6 - 2/11/2026
+
+- Added: Add-SwSdGroupMember
+- Updated: Get-SwSdAPI - Added Force parameter to refresh API list cache; Implemented caching mechanism using $global:SDAPIList to minimize API calls; Added Search API manually to the list (not included in API response)
+- Updated: Get-SwSdIncident - Added PageLimit parameter (1-500 range, default 100) to control records per page; Added PageCount parameter (0-100 range, default 0 for all pages) to limit number of pages returned; Enhanced pagination support for large result sets
+- Updated: Get-SwSdTask - Improved error handling for task retrieval; Enhanced verbose logging for task operations
+- Updated: Get-SwSdGroup - Added Id parameter to search by group ID; Enhanced filtering to support both Name and ID parameters
+
 ### 1.0.5 - 2/10/2026
 
 - Fixed: New-SwSdIncident - Fixed bug with SDSession headers and default input parameters
