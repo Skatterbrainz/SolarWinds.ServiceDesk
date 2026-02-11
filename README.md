@@ -38,6 +38,9 @@ NOTE: If you installed version 1.0.4 or 1.0.5, I apologize. It was a bad hair da
 
 ```powershell
 Install-Module -Name SolarWinds.ServiceDesk -Scope CurrentUser
+
+# or PowerShell 7.x
+Install-PSResource -Name SolarWinds.ServiceDesk
 ```
 
 ### From GitHub
