@@ -43,7 +43,7 @@ function Get-SwSdGroup {
 			UseBasicParsing = $true
 		}
 		Write-Verbose "Getting groups with parameters: $($params | Out-String)"
-		$groups  = Invoke-WebRequest @params #| Select-Object -ExpandProperty groups
+		$groups  = Invoke-WebRequest @params | Select-Object -ExpandProperty Content | ConvertFrom-Json
 		if (![string]::IsNullOrEmpty($Name)) {
 			$groups | Where-Object {$_.name -eq $Name}
 		} elseif ($Id) {
