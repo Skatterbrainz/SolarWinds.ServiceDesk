@@ -38,12 +38,12 @@ function Get-SwSdAuditLog {
 			$url = getApiBaseURL -ApiName "Audit Log List" -NoExtension
 			$url = "$url/$Id.json"
 			Write-Verbose "Url: $url"
-			$result = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ErrorAction Stop
+			$result = Invoke-WebRequest -Uri $url -Headers $SDSession.headers -Method Get -ErrorAction Stop -UseBasicParsing
 		} else {
 			$baseurl = getApiBaseURL -ApiName "Audit Log List"
 			$url = "$($baseurl)?per_page=$PageLimit"
 			Write-Verbose "Url: $url"
-			$result = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ErrorAction Stop -ResponseHeadersVariable responseHeaders
+			$result = Invoke-WebRequest -Uri $url -Headers $SDSession.headers -Method Get -ErrorAction Stop -ResponseHeadersVariable responseHeaders -UseBasicParsing
 			Write-Verbose "$($result.Count) items returned."
 			if ($responseHeaders) {
 				[int]$totalCount = $responseHeaders.'X-Total-Count'[0]
@@ -56,13 +56,13 @@ function Get-SwSdAuditLog {
 					}
 					Write-Progress -Activity "Retrieving Audit Logs" -Status "Page 1 of $totalPages" -PercentComplete (1 / $totalPages * 100) -Id 0
 					$url = "$($baseurl)?per_page=$PageLimit&page=1"
-					$result += Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get
+					$result += Invoke-WebRequest -Uri $url -Headers $SDSession.headers -Method Get -UseBasicParsing
 					$totalPages--
 				}
 				if ($totalPages -gt 1) {
 					Write-Progress -Activity "Retrieving Audit Logs" -Status "Page 2 of $totalPages" -PercentComplete (2 / $totalPages * 100) -Id 0
 					$url = "$($baseurl)?per_page=$PageLimit&page=2"
-					$result += Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get
+					$result += Invoke-WebRequest -Uri $url -Headers $SDSession.headers -Method Get -UseBasicParsing
 				}
 				$totalPages--
 			}

@@ -47,12 +47,11 @@ function Get-SwSdHardware {
 		if (![string]::IsNullOrEmpty($Id)) {
 			$url = "$($baseurl)/$Id.json"
 			$result = getApiResponseByURL -URL $url
-			Write-Output $hardwares
+			Write-Output $result
 			break
 		} else {
 			$url = "$($baseurl)?per_page=$PageLimit"
 			$result = getApiResponseByURL -URL $url
-			#$result = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ResponseHeadersVariable responseHeaders -ErrorAction Stop
 			if ($responseHeaders) {
 				[int]$totalCount = $response.Headers['X-Total-Count'][0]
 				[int]$totalPages = $response.Headers['X-Total-Pages'][0]
@@ -64,7 +63,6 @@ function Get-SwSdHardware {
 					$url = "$($baseurl)?per_page=$PageLimit&page=$i"
 					try {
 						$result += getApiResponseByURL -URL $url
-						#$result += Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get
 						if (!$NoProgress.IsPresent) {
 							Write-Progress -Activity "Retrieving hardware" -Status "Page $i of $totalPages ($totalCount total items)" -PercentComplete ($i / $totalPages * 100) -Id 0
 						}

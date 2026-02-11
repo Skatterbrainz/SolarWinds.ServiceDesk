@@ -174,6 +174,7 @@ Skatterbrainz
 
 - Fixed: New-SwSdIncident - Fixed bug with SDSession headers and default input parameters
 - Fixed: Update-SwSdIncident - Fixed bug with SDSession headers and default input parameters
+- Fixed: New-SwSdTask - Fixed bug with SDSession headers
 
 ### 1.0.4 - 12/10/2025
 

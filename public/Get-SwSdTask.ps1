@@ -45,7 +45,7 @@ function Get-SwSdTask {
 				foreach ($task in $tasks) {
 					$TaskURL = $task.href
 					Write-Verbose "Task URL: $taskUrl"
-					$response += Invoke-RestMethod -Method GET -Uri $TaskURL -Headers $Session.headers | Select-Object -ExpandProperty task
+					$response += Invoke-WebRequest -Method GET -Uri $TaskURL -Headers $SDSession.headers -UseBasicParsing | Select-Object -ExpandProperty task
 				}
 			} else {
 				throw "Incident $IncidentNumber not found."

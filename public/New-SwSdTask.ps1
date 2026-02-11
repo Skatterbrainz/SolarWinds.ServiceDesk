@@ -79,7 +79,7 @@ function New-SwSdTask {
 		}
 		Write-Verbose "Creating task: $json"
 		#curl -H "X-Samanage-Authorization: Bearer $token" -H "Accept: application/vnd.samanage.v2.1+json" -H "Content-Type: application/json" -X POST $url -d $json
-		$response = Invoke-RestMethod -Method POST -Uri $url -ContentType "application/json" -Headers $Session.headers -Body $body #-ErrorAction Stop
+		$response = Invoke-RestMethod -Method POST -Uri $url -ContentType "application/json" -Headers $SDSession.headers -Body $body #-ErrorAction Stop
 		$response
 	} catch {
 		if ($_.Exception.Message -notmatch '406') {

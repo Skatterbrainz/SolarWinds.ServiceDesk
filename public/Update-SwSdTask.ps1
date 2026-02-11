@@ -57,7 +57,15 @@ function Update-SwSdTask {
 		}
 		$json = $body | ConvertTo-Json
 		$response = getApiResponseByURL -URL $TaskURL -Method "PUT" -Body $json
-		$response = Invoke-RestMethod -Method PUT -Uri $TaskURL -ContentType "application/json" -Headers $Session.headers -Body $json
+		$params = @{
+			Method          = "PUT"
+			Uri             = $TaskURL
+			ContentType     = "application/json"
+			Headers         = $SDSession.headers
+			Body            = $json
+			UseBasicParsing = $true
+		}
+		$response = Invoke-WebRequest @params
 		$response
 	} else {
 		Write-Error "Task not found with URL: $TaskURL"

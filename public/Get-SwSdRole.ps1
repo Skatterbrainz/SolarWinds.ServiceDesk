@@ -28,7 +28,15 @@ function Get-SwSdRole {
 	try {
 		$baseurl = getApiBaseURL -ApiName "Roles List"
 		$url     = "$($baseurl)?per_page=100"
-		$roles   = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ResponseHeadersVariable responseHeaders -ErrorAction Stop
+		$params = @{
+			Uri             = $url
+			Method          = "Get"
+			ContentType     = "application/json"
+			Headers         = $SDSession.headers
+			ErrorAction     = 'Stop'
+			UseBasicParsing = $true
+		}
+		$roles   = Invoke-WebRequest @params -ResponseHeadersVariable responseHeaders
 		if (![string]::IsNullOrEmpty($Name)) {
 			$roles | Where-Object {$_.name -eq $Name}
 		} else {

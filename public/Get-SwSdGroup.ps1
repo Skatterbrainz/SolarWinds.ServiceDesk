@@ -28,7 +28,7 @@ function Get-SwSdGroup {
 	try {
 		$url     = getApiBaseURL -ApiName "Groups List"
 		$url     = "$($url)?per_page=100"
-		$groups  = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Get -ResponseHeadersVariable responseHeaders -ErrorAction Stop
+		$groups  = Invoke-RestMethod -Uri $url -Headers $SDSession.headers -Method Get -ResponseHeadersVariable responseHeaders -ErrorAction Stop
 		if (![string]::IsNullOrEmpty($Name)) {
 			$groups | Where-Object {$_.name -eq $Name}
 		} else {

@@ -20,20 +20,21 @@ function Get-SwSdComment {
 		[parameter(Mandatory = $True)][string]$IncidentNumber
 	)
 	try {
-		$incident = Get-SwSdIncident -Number $IncidentNumber -NoRequestData
+		$incident = Get-SwSdIncident -Number $IncidentNumber
 		if ($incident) {
 			$baseurl = getApiBaseURL -ApiName "Helpdesk Incidents List" -NoExtension
 			$url = "$($baseurl)/$($incident.id)/comments.json"
 			Write-Verbose "Url: $url"
 			$params = @{
-				Uri         = $url
-				Method      = 'GET'
-				ContentType = "application/json"
-				Headers     = $Session.headers
-				ErrorAction = 'Stop'
+				Uri             = $url
+				Method          = 'GET'
+				ContentType     = "application/json"
+				Headers         = $SDSession.headers
+				ErrorAction     = 'Stop'
+				UseBasicParsing = $true
 			}
-			$response    = Invoke-RestMethod @params
-			$result      = $response
+			$response = Invoke-WebRequest @params
+			$result   = $response
 		} else {
 			throw "Incident not found: $IncidentNumber"
 		}

@@ -35,7 +35,7 @@ function Add-SwSdComment {
 		[parameter(Mandatory = $False)][switch]$Private
 	)
 	try {
-		$incident = Get-SwSDIncident -Number $IncidentNumber -NoRequestData
+		$incident = Get-SwSDIncident -Number $IncidentNumber
 		if ($incident) {
 			$url = getApiBaseURL -ApiName "Helpdesk Incidents List" -NoExtension
 			$url = "$url/$($incident.id)/comments"
@@ -48,14 +48,15 @@ function Add-SwSdComment {
 				}
 			} | ConvertTo-Json
 			$params = @{
-				Uri         = $url
-				Method      = 'POST'
-				ContentType = "application/json"
-				Headers     = $Session.headers
-				Body        = $body
-				ErrorAction = 'Stop'
+				Uri             = $url
+				Method          = 'POST'
+				ContentType     = "application/json"
+				Headers         = $SDSession.headers
+				Body            = $body
+				ErrorAction     = 'Stop'
+				UseBasicParsing = $true
 			}
-			$response = Invoke-RestMethod @params
+			$response = Invoke-WebRequest @params
 			$result = $response
 		} else {
 			Write-Warning "Incident $IncidentNumber not found."

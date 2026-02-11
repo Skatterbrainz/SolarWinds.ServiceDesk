@@ -58,7 +58,7 @@ function Get-SwSdPurchaseOrder {
 			$params = @{
 				Url             = $url
 				Method          = "Get"
-				Headers         = $Session.headers
+				Headers         = $SDSession.headers
 				UseBasicParsing = $true
 				ErrorAction     = "Stop"
 			}
