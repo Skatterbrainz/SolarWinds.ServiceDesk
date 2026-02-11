@@ -10,6 +10,8 @@ A comprehensive PowerShell module providing an abstraction layer for the SolarWi
 
 This module is built to streamline SolarWinds Service Desk operations through PowerShell automation. It was created for my own needs, but further development will be based upon general interest and feedback. If you find something that needs fixing, improving, or adding, drop a new [Issue](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/issues) here. Thank you!
 
+NOTE: If you installed version 1.0.4 or 1.0.5, I apologize. It was a bad hair day.
+
 ## ✨ Features
 
 - 🎫 **Incident Management** - Create, update, query, and export Service Desk incidents
