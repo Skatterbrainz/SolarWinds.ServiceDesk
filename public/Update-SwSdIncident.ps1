@@ -39,7 +39,7 @@ function Update-SwSdIncident {
 			throw "Assignee or Status must be provided."
 		}
 		Write-Verbose "Requesting Incident $Number"
-		$incident = Get-SwSdIncident -Number $Number -NoRequestData
+		$incident = Get-SwSdIncident -Number $Number
 		if (!$incident) {
 			throw "Incident $Number not found."
 		}
@@ -63,7 +63,15 @@ function Update-SwSdIncident {
 		}
 		$json = $body | ConvertTo-Json
 		Write-Verbose "Updating incident at URL: $($incident.href)"
-		$response = Invoke-RestMethod -Method PUT -Uri $($incident.href) -ContentType "application/json" -Headers $Session.headers -Body $json
+		$params = @{
+			Method          = "PUT"
+			Uri             = $($incident.href)
+			ContentType     = "application/json"
+			Headers         = $SDSession.headers
+			Body            = $json
+			UseBasicParsing = $true
+		}
+		$response = Invoke-WebRequest @params
 		Write-Verbose "Incident $Number updated: $($response.state)"
 		$result = [pscustomobject]@{
 			Status   = "Success"

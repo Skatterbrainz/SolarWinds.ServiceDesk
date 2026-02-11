@@ -5,23 +5,28 @@ function New-SwSdIncident {
 	.DESCRIPTION
 		Creates a new incident in the Service Desk with the specified parameters.
 	.PARAMETER Name
-		The name of the incident.
+		Required. The name of the incident.
 	.PARAMETER Description
-		The description of the incident.
+		Required. The description of the incident.
 	.PARAMETER Priority
-		The priority of the incident. Default is "Normal".
+		Optional. The priority of the incident. Default is "Medium".
 	.PARAMETER Status
-		The status of the incident. Default is "Pending Assignment".
+		Optional. The status of the incident.
 	.PARAMETER Category
-		The category of the incident. Default is "General".
+		Optional. The category of the incident.
 	.PARAMETER SubCategory
-		The subcategory of the incident. Default is "General".
+		Optional. The subcategory of the incident.
+	.PARAMETER Assignee
+		Optional. The assignee of the incident.
 	.EXAMPLE
 		New-SwSdIncident -Name "Test Incident" -Description "This is a test incident."
 		Creates a new incident with the name "Test Incident" and the description "This is a test incident."
 	.EXAMPLE
 		New-SwSdIncident -Name "Test Incident" -Description "This is a test incident." -Priority "High" -Status "In Progress"
 		Creates a new incident with the name "Test Incident", the description "This is a test incident.", priority "High", and status "In Progress".
+	.EXAMPLE
+		New-SwSdIncident -Name "Test Incident" -Description "This is a test incident." -Category "Software" -SubCategory "Application" -Assignee "John.Doe@contoso.com
+		Creates a new incident with the name "Test Incident", the description "This is a test incident.", category "Software", and subcategory "Application".
 	.NOTES
 		Reference: https://apidoc.samanage.com/#tag/Incident
 	.LINK
@@ -32,31 +37,68 @@ function New-SwSdIncident {
 	param (
 		[parameter(Mandatory = $True)][string]$Name,
 		[parameter(Mandatory = $True)][string]$Description,
-		[parameter(Mandatory = $False)][string]$Priority = "Normal",
-		[parameter(Mandatory = $False)][string]$Status = "Pending Assignment",
-		[parameter(Mandatory = $False)][string]$Category = "General",
-		[parameter(Mandatory = $False)][string]$SubCategory = "General"
+		[parameter(Mandatory = $False)][string]$Priority = "Medium",
+		[parameter(Mandatory = $False)][string]$Status,
+		[parameter(Mandatory = $False)][string]$Category,
+		[parameter(Mandatory = $False)][string]$SubCategory,
+		[parameter(Mandatory = $False)][string]$Assignee
 	)
 	try {
+		<#
+		example using curl:
+		$body = @{
+			incident = @{
+				name = "Test - Expired Employee Termination"
+				description = "This is a test incident created by the ULM runbook for demonstration purposes. Please ignore."
+				category = ""
+				priority = "Medium"
+				requester = @{
+					email = "svc_ULMAPI@advocatesinc.org"
+				}
+			}
+		} | ConvertTo-Json
+
+		# form the request header
+		$headers = @{
+			"X-Samanage-Authorization" = "Bearer $($apicredential.GetNetworkCredential().Password)"
+			"Accept" = "application/vnd.samanage.v2.1+json"
+			"Content-Type" = "application/json"
+		}
+		# make the API call to create a new incident
+		$url = "https://api.samanage.com/incidents.json"
+		$incident = Invoke-RestMethod -Uri $url -Headers $headers -Method Post -Body $body
+
+		$incident.number
+		#>
 		$url = getApiBaseURL -ApiName "Helpdesk Incidents List"
 		Write-Verbose "url = $url"
 		$body = @{
 			name        = $Name
 			description = $Description
 			priority    = $Priority
-			status      = $Status
-			category    = $Category
-			subcategory = $SubCategory
-		} | ConvertTo-Json -Depth 10
+		}
+		if (![string]::IsNullOrEmpty($Status)) {
+			$body.status = $Status
+		}
+		if (![string]::IsNullOrEmpty($Category)) {
+			$body.category = $Category
+		}
+		if (![string]::IsNullOrEmpty($SubCategory)) {
+			$body.subcategory = $SubCategory
+		}
+		if (![string]::IsNullOrEmpty($Assignee)) {
+			$body.assignee = @{email = $Assignee}
+		}
+		$body = $body | ConvertTo-Json -Depth 10
 		Write-Verbose "body = $body"
-		$result = Invoke-RestMethod -Uri $url -Headers $Session.headers -Method Post -Body $body
+		$result = Invoke-WebRequest -Uri $url -Headers $SDSession.headers -Method Post -Body $body -UseBasicParsing
 	} catch {
 		$result = [pscustomobject]@{
-			Status    = 'Error'
-			Message   = $_.Exception.Message
-			Trace     = $_.ScriptStackTrace
-			Name      = $Name
-			Description= $Description
+			Status      = 'Error'
+			Message     = $_.Exception.Message
+			Trace       = $_.ScriptStackTrace
+			Name        = $Name
+			Description = $Description
 		}
 	} finally {
 		$result
