@@ -16,10 +16,10 @@ function Get-SwSdIncident {
 	.PARAMETER Status
 		The status of the incident, for example "Pending Assignment", "Assigned", "Closed", etc.
 	.PARAMETER PageLimit
-		The maximum number of records to return per page. Default is 100. Valid values are between 1 and 500.
+		The maximum number of records to return per page. Default is 50. Valid values are between 1 and 500.
 		If PageLimit is set to 0, it returns all records.
 	.PARAMETER PageCount
-		The number of pages to return. Default is 0 (all pages). Valid values are between 0 and 100.
+		The number of pages to return. Default is 5. Valid values are between 0 and 100.
 	.EXAMPLE
 		Get-SwSdIncident -Number 12345
 		Returns the incident record for incident number 12345.
@@ -45,8 +45,8 @@ function Get-SwSdIncident {
 		[parameter(Mandatory = $False)][int32]$Id,
 		[parameter(Mandatory = $False)][string]$Name,
 		[parameter(Mandatory = $False)][string]$Status,
-		[parameter(Mandatory = $False)][int][ValidateRange(1, 500)]$PageLimit = 100,
-		[parameter(Mandatory = $False)][int][ValidateRange(0,100)]$PageCount = 0
+		[parameter(Mandatory = $False)][int][ValidateRange(1, 500)]$PageLimit = 50,
+		[parameter(Mandatory = $False)][int][ValidateRange(0,100)]$PageCount = 5
 	)
 	try {
 		if (![string]::IsNullOrWhiteSpace($Number)) {
@@ -159,6 +159,57 @@ function Get-SwSdIncident {
 				return
 			}
 			Write-Verbose "$($result.Count) incidents returned."
+		} else {
+			Write-Verbose "No search criteria provided, returning all incidents"
+			$baseurl = getApiBaseURL -ApiName "Helpdesk Incidents List"
+			$url = "$($baseurl)?per_page=$PageLimit"
+			Write-Verbose "url: $url"
+			$result = @()
+			$params = @{
+				Uri             = $url
+				Headers         = $SDSession.headers
+				Method          = "Get"
+				ContentType     = "application/json"
+				UseBasicParsing = $true
+				ErrorAction     = "Stop"
+			}
+			$response = Invoke-WebRequest @params
+			if ($response.StatusCode -eq 200) {
+				$result += $response.Content | ConvertFrom-Json
+				Write-Verbose "$($result.Count) incidents returned."
+				if ($response.Headers) {
+					Write-Verbose "getting response headers"
+					[int]$totalCount = $response.Headers['X-Total-Count'][0]
+					[int]$totalPages = $response.Headers['X-Total-Pages'][0]
+					Write-Verbose "Total Pages: $totalPages / Total Records: $totalCount"
+					if ($PageCount -gt 0 -and $PageCount -lt $totalPages) {
+						$totalPages = $PageCount
+					}
+					for ($i = 2; $i -le $totalPages; $i++) {
+						$pageurl = "$url&page=$i"
+						Write-Verbose "url: $pageurl"
+						$params = @{
+							Uri             = $pageurl
+							Headers         = $SDSession.headers
+							Method          = "Get"
+							ContentType     = "application/json"
+							UseBasicParsing = $true
+							ErrorAction     = "Stop"
+						}
+						$response = Invoke-WebRequest @params
+						if ($response.StatusCode -eq 200) {
+							$result += $response.Content | ConvertFrom-Json
+							Write-Verbose "$($result.Count) incidents returned."
+						} else {
+							Write-Error "Failed to retrieve incident data. Status Code: $($response.StatusCode)"
+							continue
+						}
+					}
+				}
+			} else {
+				Write-Error "Failed to retrieve incident data. Status Code: $($response.StatusCode)"
+				return
+			}
 		}
 	} catch {
 		$result = [pscustomobject]@{
