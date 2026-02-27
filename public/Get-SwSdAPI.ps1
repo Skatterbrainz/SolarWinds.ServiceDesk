@@ -37,9 +37,9 @@ function Get-SwSdAPI {
 		Write-Verbose "API list not cached or force refresh requested, retrieving from API"
 		$url = "$($SDSession.apiurl)/api.json"
 		Write-Verbose "Url = $url"
-		$response = Invoke-WebRequest -Uri $url -Headers $SDSession.headers -Method Get -ErrorAction Stop -UseBasicParsing
-		$apilist = $response.Content | ConvertFrom-Json
+		$apilist = @((Invoke-WebRequest -Uri $url -Headers $SDSession.headers -Method Get -ErrorAction Stop).Content | ConvertFrom-Json)
 		if ($apilist.Count -gt 0) {
+			Write-Verbose "API list returned $($apilist.Count) API endpoints"
 			# the search api is not included in the list for some reason, so append it manually
 			$apilist += @([pscustomobject]@{name='Search'; href='https://api.samanage.com/search.json'})
 		}
