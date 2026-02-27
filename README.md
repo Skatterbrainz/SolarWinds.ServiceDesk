@@ -186,7 +186,8 @@ Skatterbrainz
   - Fixed parsing of the JSON response
 - Updated: Get-SwSdIncident 
   - Fixed returning unbounded queries (was being ignored)
-  - Added PageLimit parameter (1-500 range, default 50) to control records per page; 
+  - Added NamePattern parameter for searching by name values with wildcards
+  - Added PageLimit parameter (1-500 range, default 50) to control records per page
   - Added PageCount parameter (0-100 range, default 5, use 0 for all pages) to limit number of pages returned
   - Enhanced pagination support for large result sets
 - Updated: Get-SwSdTask
