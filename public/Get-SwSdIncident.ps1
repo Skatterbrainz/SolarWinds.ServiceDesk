@@ -113,6 +113,7 @@ function Get-SwSdIncident {
 		} elseif (![string]::IsNullOrWhiteSpace($Status)) {
 			Write-Verbose "Search by Status"
 			$baseurl = getApiBaseURL -ApiName "Helpdesk Incidents List"
+			Write-Verbose "Base URL: $baseurl"
 			$url = "$($baseurl)?per_page=$PageLimit&state=$Status"
 			Write-Verbose "url: $url"
 			$params = @{
