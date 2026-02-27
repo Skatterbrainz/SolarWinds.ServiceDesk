@@ -13,6 +13,8 @@ function Get-SwSdIncident {
 		The incident ID.
 	.PARAMETER Name
 		The incident name. Required if Id is provided.
+	.PARAMETER NamePattern
+		The incident name pattern to search for. Uses wildcard pattern matching, for example "Incident*"
 	.PARAMETER Status
 		The status of the incident, for example "Pending Assignment", "Assigned", "Closed", etc.
 	.PARAMETER PageLimit
@@ -44,6 +46,7 @@ function Get-SwSdIncident {
 		[parameter(Mandatory = $False)][string]$Number,
 		[parameter(Mandatory = $False)][int32]$Id,
 		[parameter(Mandatory = $False)][string]$Name,
+		[parameter(Mandatory = $False)][string]$NamePattern,
 		[parameter(Mandatory = $False)][string]$Status,
 		[parameter(Mandatory = $False)][int][ValidateRange(1, 500)]$PageLimit = 50,
 		[parameter(Mandatory = $False)][int][ValidateRange(0,100)]$PageCount = 5
@@ -159,6 +162,56 @@ function Get-SwSdIncident {
 				return
 			}
 			Write-Verbose "$($result.Count) incidents returned."
+		} elseif (![string]::IsNullOrWhiteSpace($NamePattern)) {
+			Write-Verbose "Search by Name Pattern: $NamePattern"
+			$baseurl = getApiBaseURL -ApiName "Helpdesk Incidents List"
+			Write-Verbose "Base URL: $baseurl"
+			$url = "$($baseurl)?per_page=$PageLimit"
+			Write-Verbose "url: $url"
+			$result = @()
+			$params = @{
+				Uri             = $url
+				Headers         = $SDSession.headers
+				Method          = "Get"
+				ContentType     = "application/json"
+				UseBasicParsing = $true
+				ErrorAction     = "Stop"
+			}
+			$response = Invoke-WebRequest @params
+			if ($response.StatusCode -eq 200) {
+				$result = @($response.Content | ConvertFrom-Json | Where-Object { $_.name -like $NamePattern })
+				Write-Verbose "$($result.Count) incidents matched after filtering."
+				[int]$totalCount = $response.Headers['X-Total-Count'][0]
+				[int]$totalPages = $response.Headers['X-Total-Pages'][0]
+				Write-Verbose "Total Pages: $totalPages / Total Records: $totalCount"
+				if ($PageCount -gt 0 -and $PageCount -lt $totalPages) {
+					$totalPages = $PageCount
+				}
+				for ($i = 2; $i -le $totalPages; $i++) {
+					$pageurl = "$url&page=$i"
+					Write-Verbose "url: $pageurl"
+					$params = @{
+						Uri             = $pageurl
+						Headers         = $SDSession.headers
+						Method          = "Get"
+						ContentType     = "application/json"
+						UseBasicParsing = $true
+						ErrorAction     = "Stop"
+					}
+					$response = Invoke-WebRequest @params
+					if ($response.StatusCode -eq 200) {
+						$result += @($response.Content | ConvertFrom-Json | Where-Object { $_.name -like $NamePattern })
+						Write-Verbose "$($result.Count) incidents matched after filtering."
+					} else {
+						Write-Error "Failed to retrieve incident data. Status Code: $($response.StatusCode)"
+						continue
+					}
+				}
+			} else {
+				Write-Error "Failed to retrieve incident data. Status Code: $($response.StatusCode)"
+				return
+			}
+			Write-Verbose "$($result.Count) total incidents matched pattern '$NamePattern'."
 		} else {
 			Write-Verbose "No search criteria provided, returning all incidents"
 			$baseurl = getApiBaseURL -ApiName "Helpdesk Incidents List"

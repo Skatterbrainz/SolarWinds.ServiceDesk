@@ -13,8 +13,9 @@ Returns a Service Desk incident or list of incidents.
 ## SYNTAX
 
 ```
-Get-SwSdIncident [[-Number] <String>] [[-Id] <Int32>] [[-Name] <String>] [[-Status] <String>]
- [[-PageLimit] <Int32>] [[-PageCount] <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-SwSdIncident [[-Number] <String>] [[-Id] <Int32>] [[-Name] <String>] [[-NamePattern] <String>]
+ [[-Status] <String>] [[-PageLimit] <Int32>] [[-PageCount] <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -48,6 +49,12 @@ Returns a list of incidents with status "Pending Assignment" and name "Incident 
 ```
 Get-SwSdIncident -Status "Pending Assignment" -PageLimit 50 -PageCount 2
 Returns a list of incidents with status "Pending Assignment", with a maximum of 50 records per page, and returns 2 pages.
+```
+
+### EXAMPLE 5
+```
+Get-SwSdIncident -NamePattern "New User Request*"
+Returns all incidents with names matching the wildcard pattern "New User Request*".
 ```
 
 ## PARAMETERS
@@ -98,8 +105,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Status
-The status of the incident, for example "Pending Assignment", "Assigned", "Closed", etc.
+### -NamePattern
+The incident name pattern to search for.
+Uses wildcard pattern matching, for example "Incident*".
 
 ```yaml
 Type: String
@@ -110,31 +118,28 @@ Required: False
 Position: 4
 Default value: None
 Accept pipeline input: False
-Accept wildcard characters: False
+Accept wildcard characters: True
 ```
 
-### -PageLimit
-The maximum number of records to return per page.
-Default is 100.
-Valid values are between 1 and 500.
-If PageLimit is set to 0, it returns all records.
+### -Status
+The status of the incident, for example "Pending Assignment", "Assigned", "Closed", etc.
 
 ```yaml
-Type: Int32
+Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: 5
-Default value: 100
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -PageCount
-The number of pages to return.
-Default is 0 (all pages).
-Valid values are between 0 and 100.
+### -PageLimit
+The maximum number of records to return per page.
+Default is 50.
+Valid values are between 1 and 500.
 
 ```yaml
 Type: Int32
@@ -143,7 +148,24 @@ Aliases:
 
 Required: False
 Position: 6
-Default value: 0
+Default value: 50
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PageCount
+The number of pages to return.
+Default is 5.
+Valid values are between 0 and 100.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 7
+Default value: 5
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
