@@ -31,19 +31,19 @@ function Get-SwSdPrinter {
 		[parameter(Mandatory = $False)][string]$Id
 	)
 	try {
-		$printers = getApiResponse -ApiName "Other Assets List"
-		if ($printers) {
-			if (![string]::IsNullOrWhiteSpace($Name)) {
-				$printers | Where-Object { $_.name -eq $Name -or $_.id -eq $Name }
-			} elseif (![string]::IsNullOrWhiteSpace($Id)) {
-				$printers | Where-Object { $_.id -eq $Id }
-			} else {
-				return $printers
-			}
+		$printers = getApiListOrItem -ApiName "Printers List" -Id $Id -PerPage 100
+		if (![string]::IsNullOrEmpty($Name)) {
+			$printers | Where-Object { $_.name -eq $Name }
 		} else {
-			throw "Failed to retrieve printers. Status code: $($response.StatusCode)"
+			$printers
 		}
 	} catch {
-		Write-Error $_.Exception.Message
+		[pscustomobject]@{
+			Status    = 'Error'
+			Activity  = $($_.CategoryInfo.Activity -join (";"))
+			Message   = $($_.Exception.Message -join (";"))
+			Trace     = $($_.ScriptStackTrace -join (";"))
+			Incident  = $IncidentNumber
+		}
 	}
 }
