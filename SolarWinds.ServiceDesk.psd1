@@ -5,7 +5,7 @@
 
 @{
     RootModule        = 'SolarWinds.ServiceDesk.psm1'
-    ModuleVersion     = '1.0.7'
+    ModuleVersion     = '1.0.8'
     # CompatiblePSEditions = @()
     GUID              = '15d2bfff-ebc1-4309-9aa1-51410f7ff8d3'
     Author            = 'David Stein'
