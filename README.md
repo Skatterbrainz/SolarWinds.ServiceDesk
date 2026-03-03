@@ -175,6 +175,24 @@ Skatterbrainz
 
 ## 📋 Version History
 
+### 1.0.7 - 3/3/2026
+
+- Added: Get-SwSdQueue
+  - Added queue retrieval by `Id` and `Name`
+  - Added endpoint discovery/fallback behavior for queue-like records
+- Updated: Update-SwSdIncident
+  - Added `GroupAssigneeId` parameter (aliases: `GroupId`, `QueueId`)
+  - Improved queue reassignment payload handling when switching from user assignee to queue assignee
+- Updated: New-SwSdIncident
+  - Added `GroupAssigneeId` parameter (aliases: `GroupId`, `QueueId`)
+  - Improved queue/group assignment handling during incident creation
+- Updated: Get-SwSdUser
+  - Refactored to use `getApiListOrItem` pattern with optional email filtering
+- Updated: Get-SwSdHardware
+  - Refactored to use `getApiListOrItem` pattern with optional name filtering
+- Updated: Documentation
+  - Synced markdown help for `Get-SwSdUser`, `Get-SwSdHardware`, `Get-SwSdQueue`, `New-SwSdIncident`, and `Update-SwSdIncident`
+
 ### 1.0.6 - 2/27/2026
 
 - Added: Add-SwSdGroupMember
