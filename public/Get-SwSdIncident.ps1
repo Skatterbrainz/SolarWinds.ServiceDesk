@@ -167,7 +167,7 @@ function Get-SwSdIncident {
 			$baseurl = getApiBaseURL -ApiName "Helpdesk Incidents List"
 			Write-Verbose "Base URL: $baseurl"
 			$url = "$($baseurl)?per_page=$PageLimit"
-			Write-Verbose "url: $url"
+			Write-Verbose "Url: $url"
 			$result = @()
 			$params = @{
 				Uri             = $url
