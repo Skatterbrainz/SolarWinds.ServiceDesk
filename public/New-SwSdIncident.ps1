@@ -52,32 +52,6 @@ function New-SwSdIncident {
 		[parameter(Mandatory = $False)][int][Alias('GroupId', 'QueueId')]$GroupAssigneeId
 	)
 	try {
-		<#
-		example using curl:
-		$body = @{
-			incident = @{
-				name = "Test - Expired Employee Termination"
-				description = "This is a test incident created by the ULM runbook for demonstration purposes. Please ignore."
-				category = ""
-				priority = "Medium"
-				requester = @{
-					email = "svc_ULMAPI@advocatesinc.org"
-				}
-			}
-		} | ConvertTo-Json
-
-		# form the request header
-		$headers = @{
-			"X-Samanage-Authorization" = "Bearer $($apicredential.GetNetworkCredential().Password)"
-			"Accept" = "application/vnd.samanage.v2.1+json"
-			"Content-Type" = "application/json"
-		}
-		# make the API call to create a new incident
-		$url = "https://api.samanage.com/incidents.json"
-		$incident = Invoke-RestMethod -Uri $url -Headers $headers -Method Post -Body $body
-
-		$incident.number
-		#>
 		$url = getApiBaseURL -ApiName "Helpdesk Incidents List"
 		Write-Verbose "url = $url"
 		$body = @{
@@ -132,7 +106,15 @@ function New-SwSdIncident {
 		}
 		$body = $body | ConvertTo-Json -Depth 10
 		Write-Verbose "body = $body"
-		$result = Invoke-WebRequest -Uri $url -Headers $SDSession.headers -Method Post -Body $body -UseBasicParsing
+		$invokeWebRequestParams = @{
+			Uri             = $url
+			Headers         = $SDSession.headers
+			Method          = 'Post'
+			Body            = $body
+			UseBasicParsing = $true
+		}
+		$response = (Invoke-WebRequest @invokeWebRequestParams | Select-Object -ExpandProperty Content | ConvertFrom-Json)
+		$result = $response
 	} catch {
 		$result = [pscustomobject]@{
 			Status      = 'Error'
