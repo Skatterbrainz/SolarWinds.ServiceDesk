@@ -66,7 +66,7 @@ function Get-SwSdOtherAsset {
 		[parameter(Mandatory = $False)][string]$HREF
 	)
 	try {
-		$assets = getApiResponse -ApiName "Other Assets List"
+		$assets = getApiListOrItem -ApiName "Other Assets List" -Id $Id -PerPage 100
 		if ($assets) {
 			if (![string]::IsNullOrWhiteSpace($Name)) {
 				$assets | Where-Object { $_.name -eq $Name }
@@ -76,8 +76,6 @@ function Get-SwSdOtherAsset {
 				$assets | Where-Object { $_.model -eq $Model }
 			} elseif (![string]::IsNullOrWhiteSpace($SerialNumber)) {
 				$assets | Where-Object { $_.serial_number -eq $SerialNumber }
-			} elseif (![string]::IsNullOrWhiteSpace($Id)) {
-				$assets | Where-Object { $_.id -eq $Id }
 			} elseif (![string]::IsNullOrWhiteSpace($AssetId)) {
 				$assets | Where-Object { $_.asset_id -eq $AssetId }
 			} elseif (![string]::IsNullOrWhiteSpace($HREF)) {
