@@ -17,7 +17,13 @@ function New-SwSdIncident {
 	.PARAMETER SubCategory
 		Optional. The subcategory of the incident.
 	.PARAMETER Assignee
-		Optional. The assignee of the incident.
+		Optional. The assignee of the incident. Example: "john.doe@contoso.com"
+		Assignee email will be validated before creating the incident. If the assignee email is invalid, the incident will be created without an assignee.
+	.PARAMETER GroupAssignee
+		Optional. The group assignee of the incident. Example: "IT Support"
+		Group name will be validated before creating the incident. If the group name is invalid, the incident will be created without a group assignee.
+	.PARAMETER GroupAssigneeId
+		Optional. The numeric ID of the group/queue assignee. Use this when queue names do not map to a Group name.
 	.EXAMPLE
 		New-SwSdIncident -Name "Test Incident" -Description "This is a test incident."
 		Creates a new incident with the name "Test Incident" and the description "This is a test incident."
@@ -41,7 +47,9 @@ function New-SwSdIncident {
 		[parameter(Mandatory = $False)][string]$Status,
 		[parameter(Mandatory = $False)][string]$Category,
 		[parameter(Mandatory = $False)][string]$SubCategory,
-		[parameter(Mandatory = $False)][string]$Assignee
+		[parameter(Mandatory = $False)][string]$Assignee,
+		[parameter(Mandatory = $False)][string]$GroupAssignee,
+		[parameter(Mandatory = $False)][int][Alias('GroupId', 'QueueId')]$GroupAssigneeId
 	)
 	try {
 		<#
@@ -87,7 +95,40 @@ function New-SwSdIncident {
 			$body.subcategory = $SubCategory
 		}
 		if (![string]::IsNullOrEmpty($Assignee)) {
-			$body.assignee = @{email = $Assignee}
+			if ($Assignee -match '^[\w\.\-]+@[\w\.\-]+\.\w+$') {
+				Write-Verbose "Assignee email is valid: $Assignee"
+				if (Get-SwSdUser -Email $Assignee) {
+					Write-Verbose "Assignee email exists in Service Desk: $Assignee"
+					$body.assignee = @{email = $Assignee}
+				} else {
+					Write-Warning "Assignee email does not exist in Service Desk: $Assignee. The incident will be created without an assignee."
+					$Assignee = $null
+				}
+			} else {
+				Write-Warning "Assignee email is invalid: $Assignee. The incident will be created without an assignee."
+				$Assignee = $null
+			}
+		} else {
+			if ($GroupAssigneeId) {
+				Write-Verbose "Using queue/group assignee ID: $GroupAssigneeId"
+				$body.assignee = @{id = $GroupAssigneeId}
+				$body.group_assignee = @{id = $GroupAssigneeId}
+			} elseif (![string]::IsNullOrEmpty($GroupAssignee)) {
+				$group = Get-SwSdGroup -Name $GroupAssignee
+				if ($group -and $group.id) {
+					Write-Verbose "Group assignee exists in Service Desk: $GroupAssignee"
+					$body.assignee = @{id = $group.id}
+					$body.group_assignee = @{id = $group.id}
+				} else {
+					Write-Verbose "Group not found by name; attempting queue/group assignment by name: $GroupAssignee"
+					$body.assignee = @{name = $GroupAssignee}
+					$body.group_assignee = @{name = $GroupAssignee}
+				}
+			} else {
+				Write-Verbose "No assignee or group assignee specified. The incident will be created without an assignee or group assignee."
+				$GroupAssignee = $null
+				$Assignee = $null
+			}
 		}
 		$body = $body | ConvertTo-Json -Depth 10
 		Write-Verbose "body = $body"
