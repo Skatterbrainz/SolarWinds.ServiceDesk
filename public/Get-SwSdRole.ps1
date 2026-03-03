@@ -6,6 +6,8 @@ function Get-SwSdRole {
 		Returns the role record for the specified role name or all roles.
 	.PARAMETER Name
 		The role name. If not specified, returns all roles.
+	.PARAMETER Id
+		The role ID. If provided, returns the specific role record.
 	.EXAMPLE
 		Get-SwSdRole -Name "Admin"
 
@@ -23,20 +25,11 @@ function Get-SwSdRole {
 	[OutputType([PSCustomObject])]
 	[Alias('Get-SwSdRoles', 'Get-SwSdRoleList')]
 	param(
-		[parameter(Mandatory = $False)][string]$Name
+		[parameter(Mandatory = $False)][string]$Name,
+		[parameter(Mandatory = $False)][string]$Id
 	)
 	try {
-		$baseurl = getApiBaseURL -ApiName "Roles List"
-		$url     = "$($baseurl)?per_page=100"
-		$params = @{
-			Uri             = $url
-			Method          = "Get"
-			ContentType     = "application/json"
-			Headers         = $SDSession.headers
-			ErrorAction     = 'Stop'
-			UseBasicParsing = $true
-		}
-		$roles   = Invoke-WebRequest @params -ResponseHeadersVariable responseHeaders
+		$roles = getApiListOrItem -ApiName "Roles List" -Id $Id -PerPage 100
 		if (![string]::IsNullOrEmpty($Name)) {
 			$roles | Where-Object {$_.name -eq $Name}
 		} else {
