@@ -28,7 +28,7 @@ function Get-SwSdDepartment {
 		[parameter(Mandatory = $False)][string]$Name
 	)
 	try {
-		$departments = getApiResponse -ApiName "Departments List"
+		$departments = getApiListOrItem -ApiName "Departments List" -PerPage 100
 		if ($departments) {
 			if (![string]::IsNullOrWhiteSpace($Name)) {
 				$departments | Where-Object { $_.name -eq $Name -or $_.id -eq $Name -or $_.description -match $Name}
