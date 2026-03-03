@@ -52,12 +52,10 @@ function Get-SwSdProblem {
 		[parameter(Mandatory = $False)][string]$HREF
 	)
 	try {
-		$problems = getApiResponse -ApiName "Other Assets List"
+		$problems = getApiListOrItem -ApiName "Problems List" -Id $Id -PerPage 100
 		if ($problems) {
 			if (![string]::IsNullOrWhiteSpace($Name)) {
 				$problems | Where-Object { $_.name -eq $Name -or $_.id -eq $Name }
-			} elseif (![string]::IsNullOrWhiteSpace($Id)) {
-				$problems | Where-Object { $_.id -eq $Id }
 			} elseif (![string]::IsNullOrWhiteSpace($Status)) {
 				$problems | Where-Object { $_.state -eq $Status }
 			} elseif (![string]::IsNullOrWhiteSpace($Priority)) {
