@@ -1,34 +1,21 @@
 function Get-SwSdUser {
 	<#
 	.SYNOPSIS
-		Returns the user record for the specified email address.
+		Returns the Service Desk user records for the specified email or ID.
 	.DESCRIPTION
-		Returns the user record for the specified email address. If no email address is specified, it returns all users.
-		Supports pagination with a specified page limit and page count.
+		Returns the Service Desk user records for the specified email or ID, or all users.
 	.PARAMETER Email
-		The user's email address.
-	.PARAMETER PageLimit
-		The maximum number of records to return per page. Default is 100.
-	.PARAMETER PageCount
-		The number of pages to return. Default is 10.
-	.PARAMETER NoProgress
-		Suppress the progress indicator.
+		The user email address. If provided, returns matching user records.
+	.PARAMETER Id
+		The user ID. If provided, returns the specific user record.
 	.EXAMPLE
 		Get-SwSdUser -Email "jsmith@contoso.com"
 		
 		Returns the user record for the specified email address.
 	.EXAMPLE
-		Get-SwSdUser -PageCount 5
+		Get-SwSdUser -Id 12345
 
-		Returns the first 5 pages of user records.
-	.EXAMPLE
-		Get-SwSdUser -PageLimit 50
-
-		Returns a list of user records with a maximum of 50 records per page.
-	.EXAMPLE
-		Get-SwSdUser -NoProgress
-
-		Returns a list of user records without showing the progress indicator.
+		Returns the user record for the specified ID.
 	.NOTES
 		Reference: https://apidoc.samanage.com/#tag/User
 	.LINK
@@ -39,58 +26,22 @@ function Get-SwSdUser {
 	[Alias('Get-SwSdUsers', 'Get-SwSdUserList')]
 	param(
 		[parameter(Mandatory = $False)][Alias('Name')][string]$Email,
-		[parameter(Mandatory = $False)][int]$PageLimit = 100,
-		[parameter(Mandatory = $False)][int]$PageCount = 10,
-		[parameter(Mandatory = $False)][switch]$NoProgress
+		[parameter(Mandatory = $False)][string]$Id
 	)
 	try {
-		$baseurl = getApiBaseURL -ApiName "Users List"
+		$users = getApiListOrItem -ApiName "Users List" -Id $Id -PerPage 100
 		if (![string]::IsNullOrEmpty($Email)) {
-			$url = "$($baseurl)?email=$Email"
-			$result = getApiResponseByURL -URL $url
+			$users | Where-Object { $_.email -eq $Email }
 		} else {
-			$url    = "$($baseurl)?per_page=$PageLimit"
-			Write-Verbose "Url: $url"
-			$users  = @()
-			$params = @{
-				Uri             = $url
-				Headers         = $SDSession.headers
-				Method          = "Get"
-				ContentType     = "application/json"
-				UseBasicParsing = $true
-				ErrorAction     = "Stop"
-			}
-			$response = Invoke-WebRequest @params
-			if ($response.StatusCode -eq 200) {
-				$users += $response.Content | ConvertFrom-Json
-			} else {
-				Write-Error "Failed to retrieve user data. Status Code: $($response.StatusCode)"
-				return
-			}
-			Write-Verbose "$($users.Count) users returned."
-			[int]$totalCount = $response.Headers['X-Total-Count'][0]
-			[int]$totalPages = $response.Headers['X-Total-Pages'][0]
-			Write-Verbose "Total Pages: $totalPages / Total Records: $totalCount"
-			
-			if ($PageCount -gt 0 -and $PageCount -lt $totalPages) {
-				$totalPages = $PageCount
-			}
-			
-			for ($i = 2; $i -le $totalPages; $i++) {
-				$url = "$($baseurl)?per_page=$PageLimit&page=$i"
-				if (!$NoProgress.IsPresent) {
-					Write-Progress -Activity "Retrieving User Data" -Status "Page $i of $totalPages" -PercentComplete ($i / $totalPages * 100) -Id 0
-				}
-				$users += getApiResponseByURL -URL $url
-			}
-			
-			if (!$NoProgress.IsPresent) {
-				Write-Progress -Activity "Retrieving User Data" -Status "Completed" -PercentComplete 100 -Id 0
-			}
-			$result = $users | where-Object {$_.disabled -ne $true}
+			$users
 		}
-		Write-Output $result
 	} catch {
-		Write-Error $_.Exception.Message
+		[pscustomobject]@{
+			Status    = 'Error'
+			Activity  = $($_.CategoryInfo.Activity -join (";"))
+			Message   = $($_.Exception.Message -join (";"))
+			Trace     = $($_.ScriptStackTrace -join (";"))
+			Incident  = $IncidentNumber
+		}
 	}
 }
