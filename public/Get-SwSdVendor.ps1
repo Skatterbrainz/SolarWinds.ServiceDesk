@@ -31,17 +31,13 @@ function Get-SwSdVendor {
 		[parameter(Mandatory = $False)][string]$Id
 	)
 	try {
-		$vendors = getApiResponse -ApiName "Vendors List"
-		if ($vendors) {
-			if (![string]::IsNullOrWhiteSpace($Name)) {
-				$vendors | Where-Object { $_.name -eq $Name -or $_.id -eq $Name }
-			} elseif (![string]::IsNullOrWhiteSpace($Id)) {
-				$vendors | Where-Object { $_.id -eq $Id }
-			} else {
-				return $vendors
-			}
+		if (![string]::IsNullOrWhiteSpace($Name)) {
+			$vendors = getApiListOrItem -ApiName "Vendors List" -PerPage 100
+			$vendors | Where-Object { $_.name -eq $Name -or $_.id -eq $Name }
+		} elseif (![string]::IsNullOrWhiteSpace($Id)) {
+			getApiListOrItem -ApiName "Vendors List" -Id $Id -PerPage 100
 		} else {
-			throw "Failed to retrieve vendors. Status code: $($response.StatusCode)"
+			getApiListOrItem -ApiName "Vendors List" -PerPage 100
 		}
 	} catch {
 		Write-Error $_.Exception.Message
