@@ -73,7 +73,7 @@ function Get-SwSdMobileDevice {
 		[parameter(Mandatory = $False)][string]$HREF
 	)
 	try {
-		$devices = getApiResponse -ApiName "Mobile Devices List"
+		$devices = getApiListOrItem -ApiName "Mobile Devices List" -Id $Id -PerPage 100
 		if ($devices) {
 
 			if (![string]::IsNullOrWhiteSpace($Name)) {
@@ -84,8 +84,6 @@ function Get-SwSdMobileDevice {
 				$devices | Where-Object { $_.model -eq $Model }
 			} elseif (![string]::IsNullOrWhiteSpace($SerialNumber)) {
 				$devices | Where-Object { $_.serial_number -eq $SerialNumber }
-			} elseif (![string]::IsNullOrWhiteSpace($Id)) {
-				$devices | Where-Object { $_.id -eq $Id }
 			} elseif (![string]::IsNullOrWhiteSpace($ServiceProvider)) {
 				$devices | Where-Object { $_.service_provider -eq $ServiceProvider }
 			} elseif (![string]::IsNullOrWhiteSpace($IMEI)) {
