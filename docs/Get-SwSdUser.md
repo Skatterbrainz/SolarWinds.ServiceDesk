@@ -8,19 +8,18 @@ schema: 2.0.0
 # Get-SwSdUser
 
 ## SYNOPSIS
-Returns the user record for the specified email address.
+Returns the Service Desk user records for the specified email or ID.
 
 ## SYNTAX
 
 ```
-Get-SwSdUser [[-Email] <String>] [[-PageLimit] <Int32>] [[-PageCount] <Int32>] [-NoProgress]
+Get-SwSdUser [[-Email] <String>] [[-Id] <String>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Returns the user record for the specified email address.
-If no email address is specified, it returns all users.
-Supports pagination with a specified page limit and page count.
+Returns Service Desk user records for the specified email address or ID.
+If no email or ID is specified, returns all users.
 
 ## EXAMPLES
 
@@ -33,24 +32,10 @@ Returns the user record for the specified email address.
 
 ### EXAMPLE 2
 ```
-Get-SwSdUser -PageCount 5
+Get-SwSdUser -Id 12345
 ```
 
-Returns the first 5 pages of user records.
-
-### EXAMPLE 3
-```
-Get-SwSdUser -PageLimit 50
-```
-
-Returns a list of user records with a maximum of 50 records per page.
-
-### EXAMPLE 4
-```
-Get-SwSdUser -NoProgress
-```
-
-Returns a list of user records without showing the progress indicator.
+Returns the user record for the specified ID.
 
 ## PARAMETERS
 
@@ -62,49 +47,16 @@ Type: String
 Parameter Sets: (All)
 Aliases: Name
 
-Required: False
-Position: 1
-Default value: None
+### -Id
+The user ID. If provided, returns the specific user record.
 Accept pipeline input: False
 Accept wildcard characters: False
-```
+Type: String
 
 ### -PageLimit
 The maximum number of records to return per page.
 Default is 100.
 
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 2
-Default value: 100
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -PageCount
-The number of pages to return.
-Default is 10.
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
-Default value: 10
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -NoProgress
-Suppress the progress indicator.
-
-```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases:

@@ -13,14 +13,14 @@ title: Get-SwSdUser
 
 ## SYNOPSIS
 
-Returns the user record for the specified email address.
+Returns the Service Desk user records for the specified email or ID.
 
 ## SYNTAX
 
 ### __AllParameterSets
 
 ```
-Get-SwSdUser [[-Email] <string>] [[-PageLimit] <int>] [[-PageCount] <int>] [-NoProgress]
+Get-SwSdUser [[-Email] <string>] [[-Id] <string>]
  [<CommonParameters>]
 ```
 
@@ -31,9 +31,8 @@ This cmdlet has the following aliases,
 
 ## DESCRIPTION
 
-Returns the user record for the specified email address.
-If no email address is specified, it returns all users.
-Supports pagination with a specified page limit and page count.
+Returns Service Desk user records for the specified email address or ID.
+If no email or ID is specified, returns all users.
 
 ## EXAMPLES
 
@@ -45,21 +44,9 @@ Returns the user record for the specified email address.
 
 ### EXAMPLE 2
 
-Get-SwSdUser -PageCount 5
+Get-SwSdUser -Id 12345
 
-Returns the first 5 pages of user records.
-
-### EXAMPLE 3
-
-Get-SwSdUser -PageLimit 50
-
-Returns a list of user records with a maximum of 50 records per page.
-
-### EXAMPLE 4
-
-Get-SwSdUser -NoProgress
-
-Returns a list of user records without showing the progress indicator.
+Returns the user record for the specified ID.
 
 ## PARAMETERS
 
@@ -85,57 +72,13 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -NoProgress
+### -Id
 
-Suppress the progress indicator.
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-DefaultValue: False
-SupportsWildcards: false
-Aliases: []
-ParameterSets:
-- Name: (All)
-  Position: Named
-  IsRequired: false
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
-### -PageCount
-
-The number of pages to return.
-Default is 10.
+The user ID. If provided, returns the specific user record.
 
 ```yaml
-Type: System.Int32
-DefaultValue: 10
-SupportsWildcards: false
-Aliases: []
-ParameterSets:
-- Name: (All)
-  Position: 2
-  IsRequired: false
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
-### -PageLimit
-
-The maximum number of records to return per page.
-Default is 100.
-
-```yaml
-Type: System.Int32
-DefaultValue: 100
+Type: System.String
+DefaultValue: ''
 SupportsWildcards: false
 Aliases: []
 ParameterSets:

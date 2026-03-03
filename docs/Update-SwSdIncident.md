@@ -13,7 +13,9 @@ Updates the specified incident record with the provided assignee and/or status.
 ## SYNTAX
 
 ```
-Update-SwSdIncident [-Number] <String> [[-Assignee] <String>] [[-Status] <String>]
+Update-SwSdIncident [-Number] <String> [[-Assignee] <String>] [[-GroupAssignee] <String>]
+ [[-GroupAssigneeId] <Int32>] [[-Status] <String>] [[-Category] <String>] [[-SubCategory] <String>]
+ [[-Description] <String>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
@@ -37,6 +39,13 @@ Update-SwSdIncident -Number 12345 -Status "Closed"
 ```
 
 Updates the incident 12345 with the specified status 'Closed'
+
+### EXAMPLE 3
+```
+Update-SwSdIncident -Number 12345 -GroupAssigneeId 6873849 -Status "Pending Assignment"
+```
+
+Updates the incident 12345 and assigns it to the specified queue/group ID.
 
 ## PARAMETERS
 
@@ -81,6 +90,81 @@ Aliases: State
 
 Required: False
 Position: 3
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -GroupAssignee
+The name of the group assignee. This parameter is used to assign the incident to a group instead of an individual user.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: Group
+
+Required: False
+Position: 3
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -GroupAssigneeId
+The numeric ID of the group/queue assignee. Use this when queue names do not map to a Group name.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases: GroupId, QueueId
+
+Required: False
+Position: 4
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Category
+The category of the incident.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 5
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SubCategory
+The subcategory of the incident.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 6
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Description
+The description of the incident update. This parameter is used to add a comment to the incident when updating fields.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 7
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

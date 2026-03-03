@@ -14,7 +14,8 @@ Creates a new incident in the Service Desk.
 
 ```
 New-SwSdIncident [-Name] <String> [-Description] <String> [[-Priority] <String>] [[-Status] <String>]
- [[-Category] <String>] [[-SubCategory] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [[-Category] <String>] [[-SubCategory] <String>] [[-Assignee] <String>] [[-GroupAssignee] <String>]
+ [[-GroupAssigneeId] <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -33,6 +34,13 @@ Creates a new incident with the name "Test Incident" and the description "This i
 New-SwSdIncident -Name "Test Incident" -Description "This is a test incident." -Priority "High" -Status "In Progress"
 Creates a new incident with the name "Test Incident", the description "This is a test incident.", priority "High", and status "In Progress".
 ```
+
+### EXAMPLE 3
+```
+New-SwSdIncident -Name "Queue Assigned Incident" -Description "Created and assigned to queue by ID" -GroupAssigneeId 6873849
+```
+
+Creates a new incident and assigns it to the specified queue/group ID.
 
 ## PARAMETERS
 
@@ -126,6 +134,51 @@ Aliases:
 Required: False
 Position: 6
 Default value: General
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Assignee
+Optional. The assignee of the incident. Example: "john.doe@contoso.com"
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 7
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -GroupAssignee
+Optional. The group assignee of the incident. Example: "IT Support"
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 8
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -GroupAssigneeId
+Optional. The numeric ID of the group/queue assignee. Use this when queue names do not map to a Group name.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases: GroupId, QueueId
+
+Required: False
+Position: 9
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
