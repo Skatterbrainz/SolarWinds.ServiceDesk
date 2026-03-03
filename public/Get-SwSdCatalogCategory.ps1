@@ -29,17 +29,7 @@ function Get-SwSdCatalogCategory {
 		[parameter(Mandatory = $False)][string]$Name
 	)
 	try {
-		$url = getApiBaseURL -ApiName "Categories List"
-		Write-Verbose "Url: $url"
-		$params = @{
-			Uri             = $url
-			Method          = "Get"
-			ContentType     = "application/json"
-			Headers         = $SDSession.headers
-			ErrorAction     = 'Stop'
-			UseBasicParsing = $true
-		}
-		$response = Invoke-WebRequest @params | Sort-Object name
+		$response = getApiListOrItem -ApiName "Categories List" -Id $Id -PerPage 100 | Sort-Object name
 		if ($Id -gt 0) {
 			$response | Where-Object {$_.id -eq $Id}
 		} elseif (![string]::IsNullOrEmpty($Name)) {
