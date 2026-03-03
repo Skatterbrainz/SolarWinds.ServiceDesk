@@ -33,23 +33,13 @@ function Get-SwSdGroup {
 		[parameter(Mandatory = $False)][int]$Id
 	)
 	try {
-		$baseurl = getApiBaseURL -ApiName "Groups List"
-		$url = "$($baseurl)?per_page=100"
-		$params = @{
-			Uri             = $url
-			Method          = 'Get'
-			Headers         = $SDSession.headers
-			ErrorAction     = 'Stop'
-			UseBasicParsing = $true
-		}
-		Write-Verbose "Getting groups with parameters: $($params | Out-String)"
-		$groups  = Invoke-WebRequest @params | Select-Object -ExpandProperty Content | ConvertFrom-Json
 		if (![string]::IsNullOrEmpty($Name)) {
+			$groups = getApiListOrItem -ApiName "Groups List" -PerPage 100
 			$groups | Where-Object {$_.name -eq $Name}
 		} elseif ($Id) {
-			$groups | Where-Object {$_.id -eq $Id}
+			getApiListOrItem -ApiName "Groups List" -Id $Id -PerPage 100
 		} else {
-			$groups
+			getApiListOrItem -ApiName "Groups List" -PerPage 100
 		}
 	} catch {
 		[pscustomobject]@{
