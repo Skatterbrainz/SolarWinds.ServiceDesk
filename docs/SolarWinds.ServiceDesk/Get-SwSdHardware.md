@@ -13,14 +13,14 @@ title: Get-SwSdHardware
 
 ## SYNOPSIS
 
-Returns the hardware records for the specified ID or all hardware.
+Returns the Service Desk hardware records for the specified ID or all hardware.
 
 ## SYNTAX
 
 ### __AllParameterSets
 
 ```
-Get-SwSdHardware [[-Id] <string>] [[-PageCount] <int>] [[-PageLimit] <int>] [-NoProgress]
+Get-SwSdHardware [[-Id] <string>] [[-Name] <string>]
  [<CommonParameters>]
 ```
 
@@ -31,7 +31,7 @@ This cmdlet has the following aliases,
 
 ## DESCRIPTION
 
-Returns the hardware records for the specified ID or all hardware.
+Returns the Service Desk hardware records for the specified ID or all hardware.
 
 ## EXAMPLES
 
@@ -43,27 +43,15 @@ Returns the hardware record for the specified ID.
 
 ### EXAMPLE 2
 
-Get-SwSdHardware -PageCount 5
+Get-SwSdHardware -Name "Laptop-001"
 
-Returns the first 5 pages of hardware records.
-
-### EXAMPLE 3
-
-Get-SwSdHardware -PageLimit 50
-
-Returns a list of hardware records with a maximum of 50 records per page.
-
-### EXAMPLE 4
-
-Get-SwSdHardware -NoProgress
-
-Returns a list of hardware records without showing the progress indicator.
+Returns the hardware record for the specified name.
 
 ## PARAMETERS
 
 ### -Id
 
-The hardware ID.
+The hardware ID. If provided, returns the specific hardware record.
 
 ```yaml
 Type: System.String
@@ -82,62 +70,18 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -NoProgress
+### -Name
 
-Suppress the progress indicator.
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-DefaultValue: False
-SupportsWildcards: false
-Aliases: []
-ParameterSets:
-- Name: (All)
-  Position: Named
-  IsRequired: false
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
-### -PageCount
-
-The number of pages to return.
-Default is 0 (all pages).
+The hardware name. If provided, returns the specific hardware record.
 
 ```yaml
-Type: System.Int32
-DefaultValue: 0
+Type: System.String
+DefaultValue: ''
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: (All)
   Position: 1
-  IsRequired: false
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
-### -PageLimit
-
-The maximum number of records to return per page.
-Default is 100.
-
-```yaml
-Type: System.Int32
-DefaultValue: 100
-SupportsWildcards: false
-Aliases: []
-ParameterSets:
-- Name: (All)
-  Position: 2
   IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false

@@ -8,17 +8,17 @@ schema: 2.0.0
 # Get-SwSdHardware
 
 ## SYNOPSIS
-Returns the hardware records for the specified ID or all hardware.
+Returns the Service Desk hardware records for the specified ID or all hardware.
 
 ## SYNTAX
 
 ```
-Get-SwSdHardware [[-Id] <String>] [[-PageCount] <Int32>] [[-PageLimit] <Int32>] [-NoProgress]
+Get-SwSdHardware [[-Id] <String>] [[-Name] <String>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Returns the hardware records for the specified ID or all hardware.
+Returns the Service Desk hardware records for the specified ID or all hardware.
 
 ## EXAMPLES
 
@@ -31,29 +31,15 @@ Returns the hardware record for the specified ID.
 
 ### EXAMPLE 2
 ```
-Get-SwSdHardware -PageCount 5
+Get-SwSdHardware -Name "Laptop-001"
 ```
 
-Returns the first 5 pages of hardware records.
-
-### EXAMPLE 3
-```
-Get-SwSdHardware -PageLimit 50
-```
-
-Returns a list of hardware records with a maximum of 50 records per page.
-
-### EXAMPLE 4
-```
-Get-SwSdHardware -NoProgress
-```
-
-Returns a list of hardware records without showing the progress indicator.
+Returns the hardware record for the specified name.
 
 ## PARAMETERS
 
 ### -Id
-The hardware ID.
+The hardware ID. If provided, returns the specific hardware record.
 
 ```yaml
 Type: String
@@ -67,49 +53,17 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -PageCount
-The number of pages to return.
-Default is 0 (all pages).
+### -Name
+The hardware name. If provided, returns the specific hardware record.
 
 ```yaml
-Type: Int32
+Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: 2
-Default value: 0
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -PageLimit
-The maximum number of records to return per page.
-Default is 100.
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
-Default value: 100
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -NoProgress
-Suppress the progress indicator.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
