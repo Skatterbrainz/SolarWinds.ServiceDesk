@@ -23,6 +23,36 @@ function Get-SwSdAPI {
 		Returns the URL for the Search API, forcing refresh of the API list from the API, instead of using cached list.
 	.NOTES
 		Reference: https://apidoc.samanage.com/#section/General-Concepts/API-Entry-Point
+
+		name                     href
+		----                     ----
+		Computers List           https://api.samanage.com/hardwares.json
+		Helpdesk Incidents List  https://api.samanage.com/incidents.json
+		Risks List               https://api.samanage.com/risks.json
+		Contracts List           https://api.samanage.com/contracts.json
+		Software List            https://api.samanage.com/softwares.json
+		Other Assets List        https://api.samanage.com/other_assets.json
+		Vendors List             https://api.samanage.com/vendors.json
+		Printers List            https://api.samanage.com/printers.json
+		Audit Log List           https://api.samanage.com/audits.json
+		Users List               https://api.samanage.com/users.json
+		Problems List            https://api.samanage.com/problems.json
+		Changes List             https://api.samanage.com/changes.json
+		Releases List            https://api.samanage.com/releases.json
+		Solutions List           https://api.samanage.com/solutions.json
+		Catalog Items List       https://api.samanage.com/catalog_items.json
+		Departments List         https://api.samanage.com/departments.json
+		Sites List               https://api.samanage.com/sites.json
+		Groups List              https://api.samanage.com/groups.json
+		Mobile Devices List      https://api.samanage.com/mobiles.json
+		Roles List               https://api.samanage.com/roles.json
+		Categories List          https://api.samanage.com/categories.json
+		Change Catalogs List     https://api.samanage.com/change_catalogs.json
+		Configuration Items List https://api.samanage.com/configuration_items.json
+		Purchase Orders List     https://api.samanage.com/purchase_orders.json
+
+		Appended with search API
+		Search                    https://api.samanage.com/search.json
 	.LINK
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdAPI.md
 	#>
