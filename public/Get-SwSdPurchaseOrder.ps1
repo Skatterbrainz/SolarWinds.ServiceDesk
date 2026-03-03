@@ -53,23 +53,9 @@ function Get-SwSdPurchaseOrder {
 			getApiResponseByURL -Url $url	
 		} elseif ($Id) {
 			Write-Verbose "Search by Id: $Id"
-			$url = getApiBaseURL -ApiName "Purchase Orders List"
-			$url = "$url/$Id.json"
-			$params = @{
-				Url             = $url
-				Method          = "Get"
-				Headers         = $SDSession.headers
-				UseBasicParsing = $true
-				ErrorAction     = "Stop"
-			}
-			$response = Invoke-WebRequest @params
-			if ($response.StatusCode -eq 200) {
-				Write-Output $($response.Content | ConvertFrom-Json)
-			} else {
-				throw "Failed to retrieve purchase order. Status code: $($response.StatusCode)"
-			}
+			Write-Output (getApiListOrItem -ApiName "Purchase Orders List" -Id $Id -PerPage 100)
 		} else {
-			$purchaseOrders = getApiResponse -ApiName "Purchase Orders List"
+			$purchaseOrders = getApiListOrItem -ApiName "Purchase Orders List" -PerPage 100
 			if ($purchaseOrders) {
 				if (![string]::IsNullOrWhiteSpace($Name)) {
 					$purchaseOrders | Where-Object { $_.name -eq $Name }
