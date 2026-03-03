@@ -89,3 +89,51 @@ function getApiResponseByURL {
 		Write-Warning "Failed to retrieve data from URL. Status code: $($response.StatusCode)"
 	}
 }
+
+function getApiListOrItem {
+	[CmdletBinding()]
+	param (
+		[parameter(Mandatory = $True)][string]$ApiName,
+		[parameter(Mandatory = $False)][string]$Id,
+		[parameter(Mandatory = $False)][int]$PerPage = 100,
+		[parameter(Mandatory = $False)][hashtable]$QueryParameters,
+		[parameter(Mandatory = $False)][switch]$NoIdExtension
+	)
+	$SDSession = Connect-SwSD
+	if (![string]::IsNullOrEmpty($Id)) {
+		$baseurl = getApiBaseURL -ApiName $ApiName -NoExtension
+		if ($NoIdExtension.IsPresent) {
+			$url = "$($baseurl)/$Id"
+		} else {
+			$url = "$($baseurl)/$Id.json"
+		}
+	} else {
+		$baseurl = getApiBaseURL -ApiName $ApiName
+		$queryPairs = @()
+		if ($PerPage -gt 0) {
+			$queryPairs += "per_page=$PerPage"
+		}
+		if ($QueryParameters) {
+			foreach ($key in $QueryParameters.Keys) {
+				if (![string]::IsNullOrEmpty($QueryParameters[$key])) {
+					$queryPairs += "$key=$($QueryParameters[$key])"
+				}
+			}
+		}
+		if ($queryPairs.Count -gt 0) {
+			$url = "$($baseurl)?$($queryPairs -join '&')"
+		} else {
+			$url = $baseurl
+		}
+	}
+	Write-Verbose "URL: $url"
+	$params = @{
+		Uri             = $url
+		Method          = 'Get'
+		Headers         = $SDSession.headers
+		ErrorAction     = 'Stop'
+		UseBasicParsing = $true
+	}
+	Write-Verbose "Getting data for '$ApiName' with parameters: $($params | Out-String)"
+	Invoke-WebRequest @params | Select-Object -ExpandProperty Content | ConvertFrom-Json
+}
