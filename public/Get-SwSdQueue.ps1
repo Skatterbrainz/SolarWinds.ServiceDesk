@@ -40,107 +40,172 @@ function Get-SwSdQueue {
 	)
 	try {
 		$SDSession = Connect-SwSD
+		if ($Force) {
+			[void](Get-SwSdAPI -Force)
+		}
 
-		function Expand-QueueRecords {
+		function Expand-EndpointRecords {
 			param([parameter(Mandatory = $false)]$InputObject)
 			if ($null -eq $InputObject) { return @() }
-			if ($InputObject -is [System.Array]) { return @($InputObject) }
-			if ($InputObject.PSObject.Properties['assignable_queues']) { return @($InputObject.assignable_queues) }
-			if ($InputObject.PSObject.Properties['queues']) { return @($InputObject.queues) }
-			if ($InputObject.PSObject.Properties['groups']) { return @($InputObject.groups) }
-			if ($InputObject.PSObject.Properties['data']) { return @($InputObject.data) }
-			if ($InputObject.PSObject.Properties['items']) { return @($InputObject.items) }
-			if ($InputObject.PSObject.Properties['group']) { return @($InputObject.group) }
-			if ($InputObject.PSObject.Properties['queue']) { return @($InputObject.queue) }
-			if ($InputObject.PSObject.Properties['assignable_queue']) { return @($InputObject.assignable_queue) }
+			if ($InputObject -is [System.Array]) {
+				$items = @()
+				foreach ($entry in $InputObject) {
+					$items += @(Expand-EndpointRecords -InputObject $entry)
+				}
+				return $items
+			}
+
+			foreach ($propertyName in @('assignment_queues','assignable_queues','queues','groups','data','items')) {
+				if ($InputObject.PSObject.Properties[$propertyName]) {
+					return @(Expand-EndpointRecords -InputObject $InputObject.$propertyName)
+				}
+			}
+
+			foreach ($propertyName in @('assignment_queue','assignable_queue','queue','group')) {
+				if ($InputObject.PSObject.Properties[$propertyName]) {
+					return @(Expand-EndpointRecords -InputObject $InputObject.$propertyName)
+				}
+			}
+
 			return @($InputObject)
 		}
 
-		function Test-IsQueue {
+		function Get-InnerGroupRecord {
 			param([parameter(Mandatory = $false)]$Record)
-			if ($null -eq $Record) { return $false }
-			if ($Record.type -eq 'AssignableQueueGroup') { return $true }
-			if ($Record.avatar -and $Record.avatar.klass -eq 'AssignableQueueGroup') { return $true }
-			if ($Record.avatar -and $Record.avatar.type -eq 'queue') { return $true }
-			if ($Record.type -match '(?i)queue') { return $true }
-			if ($Record.avatar -and $Record.avatar.klass -match '(?i)queue') { return $true }
-			if ($Record.name -match '(?i)\bqueue\b') { return $true }
-			return $false
+			if ($null -eq $Record) { return $null }
+			if ($Record.group) { return $Record.group }
+			if ($Record.queue) { return $Record.queue }
+			return $Record
 		}
 
-		$records = @()
+		function Get-QueueLikeGroups {
+			param([parameter(Mandatory = $false)]$InputGroups)
+			$allGroups = @($InputGroups | ForEach-Object { Get-InnerGroupRecord -Record $_ } | Where-Object { $_ })
 
-		$apiList = Get-SwSdAPI -Force:$Force
-		$queueEndpoints = @(
-			$apiList | Where-Object { $_.href -match '(?i)assignable_queues' -or $_.name -match '(?i)assignable\s*queues?' } | Select-Object -ExpandProperty href
-		)
-		$queueEndpoints += "$($SDSession.apiurl)/assignable_queues.json"
-		$queueEndpoints = $queueEndpoints | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique
+			$candidateIds = New-Object 'System.Collections.Generic.HashSet[string]'
 
-		foreach ($endpoint in $queueEndpoints) {
+			foreach ($apiName in @('Categories List', 'Sites List', 'Departments List', 'Change Catalogs List', 'Catalog Items List')) {
+				try {
+					$items = getApiListOrItem -ApiName $apiName -PerPage 100
+					foreach ($item in @($items)) {
+						$record = Get-InnerGroupRecord -Record $item
+						if ($record.default_group_assignee_id) {
+							[void]$candidateIds.Add([string]$record.default_group_assignee_id)
+						}
+						if ($record.category -and $record.category.default_group_assignee_id) {
+							[void]$candidateIds.Add([string]$record.category.default_group_assignee_id)
+						}
+						if ($record.site -and $record.site.default_group_assignee_id) {
+							[void]$candidateIds.Add([string]$record.site.default_group_assignee_id)
+						}
+						if ($record.department -and $record.department.default_group_assignee_id) {
+							[void]$candidateIds.Add([string]$record.department.default_group_assignee_id)
+						}
+						if ($record.change_catalog -and $record.change_catalog.default_group_assignee_id) {
+							[void]$candidateIds.Add([string]$record.change_catalog.default_group_assignee_id)
+						}
+						if ($record.catalog_item -and $record.catalog_item.default_group_assignee_id) {
+							[void]$candidateIds.Add([string]$record.catalog_item.default_group_assignee_id)
+						}
+					}
+				} catch {
+					Write-Verbose "Candidate lookup failed for $apiName"
+				}
+			}
+
 			try {
-				Write-Verbose "Trying endpoint: $endpoint"
-				if ($Id) {
-					$itemUrl = "$(($endpoint -replace '\\.json$',''))/$Id.json"
-					$item = getApiResponseByURL -URL $itemUrl
-					$expanded = Expand-QueueRecords -InputObject $item
-					if ($expanded.Count -gt 0) { $records += $expanded }
-				} else {
-					$listUrl = if ($endpoint -match '\?') { "$endpoint&per_page=100" } else { "$endpoint?per_page=100" }
-					$list = getApiResponseByURL -URL $listUrl
-					$expanded = Expand-QueueRecords -InputObject $list
-					if ($expanded.Count -gt 0) { $records += $expanded }
+				$incidents = getApiListOrItem -ApiName 'Helpdesk Incidents List' -PerPage 100
+				foreach ($incident in @($incidents)) {
+					$inc = if ($incident.incident) { $incident.incident } else { $incident }
+					if ($inc.group_assignee -and $inc.group_assignee.id) { [void]$candidateIds.Add([string]$inc.group_assignee.id) }
+					if ($inc.assignee -and $inc.assignee.is_user -eq $false -and $inc.assignee.id) { [void]$candidateIds.Add([string]$inc.assignee.id) }
 				}
 			} catch {
-				Write-Verbose "Endpoint failed: $endpoint"
+				Write-Verbose "Incident candidate lookup failed"
 			}
+
+			$queueLike = @(
+				$allGroups | Where-Object {
+					$g = $_
+					$idMatch = $g.id -and $candidateIds.Contains([string]$g.id)
+					$typeMatch = ([string]$g.type -match '(?i)queue') -or ($g.avatar -and [string]$g.avatar.klass -match '(?i)queue')
+					$assignableMatch = ($g.available_for_assignment -eq $true) -or ($g.can_be_available_for_assignment -eq $true)
+					$idMatch -or $typeMatch -or $assignableMatch
+				}
+			)
+
+			if ($queueLike.Count -eq 0) {
+				$queueLike = @($allGroups | Where-Object { [string]$_.name -match '(?i)queue' })
+			}
+
+			@(
+				$queueLike |
+				Where-Object { $_ -and $_.id } |
+				Group-Object -Property id |
+				ForEach-Object { $_.Group | Select-Object -First 1 }
+			)
 		}
 
-		try {
-			if ($Id) {
-				$groupById = Get-SwSdGroup -Id $Id
-				if ($groupById) { $records += (Expand-QueueRecords -InputObject $groupById) }
-			} else {
-				$groupList = Get-SwSdGroup
-				if ($groupList) { $records += (Expand-QueueRecords -InputObject $groupList) }
-			}
-		} catch {
-			Write-Verbose "Group fallback failed: $($_.Exception.Message)"
-		}
+		function Get-QueueEndpointGroups {
+			param([parameter(Mandatory = $false)][string]$MatchName)
 
-		$records = @(
-			$records |
-			Where-Object { $_ -and $_.id } |
-			Group-Object -Property id |
-			ForEach-Object { $_.Group | Select-Object -First 1 }
-		)
+			$urls = @(
+				"$($SDSession.apiurl)/assignment_queues.json?per_page=100",
+				"$($SDSession.apiurl)/assignable_queues.json?per_page=100",
+				"$($SDSession.apiurl)/queues.json?per_page=100"
+			)
+
+			$records = @()
+			foreach ($url in $urls) {
+				try {
+					Write-Verbose "Trying endpoint: $url"
+					$response = getApiResponseByURL -URL $url
+					$records += @(Expand-EndpointRecords -InputObject $response | ForEach-Object { Get-InnerGroupRecord -Record $_ })
+				} catch {
+					Write-Verbose "Endpoint failed: $url"
+				}
+			}
+
+			$records = @(
+				$records |
+				Where-Object { $_ -and ($_.id -or $_.name) } |
+				Group-Object -Property { if ($_.id) { "id:$($_.id)" } else { "name:$($_.name)" } } |
+				ForEach-Object { $_.Group | Select-Object -First 1 }
+			)
+
+			if (![string]::IsNullOrWhiteSpace($MatchName)) {
+				$exact = @($records | Where-Object { $_.name -and $_.name -ieq $MatchName })
+				if ($exact.Count -gt 0) { return $exact }
+				return @($records | Where-Object { $_.name -and $_.name -like "*$MatchName*" })
+			}
+
+			return $records
+		}
 
 		if ($Id) {
-			$idMatch = $records | Where-Object { [string]$_.id -eq [string]$Id }
-			if ($idMatch) {
-				if (![string]::IsNullOrEmpty($Name)) {
-					return $idMatch | Where-Object { $_.name -eq $Name }
-				}
-				return $idMatch
-			}
+			$byId = Get-SwSdGroup -Id $Id | ForEach-Object { Get-InnerGroupRecord -Record $_ }
+			if ($byId) { return $byId }
+			return
 		}
 
-		$queues = $records | Where-Object { Test-IsQueue -Record $_ }
+		if (![string]::IsNullOrWhiteSpace($Name)) {
+			$endpointByName = Get-QueueEndpointGroups -MatchName $Name
+			if ($endpointByName -and @($endpointByName).Count -gt 0) { return $endpointByName }
 
-		if (!$Id -and (!$queues -or $queues.Count -eq 0)) {
-			Write-Verbose "No explicit queue markers found; using fallback candidate records"
-			$queues = $records
+			$byName = Get-SwSdGroup -Name $Name | ForEach-Object { Get-InnerGroupRecord -Record $_ }
+			if ($byName) { return $byName }
+
+			$groups = @(Get-SwSdGroup | ForEach-Object { Get-InnerGroupRecord -Record $_ })
+			$queues = Get-QueueLikeGroups -InputGroups $groups
+			$nameExact = $queues | Where-Object { $_.name -ieq $Name }
+			if ($nameExact) { return $nameExact }
+			return $queues | Where-Object { $_.name -like "*$Name*" }
 		}
 
-		if (![string]::IsNullOrEmpty($Name)) {
-			$nameExact = $queues | Where-Object { [string]$_.name -ieq [string]$Name }
-			if ($nameExact) {
-				$queues = $nameExact
-			} else {
-				$queues = $queues | Where-Object { [string]$_.name -like "*$Name*" }
-			}
-		}
-		$queues
+		$endpointQueues = Get-QueueEndpointGroups
+		if ($endpointQueues -and @($endpointQueues).Count -gt 0) { return $endpointQueues }
+		Write-Verbose "No records returned from queue endpoints. Returning no results for list mode."
+		@()
 	} catch {
 		[pscustomobject]@{
 			Status   = 'Error'
