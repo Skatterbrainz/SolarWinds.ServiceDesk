@@ -13,7 +13,7 @@ Returns the role record for the specified role name.
 ## SYNTAX
 
 ```
-Get-SwSdRole [[-Name] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-SwSdRole [[-Name] <String>] [[-Id] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -48,6 +48,21 @@ Aliases:
 
 Required: False
 Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+The role ID. If provided, returns the specific role record.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

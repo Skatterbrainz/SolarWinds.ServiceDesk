@@ -1,26 +1,27 @@
 ---
 document type: cmdlet
 external help file: SolarWinds.ServiceDesk-Help.xml
-HelpUri: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdGroupMember.md
+HelpUri: https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/New-SwSdGroup.md
 Locale: en-US
 Module Name: SolarWinds.ServiceDesk
 ms.date: 02/11/2026
 PlatyPS schema version: 2024-05-01
-title: Get-SwSdGroupMember
+title: New-SwSdGroup
 ---
 
-# Get-SwSdGroupMember
+# New-SwSdGroup
 
 ## SYNOPSIS
 
-Returns the members of the specified group.
+Creates a new group in SolarWinds Service Desk.
 
 ## SYNTAX
 
 ### __AllParameterSets
 
 ```
-Get-SwSdGroupMember [-Name] <string> [[-MemberName] <string>] [<CommonParameters>]
+New-SwSdGroup [-Name] <string> [[-Description] <string>] [[-SupervisorID] <Object>]
+ [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -30,28 +31,33 @@ This cmdlet has the following aliases,
 
 ## DESCRIPTION
 
-Returns the members of the specified group.
+Creates a new group in SolarWinds Service Desk by making an API call to the appropriate endpoint.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-Get-SwSdGroupMember -Name "Admins"
+New-SwSdGroup -Name "New Group"
 
-Returns the members of the Admins group.
+Creates a new group named "New Group".
 
 ### EXAMPLE 2
 
-Get-SwSdGroupMember -Name "Admins" -MemberName "jsmith@contoso.com"
+New-SwSdGroup -Name "New Group" -Description "This is a new group."
 
-Returns the member record for the specified email address in the Admins group.
+Creates a new group named "New Group" with the specified description.
+
+### EXAMPLE 3
+
+New-SwSdGroup -Name "New Group" -SupervisorID 123456
+
+Creates a new group named "New Group" with the specified supervisor.
 
 ## PARAMETERS
 
-### -MemberName
+### -Description
 
-The member name or email address.
-If not specified, returns all members.
+A description for the group.
 
 ```yaml
 Type: System.String
@@ -72,7 +78,7 @@ HelpMessage: ''
 
 ### -Name
 
-The group name.
+The name of the group to create.
 
 ```yaml
 Type: System.String
@@ -83,6 +89,27 @@ ParameterSets:
 - Name: (All)
   Position: 0
   IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -SupervisorID
+
+The user ID of the group supervisor.
+
+```yaml
+Type: System.Object
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 2
+  IsRequired: false
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false
@@ -102,15 +129,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.Management.Automation.PSObject
-
-{{ Fill in the Description }}
-
 ## NOTES
-
-Reference: https://apidoc.samanage.com/#tag/Group
-
 
 ## RELATED LINKS
 
-- [](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdGroupMember.md)
+- [](https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/New-SwSdGroup.md)

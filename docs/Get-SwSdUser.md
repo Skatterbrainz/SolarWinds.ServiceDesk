@@ -46,24 +46,24 @@ The user's email address.
 Type: String
 Parameter Sets: (All)
 Aliases: Name
+Required: False
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Id
 The user ID. If provided, returns the specific user record.
-Accept pipeline input: False
-Accept wildcard characters: False
+
+```yaml
 Type: String
-
-### -PageLimit
-The maximum number of records to return per page.
-Default is 100.
-
-Type: SwitchParameter
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
-Default value: False
+Position: 2
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

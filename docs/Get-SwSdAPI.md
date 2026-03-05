@@ -13,7 +13,7 @@ Retrieves the SolarWinds Service Desk API URL for the specified API $Name, or re
 ## SYNTAX
 
 ```
-Get-SwSdAPI [[-Name] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-SwSdAPI [[-Name] <String>] [-Force] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -54,6 +54,21 @@ Aliases:
 Required: False
 Position: 1
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Force
+Force refresh of the API list from the API, instead of using cached list.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -13,7 +13,7 @@ Returns the group record for the specified group name.
 ## SYNTAX
 
 ```
-Get-SwSdGroup [[-Name] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-SwSdGroup [[-Name] <String>] [[-Id] <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -35,6 +35,13 @@ Get-SwSdGroup
 
 Returns all groups.
 
+### EXAMPLE 3
+```
+Get-SwSdGroup -Id 123456
+```
+
+Returns information for the group with ID 123456.
+
 ## PARAMETERS
 
 ### -Name
@@ -49,6 +56,22 @@ Aliases:
 Required: False
 Position: 1
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+The group ID.
+If not specified, returns all groups.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 2
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

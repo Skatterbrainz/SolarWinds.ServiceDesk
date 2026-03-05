@@ -13,7 +13,7 @@ Returns the Service Desk site records for the specified ID or all sites.
 ## SYNTAX
 
 ```
-Get-SwSdSite [[-Name] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-SwSdSite [[-Name] <String>] [[-Id] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,7 +30,7 @@ Returns the site record for the specified name.
 
 ### EXAMPLE 2
 ```
-Get-SwSdSite -Name "12345"
+Get-SwSdSite -Id "1234567"
 ```
 
 Returns the site record for the specified ID.
@@ -55,6 +55,21 @@ Aliases:
 
 Required: False
 Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+The site ID. If provided, returns the specific site record.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

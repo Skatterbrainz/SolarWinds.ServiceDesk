@@ -19,8 +19,8 @@ Get-SwSdQueue [[-Name] <String>] [[-Id] <Int32>] [-Force] [-ProgressAction <Acti
 
 ## DESCRIPTION
 Returns assignable queue records from the Service Desk API.
-If a dedicated queue endpoint is available in the API entry point, it is used.
-If not, it falls back to filtering group records for queue-like entities.
+List mode (no -Name or -Id) queries only queue endpoints (for example assignment_queues, assignable_queues, or queues) to avoid mixing in non-queue groups.
+Name mode first queries queue endpoints, then falls back to group lookup/filtering for tenant compatibility.
 
 ## EXAMPLES
 
@@ -117,6 +117,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.Management.Automation.PSObject
 ## NOTES
 Queues are represented in some tenants as AssignableQueueGroup entities.
+Depending on tenant/API version, queues may be exposed as assignment_queues or assignable_queues.
+When using no parameters, no queue endpoint results means no output (by design).
 Reference: https://apidoc.samanage.com/#tag/Group/operation/getGroups
 
 ## RELATED LINKS
