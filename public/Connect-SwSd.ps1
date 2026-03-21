@@ -9,6 +9,8 @@ function Connect-SwSD {
 			- ApiUrl: "https://api.samanage.com"
 			- ApiVersion: "v2.1"
 			- ApiFormat: "json"
+	.PARAMETER Credential
+		The credential object containing the API token as the password. This is an alternative to providing the API token directly as a parameter or environment variable.
 	.PARAMETER ApiToken
 		The authentication API token. This is required if not set in the environment variable `$env:SWSDToken`.
 	.PARAMETER ApiUrl
@@ -19,6 +21,10 @@ function Connect-SwSD {
 		The API format: json or xml. Default is "json".
 	.PARAMETER Refresh
 		Refresh the session.
+	.EXAMPLE
+		Connect-SwSD -Credential $apicredential
+
+		Creates a new SolarWinds Service Desk session using the API token from the provided credential object.
 	.EXAMPLE
 		Connect-SwSD -ApiToken "your_api_token"
 		
@@ -40,6 +46,7 @@ function Connect-SwSD {
 	[OutputType([PSCustomObject])]
 	[Alias('Connect-ServiceDesk', 'New-SwSdSession')]
 	param (
+		[parameter(Mandatory = $False)][pscredential]$Credential,
 		[parameter(Mandatory = $False)][string]$ApiToken,
 		[parameter(Mandatory = $False)][string]$ApiUrl = "https://api.samanage.com",
 		[parameter(Mandatory = $False)][string]$ApiVersion = "v2.1",
@@ -50,13 +57,15 @@ function Connect-SwSD {
 		if ($SDSession -and !$Refresh.IsPresent) {
 			$SDSession
 		} else {			
-			if (![string]::IsNullOrWhiteSpace($ApiToken)) {
+			if ($Credential) {
+				$global:SwSdToken = $Credential.GetNetworkCredential().Password
+			} elseif (![string]::IsNullOrWhiteSpace($ApiToken)) {
 				$global:SwSdToken = $ApiToken
 			} else {
 				if ($env:SWSDToken) {
 					$global:SwSdToken = $env:SWSDToken
 				} else {
-					throw "API Token not provided or defined in the environment.(`$env:SWSDToken)"
+					throw "Credential or API Token not provided or defined in the environment.(`$env:SWSDToken)"
 				}
 			}
 			$headers = @{
