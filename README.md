@@ -175,6 +175,11 @@ Skatterbrainz
 
 ## 📋 Version History
 
+### 1.1.0 - 3/20/2026
+
+- Updated: Connect-SwSd
+  - Added support for -Credential to pass the API token (as password property)
+
 ### 1.0.7 - 3/3/2026
 
 - Added: Get-SwSdQueue
