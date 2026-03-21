@@ -173,7 +173,7 @@ function Update-SwSdIncident {
 				$queueById = Get-SwSdQueue -Id $GroupAssigneeId | Select-Object -First 1
 				if ($queueById -and $queueById.name) {
 					$targetQueueName = [string]$queueById.name
-					Write-Verbose "Resolved queue name for id $GroupAssigneeId: $targetQueueName"
+					Write-Verbose "Resolved queue name for id $($GroupAssigneeId): $($targetQueueName)"
 				}
 			} catch {
 			}
