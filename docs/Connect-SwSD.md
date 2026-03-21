@@ -13,14 +13,15 @@ Creates a new SolarWinds Service Desk session.
 ## SYNTAX
 
 ```
-Connect-SwSD [[-ApiToken] <String>] [[-ApiUrl] <String>] [[-ApiVersion] <String>] [[-ApiFormat] <String>]
+Connect-SwSD [[-Credential] <PSCredential>] [[-ApiToken] <String>] [[-ApiUrl] <String>] [[-ApiVersion] <String>] [[-ApiFormat] <String>]
  [-Refresh] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 Creates a new SolarWinds Service Desk session.
 If a session already exists, it will return the existing session unless the \`-Refresh\` switch is used.
-You can provide the API token, URL, version, and format as parameters.
+You can provide the API credential, API token, URL, version, and format as parameters.
+If a credential is provided, the password value is used as the API token.
 If the API token is not provided, it will look for the \`$env:SWSDToken\` environment variable.
 You can also set the API URL, version, and format as parameters.
 The default values are:
@@ -32,19 +33,26 @@ The default values are:
 
 ### EXAMPLE 1
 ```
+Connect-SwSD -Credential $apicredential
+```
+
+Creates a new SolarWinds Service Desk session using the API token from the provided credential object.
+
+### EXAMPLE 2
+```
 Connect-SwSD -ApiToken "your_api_token"
 ```
 
 Creates a new SolarWinds Service Desk session with the specified API token.
 
-### EXAMPLE 2
+### EXAMPLE 3
 ```
 Connect-SwSD -ApiUrl "https://api.samanage.com" -ApiVersion "v2.1" -ApiFormat "json"
 ```
 
 Creates a new SolarWinds Service Desk session with the specified API URL, version, and format.
 
-### EXAMPLE 3
+### EXAMPLE 4
 ```
 Connect-SwSD -Refresh
 ```
@@ -52,6 +60,22 @@ Connect-SwSD -Refresh
 Refreshes the existing SolarWinds Service Desk session.
 
 ## PARAMETERS
+
+### -Credential
+The credential object containing the API token as the password.
+This is an alternative to providing the API token directly as a parameter or environment variable.
+
+```yaml
+Type: PSCredential
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -ApiToken
 The authentication API token.
@@ -63,7 +87,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -79,7 +103,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: 3
 Default value: Https://api.samanage.com
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -95,7 +119,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
+Position: 4
 Default value: V2.1
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -111,7 +135,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 4
+Position: 5
 Default value: Json
 Accept pipeline input: False
 Accept wildcard characters: False
