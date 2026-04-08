@@ -28,15 +28,15 @@ function Get-SwSdDepartment {
 		[parameter(Mandatory = $False)][string]$Name
 	)
 	try {
-		$departments = getApiListOrItem -ApiName "Departments List" -PerPage 100
-		if ($departments) {
-			if (![string]::IsNullOrWhiteSpace($Name)) {
-				$departments | Where-Object { $_.name -eq $Name -or $_.id -eq $Name -or $_.description -match $Name}
+		if (![string]::IsNullOrWhiteSpace($Name)) {
+			if ($Name -match '^\d+$') {
+				getApiListOrItem -ApiName "Departments List" -Id $Name
 			} else {
-				return $departments
+				$departments = getApiListOrItem -ApiName "Departments List" -PerPage 100 -QueryParameters @{ name = $Name }
+				$departments | Where-Object { $_.name -eq $Name -or $_.description -match $Name}
 			}
 		} else {
-			throw "Failed to retrieve departments. Status code: $($response.StatusCode)"
+			getApiListOrItem -ApiName "Departments List" -PerPage 100 -AllPages
 		}
 	} catch {
 		Write-Error $_.Exception.Message
