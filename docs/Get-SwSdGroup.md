@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-SwSdGroup
 
 ## SYNOPSIS
-Returns the group record for the specified group name.
+Returns the group record for the specified group name or ID.
 
 ## SYNTAX
 
@@ -17,7 +17,7 @@ Get-SwSdGroup [[-Name] <String>] [[-Id] <Int32>] [-ProgressAction <ActionPrefere
 ```
 
 ## DESCRIPTION
-Returns the group record for the specified group name or all groups.
+Returns the group record for the specified group name or ID, or all groups.
 
 ## EXAMPLES
 

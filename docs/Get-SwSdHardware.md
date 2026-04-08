@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-SwSdHardware
 
 ## SYNOPSIS
-Returns the Service Desk hardware records for the specified ID or all hardware.
+Returns the Service Desk hardware records for the specified name or ID, or all hardware.
 
 ## SYNTAX
 
@@ -18,7 +18,7 @@ Get-SwSdHardware [[-Id] <String>] [[-Name] <String>]
 ```
 
 ## DESCRIPTION
-Returns the Service Desk hardware records for the specified ID or all hardware.
+Returns the Service Desk hardware records for the specified name or ID, or all hardware.
 
 ## EXAMPLES
 

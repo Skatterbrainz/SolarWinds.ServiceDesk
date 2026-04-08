@@ -41,6 +41,7 @@ Returns the user record for the specified ID.
 
 ### -Email
 The user's email address.
+When provided, the API is queried by email and matching is case-insensitive.
 
 ```yaml
 Type: String

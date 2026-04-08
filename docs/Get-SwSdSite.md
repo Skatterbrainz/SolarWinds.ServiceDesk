@@ -45,7 +45,7 @@ Returns all site records.
 ## PARAMETERS
 
 ### -Name
-The site name or ID.
+The site name.
 If provided, returns the specific site record.
 
 ```yaml

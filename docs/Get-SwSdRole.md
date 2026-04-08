@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-SwSdRole
 
 ## SYNOPSIS
-Returns the role record for the specified role name.
+Returns the role record for the specified role name or ID.
 
 ## SYNTAX
 
@@ -17,7 +17,7 @@ Get-SwSdRole [[-Name] <String>] [[-Id] <String>] [-ProgressAction <ActionPrefere
 ```
 
 ## DESCRIPTION
-Returns the role record for the specified role name or all roles.
+Returns the role record for the specified role name or ID, or all roles.
 
 ## EXAMPLES
 

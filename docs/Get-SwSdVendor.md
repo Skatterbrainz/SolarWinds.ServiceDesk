@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-SwSdVendor
 
 ## SYNOPSIS
-Returns the Service Desk vendor records for the specified ID or all vendors.
+Returns the Service Desk vendor records for the specified name or ID, or all vendors.
 
 ## SYNTAX
 
@@ -17,7 +17,7 @@ Get-SwSdVendor [[-Name] <String>] [[-Id] <String>] [-ProgressAction <ActionPrefe
 ```
 
 ## DESCRIPTION
-Returns the Service Desk vendor records for the specified ID or all vendors.
+Returns the Service Desk vendor records for the specified name or ID, or all vendors.
 
 ## EXAMPLES
 

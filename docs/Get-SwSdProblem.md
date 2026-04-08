@@ -67,7 +67,7 @@ Returns all problem records.
 ## PARAMETERS
 
 ### -Name
-The problem name or ID.
+The problem name.
 If provided, returns the specific problem record.
 
 ```yaml
