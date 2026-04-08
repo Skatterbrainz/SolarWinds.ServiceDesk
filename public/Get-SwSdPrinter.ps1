@@ -31,11 +31,13 @@ function Get-SwSdPrinter {
 		[parameter(Mandatory = $False)][string]$Id
 	)
 	try {
-		$printers = getApiListOrItem -ApiName "Printers List" -Id $Id -PerPage 100
-		if (![string]::IsNullOrEmpty($Name)) {
+		if (![string]::IsNullOrEmpty($Id)) {
+			getApiListOrItem -ApiName "Printers List" -Id $Id
+		} elseif (![string]::IsNullOrEmpty($Name)) {
+			$printers = getApiListOrItem -ApiName "Printers List" -PerPage 100 -QueryParameters @{ name = $Name }
 			$printers | Where-Object { $_.name -eq $Name }
 		} else {
-			$printers
+			getApiListOrItem -ApiName "Printers List" -PerPage 100 -AllPages
 		}
 	} catch {
 		[pscustomobject]@{
