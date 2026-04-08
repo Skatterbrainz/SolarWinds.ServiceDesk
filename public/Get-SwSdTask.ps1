@@ -46,7 +46,7 @@ function Get-SwSdTask {
 				foreach ($task in $tasks) {
 					$TaskURL = $task.href
 					Write-Verbose "Task URL: $taskUrl"
-					$response += Invoke-WebRequest -Method GET -Uri $TaskURL -Headers $SDSession.headers -UseBasicParsing | Select-Object -ExpandProperty task
+					$response += getApiResponseByURL -Url $TaskURL | Select-Object -ExpandProperty task
 				}
 				$result = $response
 			} else {
