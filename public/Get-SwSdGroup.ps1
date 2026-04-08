@@ -33,13 +33,13 @@ function Get-SwSdGroup {
 		[parameter(Mandatory = $False)][int]$Id
 	)
 	try {
-		if (![string]::IsNullOrEmpty($Name)) {
-			$groups = getApiListOrItem -ApiName "Groups List" -PerPage 100
+		if ($Id) {
+			getApiListOrItem -ApiName "Groups List" -Id $Id
+		} elseif (![string]::IsNullOrEmpty($Name)) {
+			$groups = getApiListOrItem -ApiName "Groups List" -PerPage 100 -QueryParameters @{ name = $Name }
 			$groups | Where-Object {$_.name -eq $Name}
-		} elseif ($Id) {
-			getApiListOrItem -ApiName "Groups List" -Id $Id -PerPage 100
 		} else {
-			getApiListOrItem -ApiName "Groups List" -PerPage 100
+			getApiListOrItem -ApiName "Groups List" -PerPage 100 -AllPages
 		}
 	} catch {
 		[pscustomobject]@{
