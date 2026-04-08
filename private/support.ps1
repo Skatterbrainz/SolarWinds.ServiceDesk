@@ -97,6 +97,7 @@ function getApiListOrItem {
 		[parameter(Mandatory = $False)][string]$Id,
 		[parameter(Mandatory = $False)][int]$PerPage = 100,
 		[parameter(Mandatory = $False)][hashtable]$QueryParameters,
+		[parameter(Mandatory = $False)][switch]$AllPages,
 		[parameter(Mandatory = $False)][switch]$NoIdExtension
 	)
 	$SDSession = Connect-SwSD
@@ -135,5 +136,33 @@ function getApiListOrItem {
 		UseBasicParsing = $true
 	}
 	Write-Verbose "Getting data for '$ApiName' with parameters: $($params | Out-String)"
-	Invoke-WebRequest @params | Select-Object -ExpandProperty Content | ConvertFrom-Json
+	$response = Invoke-WebRequest @params
+
+	if ($AllPages.IsPresent -and [string]::IsNullOrEmpty($Id) -and -not ($QueryParameters -and $QueryParameters.ContainsKey('page'))) {
+		$result = @()
+		if ($response.Content) {
+			$result += @($response.Content | ConvertFrom-Json)
+		}
+
+		[int]$totalPages = 1
+		if ($response.Headers -and $response.Headers['X-Total-Pages']) {
+			[void][int]::TryParse([string]$response.Headers['X-Total-Pages'][0], [ref]$totalPages)
+		}
+
+		if ($totalPages -gt 1) {
+			$delimiter = if ($url -like '*?*') { '&' } else { '?' }
+			for ($page = 2; $page -le $totalPages; $page++) {
+				$pageUrl = "$url$($delimiter)page=$page"
+				$pageResponse = Invoke-WebRequest -Uri $pageUrl -Method 'Get' -Headers $SDSession.headers -ErrorAction 'Stop' -UseBasicParsing:$true
+				if ($pageResponse.Content) {
+					$result += @($pageResponse.Content | ConvertFrom-Json)
+				}
+			}
+		}
+
+		Write-Output $result
+		return
+	}
+
+	$response | Select-Object -ExpandProperty Content | ConvertFrom-Json
 }
