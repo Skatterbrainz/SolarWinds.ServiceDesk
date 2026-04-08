@@ -29,11 +29,13 @@ function Get-SwSdHardware {
 		[parameter(Mandatory = $False)][string]$Name
 	)
 	try {
-		$hardware = getApiListOrItem -ApiName "Computers List" -Id $Id -PerPage 100
-		if (![string]::IsNullOrEmpty($Name)) {
+		if (![string]::IsNullOrEmpty($Id)) {
+			getApiListOrItem -ApiName "Computers List" -Id $Id
+		} elseif (![string]::IsNullOrEmpty($Name)) {
+			$hardware = getApiListOrItem -ApiName "Computers List" -PerPage 100 -QueryParameters @{ name = $Name }
 			$hardware | Where-Object { $_.name -eq $Name }
 		} else {
-			$hardware
+			getApiListOrItem -ApiName "Computers List" -PerPage 100 -AllPages
 		}
 	} catch {
 		[pscustomobject]@{
