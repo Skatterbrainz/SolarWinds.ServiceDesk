@@ -29,11 +29,19 @@ function Get-SwSdUser {
 		[parameter(Mandatory = $False)][string]$Id
 	)
 	try {
-		$users = getApiListOrItem -ApiName "Users List" -Id $Id -PerPage 100
-		if (![string]::IsNullOrEmpty($Email)) {
-			$users | Where-Object { $_.email -eq $Email }
+		if (![string]::IsNullOrEmpty($Id)) {
+			getApiListOrItem -ApiName "Users List" -Id $Id
+		} elseif (![string]::IsNullOrEmpty($Email)) {
+			$baseurl = getApiBaseURL -ApiName "Users List"
+			$normalizedEmail = $Email.Trim()
+			$encodedEmail = [System.Uri]::EscapeDataString($normalizedEmail)
+			$url = "$($baseurl)?email=$encodedEmail"
+			$response = getApiResponseByURL -URL $url
+			@($response) | Where-Object {
+				$_.email -and [string]::Equals([string]$_.email, $normalizedEmail, [System.StringComparison]::OrdinalIgnoreCase)
+			}
 		} else {
-			$users
+			getApiListOrItem -ApiName "Users List" -PerPage 100 -AllPages
 		}
 	} catch {
 		[pscustomobject]@{

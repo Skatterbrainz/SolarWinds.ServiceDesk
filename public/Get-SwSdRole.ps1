@@ -29,11 +29,13 @@ function Get-SwSdRole {
 		[parameter(Mandatory = $False)][string]$Id
 	)
 	try {
-		$roles = getApiListOrItem -ApiName "Roles List" -Id $Id -PerPage 100
-		if (![string]::IsNullOrEmpty($Name)) {
+		if (![string]::IsNullOrEmpty($Id)) {
+			getApiListOrItem -ApiName "Roles List" -Id $Id
+		} elseif (![string]::IsNullOrEmpty($Name)) {
+			$roles = getApiListOrItem -ApiName "Roles List" -PerPage 100 -QueryParameters @{ name = $Name }
 			$roles | Where-Object {$_.name -eq $Name}
 		} else {
-			$roles
+			getApiListOrItem -ApiName "Roles List" -PerPage 100 -AllPages
 		}
 	} catch {
 		Write-Error $_.Exception.Message

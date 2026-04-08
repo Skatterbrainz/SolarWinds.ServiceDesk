@@ -31,13 +31,13 @@ function Get-SwSdVendor {
 		[parameter(Mandatory = $False)][string]$Id
 	)
 	try {
-		if (![string]::IsNullOrWhiteSpace($Name)) {
-			$vendors = getApiListOrItem -ApiName "Vendors List" -PerPage 100
-			$vendors | Where-Object { $_.name -eq $Name -or $_.id -eq $Name }
-		} elseif (![string]::IsNullOrWhiteSpace($Id)) {
-			getApiListOrItem -ApiName "Vendors List" -Id $Id -PerPage 100
+		if (![string]::IsNullOrWhiteSpace($Id)) {
+			getApiListOrItem -ApiName "Vendors List" -Id $Id
+		} elseif (![string]::IsNullOrWhiteSpace($Name)) {
+			$vendors = getApiListOrItem -ApiName "Vendors List" -PerPage 100 -QueryParameters @{ name = $Name }
+			$vendors | Where-Object { $_.name -eq $Name }
 		} else {
-			getApiListOrItem -ApiName "Vendors List" -PerPage 100
+			getApiListOrItem -ApiName "Vendors List" -PerPage 100 -AllPages
 		}
 	} catch {
 		Write-Error $_.Exception.Message
