@@ -86,7 +86,7 @@ function Get-SwSdQueue {
 
 			foreach ($apiName in @('Categories List', 'Sites List', 'Departments List', 'Change Catalogs List', 'Catalog Items List')) {
 				try {
-					$items = getApiListOrItem -ApiName $apiName -PerPage 100
+					$items = getApiListOrItem -ApiName $apiName -PerPage 100 -AllPages
 					foreach ($item in @($items)) {
 						$record = Get-InnerGroupRecord -Record $item
 						if ($record.default_group_assignee_id) {
@@ -114,7 +114,7 @@ function Get-SwSdQueue {
 			}
 
 			try {
-				$incidents = getApiListOrItem -ApiName 'Helpdesk Incidents List' -PerPage 100
+				$incidents = getApiListOrItem -ApiName 'Helpdesk Incidents List' -PerPage 100 -AllPages
 				foreach ($incident in @($incidents)) {
 					$inc = if ($incident.incident) { $incident.incident } else { $incident }
 					if ($inc.group_assignee -and $inc.group_assignee.id) { [void]$candidateIds.Add([string]$inc.group_assignee.id) }
