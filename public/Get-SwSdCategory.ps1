@@ -32,11 +32,13 @@ function Get-SwSdCategory {
         [parameter(Mandatory = $False)][string]$Id
     )
 	try {
-		$categories = getApiListOrItem -ApiName "Categories List" -Id $Id -PerPage 100
-		if (![string]::IsNullOrEmpty($Name)) {
+		if (![string]::IsNullOrEmpty($Id)) {
+			getApiListOrItem -ApiName "Categories List" -Id $Id
+		} elseif (![string]::IsNullOrEmpty($Name)) {
+			$categories = getApiListOrItem -ApiName "Categories List" -PerPage 100 -QueryParameters @{ name = $Name }
 			$categories | Where-Object {$_.name -eq $Name}
 		} else {
-			$categories
+			getApiListOrItem -ApiName "Categories List" -PerPage 100 -AllPages
 		}
 	} catch {
 		[pscustomobject]@{
