@@ -53,20 +53,15 @@ function Get-SwSdPurchaseOrder {
 			getApiResponseByURL -Url $url	
 		} elseif ($Id) {
 			Write-Verbose "Search by Id: $Id"
-			Write-Output (getApiListOrItem -ApiName "Purchase Orders List" -Id $Id -PerPage 100)
+			Write-Output (getApiListOrItem -ApiName "Purchase Orders List" -Id $Id)
+		} elseif (![string]::IsNullOrWhiteSpace($Name)) {
+			$purchaseOrders = getApiListOrItem -ApiName "Purchase Orders List" -PerPage 100 -QueryParameters @{ name = $Name }
+			$purchaseOrders | Where-Object { $_.name -eq $Name }
+		} elseif (![string]::IsNullOrWhiteSpace($Status)) {
+			$purchaseOrders = getApiListOrItem -ApiName "Purchase Orders List" -PerPage 100 -QueryParameters @{ state = $Status }
+			$purchaseOrders | Where-Object { $_.state -eq $Status }
 		} else {
-			$purchaseOrders = getApiListOrItem -ApiName "Purchase Orders List" -PerPage 100
-			if ($purchaseOrders) {
-				if (![string]::IsNullOrWhiteSpace($Name)) {
-					$purchaseOrders | Where-Object { $_.name -eq $Name }
-				} elseif (![string]::IsNullOrWhiteSpace($Status)) {
-					$purchaseOrders | Where-Object { $_.state -eq $Status }
-				} else {
-					return $purchaseOrders
-				}
-			} else {
-				throw "Failed to retrieve purchase orders. Status code: $($response.StatusCode)"
-			}
+			getApiListOrItem -ApiName "Purchase Orders List" -PerPage 100 -AllPages
 		}
 	} catch {
 		Write-Error $_.Exception.Message
