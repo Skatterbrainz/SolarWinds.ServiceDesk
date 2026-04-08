@@ -29,13 +29,13 @@ function Get-SwSdCatalogCategory {
 		[parameter(Mandatory = $False)][string]$Name
 	)
 	try {
-		$response = getApiListOrItem -ApiName "Categories List" -Id $Id -PerPage 100 | Sort-Object name
 		if ($Id -gt 0) {
-			$response | Where-Object {$_.id -eq $Id}
+			getApiListOrItem -ApiName "Categories List" -Id $Id
 		} elseif (![string]::IsNullOrEmpty($Name)) {
+			$response = getApiListOrItem -ApiName "Categories List" -PerPage 100 -QueryParameters @{ name = $Name }
 			$response | Where-Object {$_.name -eq $Name}
 		} else {
-			$response
+			getApiListOrItem -ApiName "Categories List" -PerPage 100 -AllPages | Sort-Object name
 		}
 	} catch {
 		Write-Error $_.Exception.Message
