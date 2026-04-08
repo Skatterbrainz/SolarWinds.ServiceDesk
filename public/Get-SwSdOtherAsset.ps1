@@ -66,25 +66,28 @@ function Get-SwSdOtherAsset {
 		[parameter(Mandatory = $False)][string]$HREF
 	)
 	try {
-		$assets = getApiListOrItem -ApiName "Other Assets List" -Id $Id -PerPage 100
-		if ($assets) {
-			if (![string]::IsNullOrWhiteSpace($Name)) {
-				$assets | Where-Object { $_.name -eq $Name }
-			} elseif (![string]::IsNullOrWhiteSpace($Manufacturer)) {
-				$assets | Where-Object { $_.manufacturer -eq $Manufacturer }
-			} elseif (![string]::IsNullOrWhiteSpace($Model)) {
-				$assets | Where-Object { $_.model -eq $Model }
-			} elseif (![string]::IsNullOrWhiteSpace($SerialNumber)) {
-				$assets | Where-Object { $_.serial_number -eq $SerialNumber }
-			} elseif (![string]::IsNullOrWhiteSpace($AssetId)) {
-				$assets | Where-Object { $_.asset_id -eq $AssetId }
-			} elseif (![string]::IsNullOrWhiteSpace($HREF)) {
-				$assets | Where-Object { $_.href -eq $HREF }
-			} else {
-				return $assets
-			}
+		if (![string]::IsNullOrWhiteSpace($Id)) {
+			getApiListOrItem -ApiName "Other Assets List" -Id $Id
+		} elseif (![string]::IsNullOrWhiteSpace($Name)) {
+			$assets = getApiListOrItem -ApiName "Other Assets List" -PerPage 100 -QueryParameters @{ name = $Name }
+			$assets | Where-Object { $_.name -eq $Name }
+		} elseif (![string]::IsNullOrWhiteSpace($Manufacturer)) {
+			$assets = getApiListOrItem -ApiName "Other Assets List" -PerPage 100 -QueryParameters @{ manufacturer = $Manufacturer }
+			$assets | Where-Object { $_.manufacturer -eq $Manufacturer }
+		} elseif (![string]::IsNullOrWhiteSpace($Model)) {
+			$assets = getApiListOrItem -ApiName "Other Assets List" -PerPage 100 -QueryParameters @{ model = $Model }
+			$assets | Where-Object { $_.model -eq $Model }
+		} elseif (![string]::IsNullOrWhiteSpace($SerialNumber)) {
+			$assets = getApiListOrItem -ApiName "Other Assets List" -PerPage 100 -QueryParameters @{ serial_number = $SerialNumber }
+			$assets | Where-Object { $_.serial_number -eq $SerialNumber }
+		} elseif (![string]::IsNullOrWhiteSpace($AssetId)) {
+			$assets = getApiListOrItem -ApiName "Other Assets List" -PerPage 100 -QueryParameters @{ asset_id = $AssetId }
+			$assets | Where-Object { $_.asset_id -eq $AssetId }
+		} elseif (![string]::IsNullOrWhiteSpace($HREF)) {
+			$assets = getApiListOrItem -ApiName "Other Assets List" -PerPage 100 -QueryParameters @{ href = $HREF }
+			$assets | Where-Object { $_.href -eq $HREF }
 		} else {
-			throw "Failed to retrieve other assets. Status code: $($response.StatusCode)"
+			getApiListOrItem -ApiName "Other Assets List" -PerPage 100 -AllPages
 		}
 	} catch {
 		Write-Error $_.Exception.Message
