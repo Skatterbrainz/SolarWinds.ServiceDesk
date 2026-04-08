@@ -52,21 +52,22 @@ function Get-SwSdProblem {
 		[parameter(Mandatory = $False)][string]$HREF
 	)
 	try {
-		$problems = getApiListOrItem -ApiName "Problems List" -Id $Id -PerPage 100
-		if ($problems) {
-			if (![string]::IsNullOrWhiteSpace($Name)) {
-				$problems | Where-Object { $_.name -eq $Name -or $_.id -eq $Name }
-			} elseif (![string]::IsNullOrWhiteSpace($Status)) {
-				$problems | Where-Object { $_.state -eq $Status }
-			} elseif (![string]::IsNullOrWhiteSpace($Priority)) {
-				$problems | Where-Object { $_.priority -eq $Priority }
-			} elseif (![string]::IsNullOrWhiteSpace($HREF)) {
-				$problems | Where-Object { $_.href -eq $HREF }
-			} else {
-				return $problems
-			}
+		if (![string]::IsNullOrWhiteSpace($Id)) {
+			getApiListOrItem -ApiName "Problems List" -Id $Id
+		} elseif (![string]::IsNullOrWhiteSpace($Name)) {
+			$problems = getApiListOrItem -ApiName "Problems List" -PerPage 100 -QueryParameters @{ name = $Name }
+			$problems | Where-Object { $_.name -eq $Name }
+		} elseif (![string]::IsNullOrWhiteSpace($Status)) {
+			$problems = getApiListOrItem -ApiName "Problems List" -PerPage 100 -QueryParameters @{ state = $Status }
+			$problems | Where-Object { $_.state -eq $Status }
+		} elseif (![string]::IsNullOrWhiteSpace($Priority)) {
+			$problems = getApiListOrItem -ApiName "Problems List" -PerPage 100 -QueryParameters @{ priority = $Priority }
+			$problems | Where-Object { $_.priority -eq $Priority }
+		} elseif (![string]::IsNullOrWhiteSpace($HREF)) {
+			$problems = getApiListOrItem -ApiName "Problems List" -PerPage 100 -QueryParameters @{ href = $HREF }
+			$problems | Where-Object { $_.href -eq $HREF }
 		} else {
-			throw "Failed to retrieve problems. Status code: $($response.StatusCode)"
+			getApiListOrItem -ApiName "Problems List" -PerPage 100 -AllPages
 		}
 	} catch {
 		Write-Error $_.Exception.Message
