@@ -175,6 +175,25 @@ Skatterbrainz
 
 ## 📋 Version History
 
+### 1.2.0 - 4/8/2026
+
+- Updated: `getApiListOrItem` (private helper)
+  - Added optional `-AllPages` support for list endpoints using `X-Total-Pages` response headers
+  - Preserves existing single-item (`-Id`) behavior and explicit page query behavior
+- Updated: `Get-SwSdUser`
+  - `-Id` now performs direct item lookup by user ID
+  - `-Email` now performs API-side filtering (`?email=`) instead of retrieving all users first
+  - Added normalized/case-insensitive email matching for returned results
+  - Unfiltered calls now return all users via pagination
+- Updated: Get cmdlets to prefer API-side filtering when search parameters are provided (instead of full list retrieval + local filtering)
+  - `Get-SwSdVendor`, `Get-SwSdGroup`, `Get-SwSdSite`, `Get-SwSdRole`, `Get-SwSdDepartment`, `Get-SwSdCategory`, `Get-SwSdHardware`, `Get-SwSdPrinter`, `Get-SwSdCatalogCategory`, `Get-SwSdProblem`, `Get-SwSdPurchaseOrder`, `Get-SwSdMobileDevice`, `Get-SwSdOtherAsset`
+  - `-Id` parameters now consistently map to item ID lookups
+  - `-Name`/other string parameters now use API query parameters where supported
+- Updated: markdown help files in `/docs`
+  - Synced parameter semantics for Name vs ID behavior
+  - Added updated lookup behavior notes for affected functions
+
+
 ### 1.1.0 - 3/20/2026
 
 - Updated: Connect-SwSd
