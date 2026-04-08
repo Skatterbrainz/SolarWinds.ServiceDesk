@@ -73,26 +73,31 @@ function Get-SwSdMobileDevice {
 		[parameter(Mandatory = $False)][string]$HREF
 	)
 	try {
-		$devices = getApiListOrItem -ApiName "Mobile Devices List" -Id $Id -PerPage 100
-		if ($devices) {
-
-			if (![string]::IsNullOrWhiteSpace($Name)) {
-				$devices | Where-Object { $_.name -eq $Name }
-			} elseif (![string]::IsNullOrWhiteSpace($Manufacturer)) {
-				$devices | Where-Object { $_.manufacturer -eq $Manufacturer }
-			} elseif (![string]::IsNullOrWhiteSpace($Model)) {
-				$devices | Where-Object { $_.model -eq $Model }
-			} elseif (![string]::IsNullOrWhiteSpace($SerialNumber)) {
-				$devices | Where-Object { $_.serial_number -eq $SerialNumber }
-			} elseif (![string]::IsNullOrWhiteSpace($ServiceProvider)) {
-				$devices | Where-Object { $_.service_provider -eq $ServiceProvider }
-			} elseif (![string]::IsNullOrWhiteSpace($IMEI)) {
-				$devices | Where-Object { $_.imei -eq $IMEI }
-			} else {
-				return $devices
-			}
+		if (![string]::IsNullOrWhiteSpace($Id)) {
+			getApiListOrItem -ApiName "Mobile Devices List" -Id $Id
+		} elseif (![string]::IsNullOrWhiteSpace($Name)) {
+			$devices = getApiListOrItem -ApiName "Mobile Devices List" -PerPage 100 -QueryParameters @{ name = $Name }
+			$devices | Where-Object { $_.name -eq $Name }
+		} elseif (![string]::IsNullOrWhiteSpace($Manufacturer)) {
+			$devices = getApiListOrItem -ApiName "Mobile Devices List" -PerPage 100 -QueryParameters @{ manufacturer = $Manufacturer }
+			$devices | Where-Object { $_.manufacturer -eq $Manufacturer }
+		} elseif (![string]::IsNullOrWhiteSpace($Model)) {
+			$devices = getApiListOrItem -ApiName "Mobile Devices List" -PerPage 100 -QueryParameters @{ model = $Model }
+			$devices | Where-Object { $_.model -eq $Model }
+		} elseif (![string]::IsNullOrWhiteSpace($SerialNumber)) {
+			$devices = getApiListOrItem -ApiName "Mobile Devices List" -PerPage 100 -QueryParameters @{ serial_number = $SerialNumber }
+			$devices | Where-Object { $_.serial_number -eq $SerialNumber }
+		} elseif (![string]::IsNullOrWhiteSpace($ServiceProvider)) {
+			$devices = getApiListOrItem -ApiName "Mobile Devices List" -PerPage 100 -QueryParameters @{ service_provider = $ServiceProvider }
+			$devices | Where-Object { $_.service_provider -eq $ServiceProvider }
+		} elseif (![string]::IsNullOrWhiteSpace($IMEI)) {
+			$devices = getApiListOrItem -ApiName "Mobile Devices List" -PerPage 100 -QueryParameters @{ imei = $IMEI }
+			$devices | Where-Object { $_.imei -eq $IMEI }
+		} elseif (![string]::IsNullOrWhiteSpace($HREF)) {
+			$devices = getApiListOrItem -ApiName "Mobile Devices List" -PerPage 100 -QueryParameters @{ href = $HREF }
+			$devices | Where-Object { $_.href -eq $HREF }
 		} else {
-			throw "Failed to retrieve mobile devices. Status code: $($response.StatusCode)"
+			getApiListOrItem -ApiName "Mobile Devices List" -PerPage 100 -AllPages
 		}
 	} catch {
 		Write-Error $_.Exception.Message
