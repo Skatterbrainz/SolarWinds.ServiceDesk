@@ -7,7 +7,6 @@ function Invoke-SwSdWebRequest {
 		[parameter(Mandatory = $False)][string]$ContentType,
 		[parameter(Mandatory = $False)]$Body,
 		[parameter(Mandatory = $False)][switch]$UseBasicParsing,
-		[parameter(Mandatory = $False)][string]$ErrorAction,
 		[parameter(Mandatory = $False)][string]$ResponseHeadersVariable
 	)
 
@@ -28,7 +27,7 @@ function Invoke-SwSdWebRequest {
 	}
 
 	if ($PSBoundParameters.ContainsKey('ErrorAction')) {
-		$params.ErrorAction = $ErrorAction
+		$params.ErrorAction = $PSBoundParameters['ErrorAction']
 	} else {
 		$params.ErrorAction = 'Stop'
 	}
