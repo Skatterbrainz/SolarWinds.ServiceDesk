@@ -33,7 +33,7 @@ function Get-SwSdComment {
 				ErrorAction     = 'Stop'
 				UseBasicParsing = $true
 			}
-			$response = Invoke-WebRequest @params
+			$response = Invoke-SwSdWebRequest @params
 			$result   = $response
 		} else {
 			throw "Incident not found: $IncidentNumber"

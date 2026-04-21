@@ -53,7 +53,7 @@ function New-SwSdGroup {
             UseBasicParsing = $true
         }
         Write-Verbose "Creating group with parameters: $($params | Out-String)"
-        $response = Invoke-WebRequest @params | Select-Object -ExpandProperty Content | ConvertFrom-Json
+        $response = Invoke-SwSdWebRequest @params | Select-Object -ExpandProperty Content | ConvertFrom-Json
         if ($response.StatusCode -eq 200) {
             Write-Verbose "Group $Name created successfully."
             [PSCustomObject]@{

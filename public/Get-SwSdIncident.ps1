@@ -81,7 +81,7 @@ function Get-SwSdIncident {
 				UseBasicParsing = $true
 				ErrorAction     = "Stop"
 			}
-			$response = Invoke-WebRequest @params
+			$response = Invoke-SwSdWebRequest @params
 			$result += $response.Content | ConvertFrom-Json
 			Write-Verbose "$($result.Count) incidents returned."
 			if ($response.Headers) {
@@ -103,7 +103,7 @@ function Get-SwSdIncident {
 						UseBasicParsing = $true
 						ErrorAction     = "Stop"
 					}
-					$response = Invoke-WebRequest @params
+					$response = Invoke-SwSdWebRequest @params
 					if ($response) {
 						$result += $response.Content | ConvertFrom-Json
 						Write-Verbose "$($result.Count) incidents returned."
@@ -127,7 +127,7 @@ function Get-SwSdIncident {
 				UseBasicParsing = $true
 				ErrorAction     = "Stop"
 			}
-			$response = Invoke-WebRequest @params
+			$response = Invoke-SwSdWebRequest @params
 			if ($response.StatusCode -eq 200) {
 				$result = $response.Content | ConvertFrom-Json
 				Write-Verbose "$($result.Count) incidents returned."
@@ -148,7 +148,7 @@ function Get-SwSdIncident {
 						UseBasicParsing = $true
 						ErrorAction     = "Stop"
 					}
-					$response = Invoke-WebRequest @params
+					$response = Invoke-SwSdWebRequest @params
 					if ($response.StatusCode -eq 200) {
 						$result += $response.Content | ConvertFrom-Json
 						Write-Verbose "$($result.Count) incidents returned."
@@ -177,7 +177,7 @@ function Get-SwSdIncident {
 				UseBasicParsing = $true
 				ErrorAction     = "Stop"
 			}
-			$response = Invoke-WebRequest @params
+			$response = Invoke-SwSdWebRequest @params
 			if ($response.StatusCode -eq 200) {
 				$result = @($response.Content | ConvertFrom-Json | Where-Object { $_.name -like $NamePattern })
 				Write-Verbose "$($result.Count) incidents matched after filtering."
@@ -198,7 +198,7 @@ function Get-SwSdIncident {
 						UseBasicParsing = $true
 						ErrorAction     = "Stop"
 					}
-					$response = Invoke-WebRequest @params
+					$response = Invoke-SwSdWebRequest @params
 					if ($response.StatusCode -eq 200) {
 						$result += @($response.Content | ConvertFrom-Json | Where-Object { $_.name -like $NamePattern })
 						Write-Verbose "$($result.Count) incidents matched after filtering."
@@ -226,7 +226,7 @@ function Get-SwSdIncident {
 				UseBasicParsing = $true
 				ErrorAction     = "Stop"
 			}
-			$response = Invoke-WebRequest @params
+			$response = Invoke-SwSdWebRequest @params
 			if ($response.StatusCode -eq 200) {
 				$result += $response.Content | ConvertFrom-Json
 				Write-Verbose "$($result.Count) incidents returned."
@@ -249,7 +249,7 @@ function Get-SwSdIncident {
 							UseBasicParsing = $true
 							ErrorAction     = "Stop"
 						}
-						$response = Invoke-WebRequest @params
+						$response = Invoke-SwSdWebRequest @params
 						if ($response.StatusCode -eq 200) {
 							$result += $response.Content | ConvertFrom-Json
 							Write-Verbose "$($result.Count) incidents returned."

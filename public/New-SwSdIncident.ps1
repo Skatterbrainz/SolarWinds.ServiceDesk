@@ -113,7 +113,7 @@ function New-SwSdIncident {
 			Body            = $body
 			UseBasicParsing = $true
 		}
-		$response = (Invoke-WebRequest @invokeWebRequestParams | Select-Object -ExpandProperty Content | ConvertFrom-Json)
+		$response = (Invoke-SwSdWebRequest @invokeWebRequestParams | Select-Object -ExpandProperty Content | ConvertFrom-Json)
 		$result = $response
 	} catch {
 		$result = [pscustomobject]@{

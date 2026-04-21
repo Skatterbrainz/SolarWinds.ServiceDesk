@@ -104,7 +104,7 @@ function New-SwSdUser {
 			Body            = $body
 			UseBasicParsing = $true
 		}
-		$result = Invoke-WebRequest @invokeWebRequestParams
+		$result = Invoke-SwSdWebRequest @invokeWebRequestParams
 
 		Write-Verbose "User created with status code: $($result.StatusCode)"
 		if ($result.StatusCode -eq 201) {

@@ -47,16 +47,16 @@ function Get-SwSdCatalogItem {
 			$url = getApiBaseURL -ApiName "Catalog Items List"
 			$url = "$url/$Id.json"
 			Write-Verbose "Url: $url"
-			$result = Invoke-WebRequest -Uri $url -Headers $SDSession.headers -Method Get -ErrorAction Stop -UseBasicParsing
+			$result = Invoke-SwSdWebRequest -Uri $url -Headers $SDSession.headers -Method Get -ErrorAction Stop -UseBasicParsing
 		} elseif (![string]::IsNullOrEmpty($Name) -and ($Id -gt 0)) {
 			$url = getApiBaseURL -ApiName "Catalog Items List"
 			$url = "$url/$Id-$($Name.ToLower().Replace(' ','-')).json"
 			Write-Verbose "Url: $url"
-			$result = Invoke-WebRequest -Uri $url -Headers $SDSession.headers -Method Get -ErrorAction Stop -UseBasicParsing
+			$result = Invoke-SwSdWebRequest -Uri $url -Headers $SDSession.headers -Method Get -ErrorAction Stop -UseBasicParsing
 		} else {
 			$url = "$($baseurl)?per_page=$PageLimit"
 			Write-Verbose "Url: $url"
-			$result = Invoke-WebRequest -Uri $url -Headers $SDSession.headers -Method Get -ErrorAction Stop -ResponseHeadersVariable responseHeaders -UseBasicParsing
+			$result = Invoke-SwSdWebRequest -Uri $url -Headers $SDSession.headers -Method Get -ErrorAction Stop -ResponseHeadersVariable responseHeaders -UseBasicParsing
 			Write-Verbose "$($result.Count) items returned."
 			if ($responseHeaders) {
 				[int]$totalCount = $responseHeaders.'X-Total-Count'[0]
@@ -65,7 +65,7 @@ function Get-SwSdCatalogItem {
 				for ($i = 2; $i -le $totalPages; $i++) {
 					Write-Progress -Activity "Retrieving Catalog Items" -Status "Page $i of $totalPages" -PercentComplete ($i / $totalPages * 100) -Id 0
 					$url = "$($baseurl)?per_page=$PageLimit&page=$i"
-					$result += Invoke-WebRequest -Uri $url -Headers $SDSession.headers -Method Get -UseBasicParsing
+					$result += Invoke-SwSdWebRequest -Uri $url -Headers $SDSession.headers -Method Get -UseBasicParsing
 				}
 				Write-Progress -Activity "Retrieving Catalog Items" -Status "Completed" -PercentComplete 100 -Id 0
 			} else {

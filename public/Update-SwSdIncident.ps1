@@ -67,7 +67,7 @@ function Update-SwSdIncident {
 			}
 			Write-Verbose "Request body: $(@{ incident = $IncidentBody } | ConvertTo-Json -Depth 10)"
 			try {
-				$response = Invoke-WebRequest @params
+				$response = Invoke-SwSdWebRequest @params
 				return [pscustomobject]@{
 					Success    = $true
 					StatusCode = [int]$response.StatusCode
@@ -111,7 +111,7 @@ function Update-SwSdIncident {
 				ContentType     = "application/json"
 				UseBasicParsing = $true
 			}
-			$response = Invoke-WebRequest @params
+			$response = Invoke-SwSdWebRequest @params
 			$data = $response.Content | ConvertFrom-Json
 			if ($data -and $data.incident) { return $data.incident }
 			return $data

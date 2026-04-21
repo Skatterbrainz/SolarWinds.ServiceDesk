@@ -65,7 +65,7 @@ function Update-SwSdTask {
 			Body            = $json
 			UseBasicParsing = $true
 		}
-		$response = Invoke-WebRequest @params
+		$response = Invoke-SwSdWebRequest @params
 		$response
 	} else {
 		Write-Error "Task not found with URL: $TaskURL"
