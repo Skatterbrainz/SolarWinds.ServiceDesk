@@ -56,7 +56,7 @@ function Add-SwSdComment {
 				ErrorAction     = 'Stop'
 				UseBasicParsing = $true
 			}
-			$response = Invoke-WebRequest @params
+			$response = Invoke-SwSdWebRequest @params
 			$result = $response
 		} else {
 			Write-Warning "Incident $IncidentNumber not found."
