@@ -1,3 +1,41 @@
+function Invoke-SwSdWebRequest {
+	[CmdletBinding()]
+	param (
+		[parameter(Mandatory = $True)][string]$Uri,
+		[parameter(Mandatory = $False)][hashtable]$Headers,
+		[parameter(Mandatory = $False)][ValidateSet('Default','Delete','Get','Head','Merge','Options','Patch','Post','Put','Trace')][string]$Method = 'Get',
+		[parameter(Mandatory = $False)][string]$ContentType,
+		[parameter(Mandatory = $False)]$Body,
+		[parameter(Mandatory = $False)][switch]$UseBasicParsing,
+		[parameter(Mandatory = $False)][string]$ErrorAction,
+		[parameter(Mandatory = $False)][string]$ResponseHeadersVariable
+	)
+
+	$params = @{
+		Uri = $Uri
+	}
+
+	if ($PSBoundParameters.ContainsKey('Headers')) { $params.Headers = $Headers }
+	if ($PSBoundParameters.ContainsKey('Method')) { $params.Method = $Method }
+	if ($PSBoundParameters.ContainsKey('ContentType')) { $params.ContentType = $ContentType }
+	if ($PSBoundParameters.ContainsKey('Body')) { $params.Body = $Body }
+	if ($PSBoundParameters.ContainsKey('ResponseHeadersVariable')) { $params.ResponseHeadersVariable = $ResponseHeadersVariable }
+
+	if ($PSBoundParameters.ContainsKey('UseBasicParsing')) {
+		$params.UseBasicParsing = [bool]$UseBasicParsing
+	} else {
+		$params.UseBasicParsing = $true
+	}
+
+	if ($PSBoundParameters.ContainsKey('ErrorAction')) {
+		$params.ErrorAction = $ErrorAction
+	} else {
+		$params.ErrorAction = 'Stop'
+	}
+
+	Microsoft.PowerShell.Utility\Invoke-WebRequest @params
+}
+
 function getApiBaseURL {
 	<#
 	.SYNOPSIS
@@ -50,7 +88,7 @@ function getApiResponse {
 		UseBasicParsing = $true
 		ErrorAction	    = 'Stop'
 	}
-	$response = Invoke-WebRequest @params
+	$response = Invoke-SwSdWebRequest @params
 	if ($response.StatusCode -eq 200) {
 		Write-Output $($response.Content | ConvertFrom-Json)
 	} else {
@@ -77,7 +115,7 @@ function getApiResponseByURL {
 	if ($Method -eq 'POST' -or $Method -eq 'PUT') {
 		$params.Body = $Body
 	}
-	$response = Invoke-WebRequest @params
+	$response = Invoke-SwSdWebRequest @params
 	#$response = Invoke-RestMethod -Method $Method -Uri $URL.Trim() -Headers $Session.headers
 	if ($response.StatusCode -eq 200) {
 		if ($response.Content) {
@@ -136,7 +174,7 @@ function getApiListOrItem {
 		UseBasicParsing = $true
 	}
 	Write-Verbose "Getting data for '$ApiName' with parameters: $($params | Out-String)"
-	$response = Invoke-WebRequest @params
+	$response = Invoke-SwSdWebRequest @params
 
 	if ($AllPages.IsPresent -and [string]::IsNullOrEmpty($Id) -and -not ($QueryParameters -and $QueryParameters.ContainsKey('page'))) {
 		$result = @()
@@ -153,7 +191,7 @@ function getApiListOrItem {
 			$delimiter = if ($url -like '*?*') { '&' } else { '?' }
 			for ($page = 2; $page -le $totalPages; $page++) {
 				$pageUrl = "$url$($delimiter)page=$page"
-				$pageResponse = Invoke-WebRequest -Uri $pageUrl -Method 'Get' -Headers $SDSession.headers -ErrorAction 'Stop' -UseBasicParsing:$true
+				$pageResponse = Invoke-SwSdWebRequest -Uri $pageUrl -Method 'Get' -Headers $SDSession.headers -ErrorAction 'Stop' -UseBasicParsing:$true
 				if ($pageResponse.Content) {
 					$result += @($pageResponse.Content | ConvertFrom-Json)
 				}
