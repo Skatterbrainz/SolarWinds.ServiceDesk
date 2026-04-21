@@ -53,7 +53,7 @@ function Add-SwSdGroupMember {
 					}
 					Write-Verbose "Adding user $email to group $GroupName with parameters: $($params | Out-String)"
 					try {
-						$response = Invoke-WebRequest @params
+						$response = Invoke-SwSdWebRequest @params
 						#Write-Verbose "Response: $($response.Content)"
 						if ($response.StatusCode -eq 200) {
 							Write-Verbose "User $email added to group $GroupName successfully."
