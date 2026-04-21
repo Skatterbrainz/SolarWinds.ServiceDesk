@@ -175,7 +175,7 @@ Skatterbrainz
 
 ## 📋 Version History
 
-### 1.2.0 - 4/8/2026
+### 1.2.0 - 4/20/2026
 
 - Updated: `getApiListOrItem` (private helper)
   - Added optional `-AllPages` support for list endpoints using `X-Total-Pages` response headers
@@ -192,6 +192,12 @@ Skatterbrainz
 - Updated: markdown help files in `/docs`
   - Synced parameter semantics for Name vs ID behavior
   - Added updated lookup behavior notes for affected functions
+- Fixed: `Get-SwSdAPI`
+  - Added `UseBasicParsing` to API endpoint bootstrap request to avoid IE-engine parsing errors in Windows PowerShell 5.1
+- Added: `Invoke-SwSdWebRequest` (private helper)
+  - Centralizes web request behavior with safe defaults for `UseBasicParsing` and `ErrorAction`
+- Updated: cmdlets/internal helpers that call Service Desk APIs
+  - Standardized internal web calls to use `Invoke-SwSdWebRequest` for consistent request behavior across the module
 
 
 ### 1.1.0 - 3/20/2026
