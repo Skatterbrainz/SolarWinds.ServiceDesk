@@ -67,7 +67,7 @@ function Get-SwSdAPI {
 		Write-Verbose "API list not cached or force refresh requested, retrieving from API"
 		$url = "$($SDSession.apiurl)/api.json"
 		Write-Verbose "Url = $url"
-		$apilist = @((Invoke-WebRequest -Uri $url -Headers $SDSession.headers -Method Get -ErrorAction Stop).Content | ConvertFrom-Json)
+		$apilist = @((Invoke-SwSdWebRequest -Uri $url -Headers $SDSession.headers -Method Get -UseBasicParsing:$true -ErrorAction Stop).Content | ConvertFrom-Json)
 		if ($apilist.Count -gt 0) {
 			Write-Verbose "API list returned $($apilist.Count) API endpoints"
 			# the search api is not included in the list for some reason, so append it manually
