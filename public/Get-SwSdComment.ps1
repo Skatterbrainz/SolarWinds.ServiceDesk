@@ -15,7 +15,7 @@ function Get-SwSdComment {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
-	[Alias('Get-SwSdComments', 'Get-SwSdIncidentComments')]
+	[Alias('Get-SwSdComments', 'Get-SwSdIncidentComments', 'Get-SDComment')]
 	param (
 		[parameter(Mandatory = $True)][string]$IncidentNumber
 	)

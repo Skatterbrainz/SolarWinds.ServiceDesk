@@ -24,6 +24,7 @@ function Get-SwSdCatalogCategory {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
+	[Alias('Get-SwSdCatalogCategories', 'Get-SwSdCatalogCategoryList', 'Get-SDCatalogCategory')]
 	param(
 		[parameter(Mandatory = $False)][int]$Id,
 		[parameter(Mandatory = $False)][string]$Name

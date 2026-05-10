@@ -25,7 +25,7 @@ function Get-SwSdVendor {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
-	[Alias('Get-SwSdVendors', 'Get-SwSdVendorList')]
+	[Alias('Get-SwSdVendors', 'Get-SwSdVendorList', 'Get-SDVendor')]
 	param (
 		[parameter(Mandatory = $False)][string]$Name,
 		[parameter(Mandatory = $False)][string]$Id

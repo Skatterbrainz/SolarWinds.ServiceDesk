@@ -22,6 +22,7 @@ function Add-SwSdGroupMember {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
+	[Alias('Add-SDGroupMember')]
 	param (
 		[parameter(Mandatory = $true)][string]$GroupName,
 		[parameter(Mandatory = $true)][string]$UserEmail

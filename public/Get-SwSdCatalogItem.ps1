@@ -33,7 +33,7 @@ function Get-SwSdCatalogItem {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
-	[Alias('Get-SwSdCatalogItems', 'Get-SwSdCatalogItemList')]
+	[Alias('Get-SwSdCatalogItems', 'Get-SwSdCatalogItemList', 'Get-SDCatalogItem')]
 	param(
 		[parameter(Mandatory = $False)][string]$Id,
 		[parameter(Mandatory = $False)][string]$Name,

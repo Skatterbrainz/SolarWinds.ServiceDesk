@@ -25,7 +25,7 @@ function Get-SwSdPrinter {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
-	[Alias('Get-SwSdPrinters', 'Get-SwSdPrinterList')]
+	[Alias('Get-SwSdPrinters', 'Get-SwSdPrinterList', 'Get-SDPrinter')]
 	param (
 		[parameter(Mandatory = $False)][string]$Name,
 		[parameter(Mandatory = $False)][string]$Id

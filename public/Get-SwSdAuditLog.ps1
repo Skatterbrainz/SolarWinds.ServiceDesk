@@ -27,7 +27,7 @@ function Get-SwSdAuditLog {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
-	[Alias('Get-SwSdAuditLogs', 'Get-SwSdAuditLogList')]
+	[Alias('Get-SwSdAuditLogs', 'Get-SwSdAuditLogList', 'Get-SDAuditLog')]
 	param(
 		[parameter(Mandatory = $False)][string]$Id,
 		[parameter(Mandatory = $False)][int]$PageLimit = 100,

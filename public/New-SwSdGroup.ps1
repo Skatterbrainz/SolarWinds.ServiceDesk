@@ -26,6 +26,8 @@ function New-SwSdGroup {
         https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/New-SwSdGroup.md
     #>
     [CmdletBinding()]
+	[OutputType([PSCustomObject])]
+	[Alias('New-SDGroup', 'Add-SwSdGroup', 'Add-SDGroup')]
     param (
         [parameter(Mandatory = $True)][string]$Name,
         [parameter(Mandatory = $False)][string]$Description,

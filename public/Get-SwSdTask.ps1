@@ -25,7 +25,7 @@ function Get-SwSdTask {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
-	[Alias('Get-SwSdTasks', 'Get-SwSdTaskList')]
+	[Alias('Get-SwSdTasks', 'Get-SwSdTaskList', 'Get-SDTask')]
 	param (
 		[parameter(Mandatory = $False)][string]$TaskURL,
 		[parameter(Mandatory = $False)][string]$IncidentNumber

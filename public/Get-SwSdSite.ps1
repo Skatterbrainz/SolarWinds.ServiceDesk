@@ -25,7 +25,7 @@ function Get-SwSdSite {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
-	[Alias('Get-SwSdSites', 'Get-SwSdSiteList')]
+	[Alias('Get-SwSdSites', 'Get-SwSdSiteList', 'Get-SDSite')]
 	param(
 		[parameter(Mandatory = $False)][string]$Name,
 		[parameter(Mandatory = $False)][string]$Id

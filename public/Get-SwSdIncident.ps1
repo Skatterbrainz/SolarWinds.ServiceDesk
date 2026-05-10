@@ -41,7 +41,7 @@ function Get-SwSdIncident {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
-	[Alias('Get-SwSdIncidents', 'Get-SwSdIncidentList')]
+	[Alias('Get-SwSdIncidents', 'Get-SwSdIncidentList', 'Get-SDIncident')]
 	param (
 		[parameter(Mandatory = $False)][string]$Number,
 		[parameter(Mandatory = $False)][int32]$Id,

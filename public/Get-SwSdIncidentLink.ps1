@@ -19,7 +19,7 @@ function Get-SwSdIncidentLink {
 	#>
 	[CmdletBinding()]
 	[OutputType([string])]
-	[Alias('Get-SwSdIncidentUrl', 'Get-SwSdIncidentHref')]
+	[Alias('Get-SwSdIncidentUrl', 'Get-SwSdIncidentHref', 'Get-SDIncidentLink')]
 	param (
 		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$Number,
 		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$Name

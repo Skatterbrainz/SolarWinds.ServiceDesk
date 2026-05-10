@@ -32,7 +32,7 @@ function Get-SwSdQueue {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
-	[Alias('Get-SwSdQueues', 'Get-SwSdQueueList')]
+	[Alias('Get-SwSdQueues', 'Get-SwSdQueueList', 'Get-SDQueue')]
 	param(
 		[parameter(Mandatory = $False)][string]$Name,
 		[parameter(Mandatory = $False)][int]$Id,

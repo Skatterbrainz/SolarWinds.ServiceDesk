@@ -35,6 +35,7 @@ function New-SwSdTask {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
+	[Alias('New-SwSdTasks', 'New-SDTask', 'Add-SwSdTask', 'Add-SDTask')]
 	param(
 		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$IncidentNumber,
 		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$Name,

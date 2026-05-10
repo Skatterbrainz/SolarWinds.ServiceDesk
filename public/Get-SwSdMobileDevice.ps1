@@ -61,7 +61,7 @@ function Get-SwSdMobileDevice {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
-	[Alias('Get-SwSdMobileDevices')]
+	[Alias('Get-SwSdMobileDevices', 'Get-SDMobileDevice')]
 	param (
 		[parameter(Mandatory = $False)][string]$Name,
 		[parameter(Mandatory = $False)][string]$Manufacturer,

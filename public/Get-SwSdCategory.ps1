@@ -27,6 +27,7 @@ function Get-SwSdCategory {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Get-SwSdCategory.md
 	#>
 	[CmdletBinding()]
+	[Alias('Get-SwSdCategories', 'Get-SwSdCategoryList', 'Get-SDCategory')]
     param (
         [parameter(Mandatory = $False)][string]$Name,
         [parameter(Mandatory = $False)][string]$Id

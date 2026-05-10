@@ -17,6 +17,7 @@ function Remove-SwSdTask {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
+	[Alias('Remove-SDTask', 'Delete-SwSdTask', 'Delete-SDTask')]
 	param(
 		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$TaskURL
 	)

@@ -29,6 +29,7 @@ function New-SwSdUser {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
+	[Alias('New-SDUser', 'Add-SwSdUser', 'Add-SDUser')]
 	param (
 		[parameter(Mandatory = $True)][string]$Name,
 		[parameter(Mandatory = $True)][string]$Email,

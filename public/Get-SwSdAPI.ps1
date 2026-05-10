@@ -58,6 +58,7 @@ function Get-SwSdAPI {
 	#>
 	[CmdletBinding()]
 	[OutputType([string], [PSCustomObject])]
+	[Alias('Get-SDAPI')]
 	param (
 		[parameter(Mandatory = $false)][string]$Name,
 		[parameter(Mandatory = $false)][switch]$Force

@@ -35,7 +35,7 @@ function Update-SwSdTask {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
-	[Alias('Update-SwSdTaskRecord', 'Set-SwSdTask')]
+	[Alias('Update-SwSdTaskRecord', 'Set-SwSdTask', 'Update-SDTask')]
 	param (
 		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$TaskURL,
 		[parameter(Mandatory = $False)][string][Alias('Email')]$Assignee,

@@ -23,7 +23,7 @@ function Get-SwSdDepartment {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
-	[Alias('Get-SwSdDepartments', 'Get-SwSdDepartmentList')]
+	[Alias('Get-SwSdDepartments', 'Get-SwSdDepartmentList', 'Get-SDDepartment')]
 	param (
 		[parameter(Mandatory = $False)][string]$Name
 	)

@@ -44,7 +44,7 @@ function Connect-SwSD {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
-	[Alias('Connect-ServiceDesk', 'New-SwSdSession')]
+	[Alias('Connect-ServiceDesk', 'New-SwSdSession', 'New-SDSession')]
 	param (
 		[parameter(Mandatory = $False)][pscredential]$Credential,
 		[parameter(Mandatory = $False)][string]$ApiToken,

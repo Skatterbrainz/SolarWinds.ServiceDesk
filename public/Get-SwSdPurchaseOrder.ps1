@@ -24,7 +24,6 @@ function Get-SwSdPurchaseOrder {
 		Get-SwSdPurchaseOrder -Status "Open"
 		
 		Returns the purchase order records for the specified status.
-
 	.EXAMPLE
 		Get-SwSdPurchaseOrder -HREF "https://api.samanage.com/purchase_orders/1234567890"
 
@@ -38,7 +37,7 @@ function Get-SwSdPurchaseOrder {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
-	[Alias('Get-SwSdPurchaseOrders', 'Get-SwSdPurchaseOrderList')]
+	[Alias('Get-SwSdPurchaseOrders', 'Get-SwSdPurchaseOrderList', 'Get-SDPurchaseOrder')]
 	param (
 		[parameter(Mandatory = $False)][string]$Name,
 		[parameter(Mandatory = $False)][int]$Id,

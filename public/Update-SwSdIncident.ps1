@@ -37,6 +37,7 @@ function Update-SwSdIncident {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
+	[Alias('Update-SwSdIncidentRecord', 'Set-SwSdIncident', 'Update-SDIncident')]
 	param (
 		[parameter(Mandatory = $True)][string][ValidateNotNullOrWhiteSpace()]$Number,
 		[parameter(Mandatory = $False)][string][Alias('Email')]$Assignee,

@@ -28,6 +28,8 @@ function Add-SwSdComment {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Add-SwSdComment.md
 	#>
 	[CmdletBinding()]
+	[OutputType([PSCustomObject])]
+	[Alias('Add-SwSdComments', 'Add-SwSdCommentList', 'Add-SDComment', 'New-SwSdComment', 'New-SDComment')]
 	param (
 		[parameter(Mandatory = $True)][string]$IncidentNumber,
 		[parameter(Mandatory = $True)][string]$Comment,

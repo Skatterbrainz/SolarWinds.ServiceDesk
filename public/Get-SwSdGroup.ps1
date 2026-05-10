@@ -27,7 +27,7 @@ function Get-SwSdGroup {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
-	[Alias('Get-SwSdGroups', 'Get-SwSdGroupList')]
+	[Alias('Get-SwSdGroups', 'Get-SwSdGroupList', 'Get-SDGroup')]
 	param(
 		[parameter(Mandatory = $False)][string]$Name,
 		[parameter(Mandatory = $False)][int]$Id

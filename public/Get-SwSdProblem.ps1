@@ -43,7 +43,7 @@ function Get-SwSdProblem {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
-	[Alias('Get-SwSdProblems', 'Get-SwSdProblemList')]
+	[Alias('Get-SwSdProblems', 'Get-SwSdProblemList', 'Get-SDProblem')]
 	param (
 		[parameter(Mandatory = $False)][string]$Name,
 		[parameter(Mandatory = $False)][string]$Id,

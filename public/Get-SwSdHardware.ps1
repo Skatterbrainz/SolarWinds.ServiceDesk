@@ -23,7 +23,7 @@ function Get-SwSdHardware {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
-	[Alias('Get-SwSdHardwareList')]
+	[Alias('Get-SwSdHardwareList', 'Get-SDHardware')]
 	param (
 		[parameter(Mandatory = $False)][string]$Id,
 		[parameter(Mandatory = $False)][string]$Name

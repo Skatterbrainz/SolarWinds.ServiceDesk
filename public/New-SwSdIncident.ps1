@@ -40,6 +40,7 @@ function New-SwSdIncident {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
+	[Alias('New-SDIncident', 'Add-SwSdIncident', 'Add-SDIncident')]
 	param (
 		[parameter(Mandatory = $True)][string]$Name,
 		[parameter(Mandatory = $True)][string]$Description,

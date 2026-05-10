@@ -55,7 +55,7 @@ function Get-SwSdOtherAsset {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
-	[Alias('Get-SwSdOtherAssets', 'Get-SwSdOtherAssetList')]
+	[Alias('Get-SwSdOtherAssets', 'Get-SwSdOtherAssetList', 'Get-SDOtherAsset')]
 	param (
 		[parameter(Mandatory = $False)][string]$Name,
 		[parameter(Mandatory = $False)][string]$Manufacturer,

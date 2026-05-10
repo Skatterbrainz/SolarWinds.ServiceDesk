@@ -23,7 +23,7 @@ function Get-SwSdUser {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
-	[Alias('Get-SwSdUsers', 'Get-SwSdUserList')]
+	[Alias('Get-SwSdUsers', 'Get-SwSdUserList', 'Get-SDUser')]
 	param(
 		[parameter(Mandatory = $False)][Alias('Name')][string]$Email,
 		[parameter(Mandatory = $False)][string]$Id

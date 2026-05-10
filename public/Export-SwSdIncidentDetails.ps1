@@ -30,6 +30,7 @@ function Export-SwSdIncidentDetails {
 		https://github.com/Skatterbrainz/SolarWinds.ServiceDesk/blob/main/docs/Export-SwSdIncidentDetails.md
 	#>
 	[CmdletBinding()]
+	[Alias('Export-SDIncidentDetails')]
 	param(
 		[parameter(Mandatory)][string][ValidateNotNullOrWhiteSpace()]$Number,
 		[parameter()][switch]$SaveToFile,

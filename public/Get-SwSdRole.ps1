@@ -23,7 +23,7 @@ function Get-SwSdRole {
 	#>
 	[CmdletBinding()]
 	[OutputType([PSCustomObject])]
-	[Alias('Get-SwSdRoles', 'Get-SwSdRoleList')]
+	[Alias('Get-SwSdRoles', 'Get-SwSdRoleList', 'Get-SDRole')]
 	param(
 		[parameter(Mandatory = $False)][string]$Name,
 		[parameter(Mandatory = $False)][string]$Id
