@@ -175,6 +175,11 @@ Skatterbrainz
 
 ## 📋 Version History
 
+### 1.2.1 - 5/10/2026
+
+- Updated: All functions to add aliases for "SD" prefix
+  and Add- for New- and Set- for Update-
+
 ### 1.2.0 - 4/20/2026
 
 - Updated: `getApiListOrItem` (private helper)

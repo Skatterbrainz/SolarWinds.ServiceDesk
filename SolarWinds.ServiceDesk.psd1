@@ -5,11 +5,11 @@
 
 @{
     RootModule        = 'SolarWinds.ServiceDesk.psm1'
-    ModuleVersion     = '1.2.0'
+    ModuleVersion     = '1.2.1'
     # CompatiblePSEditions = @()
     GUID              = '15d2bfff-ebc1-4309-9aa1-51410f7ff8d3'
     Author            = 'David Stein'
-    CompanyName       = 'Skatterbrainz'
+    CompanyName       = ''
     Copyright         = '(c) 2025-2026 Skatterbrainz. All rights reserved.'
     Description       = 'SolarWinds Service Desk API Module - based on REST API reference https://apidoc.samanage.com/#section/General-Concepts'
     PowerShellVersion = '5.1'
